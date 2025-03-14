@@ -1,6 +1,6 @@
 // LoginComponent.tsx
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import {useAuth} from "../../providers/AuthProvider.tsx";
 
 const LoginPage: React.FC = () => {
@@ -12,12 +12,12 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('your-api-endpoint/login', {
-                username,
-                password
-            });
+            // const response = await axios.post('your-api-endpoint/login', {
+            //     username,
+            //     password
+            // });
 
-            setToken(response.data.token);
+            // setToken(response.data.token);
             setToken('your-token');
         } catch (error) {
             console.error('Login failed:', error);
@@ -30,6 +30,9 @@ const LoginPage: React.FC = () => {
                 <div>Bạn đã đăng nhập!</div>
             ) : (
                 <form onSubmit={handleLogin}>
+                    <h1 className="text-3xl font-bold underline">
+                        Hello world!
+                    </h1>
                     <input
                         type="text"
                         value={username}
