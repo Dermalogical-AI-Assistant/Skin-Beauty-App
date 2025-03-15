@@ -1,0 +1,12 @@
+export const HOME = '/'
+export const LOGIN = '/login'
+export const REGISTER = '/register'
+export const PROFILE = '/profile'
+export const FORGOT_PASSWORD = '/forgot-password'
+export const RESET_PASSWORD = '/reset-password'
+export const NOT_FOUND = '/404'
+export const SERVER_ERROR = '/500'
+export const ACCESS_DENIED = '/403'
+export const UNAUTHORIZED = '/401'
+
+export const DASHBOARD = '/dashboard'
