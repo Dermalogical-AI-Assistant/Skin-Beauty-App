@@ -11,6 +11,7 @@ interface AuthState {
     user: any | null;
     isLoading: boolean;
     error: string | null;
+    isLogin: boolean;
 }
 
 /**
@@ -42,6 +43,7 @@ const useAuthStore = create<AuthStore>()(
             user: null,
             isLoading: false,
             error: null,
+            isLogin: false,
 
             /**
              * Login user with token and user profile
@@ -57,7 +59,8 @@ const useAuthStore = create<AuthStore>()(
                     accessToken,
                     refreshToken,
                     isLoading: false,
-                    error: null
+                    error: null,
+                    isLogin: true
                 });
             },
 
@@ -74,7 +77,8 @@ const useAuthStore = create<AuthStore>()(
                     refreshToken: null,
                     user: null,
                     isLoading: false,
-                    error: null
+                    error: null,
+                    isLogin: false
                 });
             },
 
@@ -99,6 +103,7 @@ const useAuthStore = create<AuthStore>()(
                 accessToken: state.accessToken,
                 refreshToken: state.refreshToken,
                 user: state.user,
+                isLogin: state.isLogin,
             }),
         }
     )

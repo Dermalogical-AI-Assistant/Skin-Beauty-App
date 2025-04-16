@@ -7,7 +7,8 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const handleLogout = () => {
         logout(); // Gọi hàm logout từ Zustand
-        navigate("/login"); // Chuyển hướng về trang login
+        // navigate("/login"); // Chuyển hướng về trang login
+        window.location.reload();
     };
 
     useEffect(() => {

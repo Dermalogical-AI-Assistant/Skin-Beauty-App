@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from "./Navbar.tsx";
+import AcountMenu from "./AccountMenu.tsx";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -20,8 +21,9 @@ const AdminLayout: React.FC<LayoutProps> = ({ children }) => {
             <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
             {/* Main Content */}
-            <div className="flex flex-col flex-1 bg-white m-7 rounded-2xl shadow-lg">
+            <div className="flex flex-col flex-1 bg-white m-5 rounded-2xl shadow-lg p-2">
               <Navbar/>
+
               <main className="flex-1 overflow-autobg-white m-4">
                   {children || <Outlet />}
               </main>

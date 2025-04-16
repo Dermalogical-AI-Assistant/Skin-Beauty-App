@@ -67,10 +67,10 @@ const renderNavItems = (items: NavItem[], currentPath: string) => {
               <a
                 key={index}
                 href={item.path}
-                className={`flex items-center gap-2 text-lg ${isActive&&"bg-secondary-dark"}  hover:bg-secondary-dark px-2 py-1.5 rounded-md transition`}
+                className={`flex items-center gap-2 text-lg ${isActive&&"bg-secondary-dark/25"}  hover:bg-secondary-dark px-2 py-1.5 rounded-md transition`}
               >
                   {item.icon}
-                  <span>{item.name}</span>
+                  <p className={`flex items-center text-center align-middle`}>{item.name}</p>
               </a>
             );
         }

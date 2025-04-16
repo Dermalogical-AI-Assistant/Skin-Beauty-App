@@ -2,11 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-:root {
-    line-height: 1.5;
-    font-weight: 400;
-}
-
 @font-face {
     font-family: 'sunflower';
     src: url('/fonts/sunflower.otf') format('opentype');
@@ -48,5 +43,14 @@
     font-family: 'Butler';
     src: url('/fonts/butler/Butler_Black.otf') format('opentype');
     font-weight: 900;
+}
+
+
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
 }
 
