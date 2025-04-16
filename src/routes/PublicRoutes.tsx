@@ -1,10 +1,9 @@
 import LoginPage from "../pages/LoginPage";
+import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
+import Dashboard from "../pages/AdminPage/Dashboard";
+import NotFoundPage from "../pages/NotFoundPage.tsx";
+import UserManagement from "../pages/AdminPage/User";
 
-/**
- * Public routes that are accessible to all users, regardless of authentication status
- * These routes do not require users to be logged in
- * @type {Array<Object>}
- */
 export const routesForPublic = [
     {
         path: "/",
@@ -14,4 +13,22 @@ export const routesForPublic = [
         path: "/login",
         element: <LoginPage/>,
     },
+    {
+        path: "/admin",
+        element: <AdminLayout/>,
+        children: [
+            {
+                path: "dashboard",
+                element: <Dashboard/>,
+            },
+            {
+                path: "users",
+                element: <UserManagement/>,
+            }
+        ]
+    },
+    {
+        path: "*",
+        element: <NotFoundPage/>,
+    }
 ];
