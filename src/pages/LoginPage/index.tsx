@@ -10,13 +10,11 @@ import { FcGoogle } from "react-icons/fc";
 import {BiLoaderAlt} from "react-icons/bi";
 import {FORGOT_PASSWORD, REGISTER} from "../../constants/routes.ts";
 
-interface LoginPageProps {
-}
 
 /**
  * Login page component that handles user authentication
  */
-const LoginPage: React.FC<LoginPageProps> = (props) => {
+const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { onSubmitAccountForm, handleLoginPassword} = useAuth();
