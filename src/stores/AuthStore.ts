@@ -52,8 +52,7 @@ const useAuthStore = create<AuthStore>()(
              */
             login: (accessToken: string, refreshToken: string) => {
                 // Set token in axios headers
-                axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
+              axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                 // Update state
                 set({
                     accessToken,
