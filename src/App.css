@@ -17,6 +17,7 @@
     --color-secondary: #F5F4ED;
     --color-primary-dark: #505050;
     --color-secondary-dark: #A4A3A2;
+    --color-pink-light: #EAA58D;
 
     /* font */
     --font-encode: 'Encode Sans Expanded', sans-serif;
@@ -29,3 +30,4 @@
         background: linear-gradient(315deg, rgba(242,144,126,1) 0%, rgba(246,174,161,1) 32%, rgba(251,217,211,1) 66%, rgba(255,255,255,1) 100%);
     }
 }
+
