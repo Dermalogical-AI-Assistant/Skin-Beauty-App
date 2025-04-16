@@ -3,11 +3,12 @@ import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
 import Dashboard from "../pages/AdminPage/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import UserManagement from "../pages/AdminPage/User";
+import HomePage from "../pages/HomePage.tsx";
 
 export const routesForPublic = [
     {
         path: "/",
-        element: <div>Home Page</div>,
+        element: <HomePage/>,
     },
     {
         path: "/login",
