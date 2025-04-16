@@ -10,7 +10,6 @@ import { FcGoogle } from "react-icons/fc";
 import {BiLoaderAlt} from "react-icons/bi";
 import {FORGOT_PASSWORD, REGISTER} from "../../constants/routes.ts";
 
-
 /**
  * Login page component that handles user authentication
  */

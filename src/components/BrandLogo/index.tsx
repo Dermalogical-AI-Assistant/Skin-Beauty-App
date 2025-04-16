@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const BrandLogo: React.FC = () => {
     return (
         <Link
-          className={`select-none flex flex-col w-full items-center justify-center out-line-orange-100 out-line-4`}
+          className={`select-none flex flex-col items-center justify-center out-line-orange-100 out-line-4`}
           to="/"
         >
             {/* brand logo */}
