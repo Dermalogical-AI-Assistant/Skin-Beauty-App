@@ -1,15 +1,17 @@
 import React from "react";
-
-
+import { Link } from "react-router-dom";
 
 const BrandLogo: React.FC = () => {
     return (
-        <div className={`select-none flex flex-col items-center justify-center text-[#F2907E] out-line-orange-100 out-line-4`}>
+        <Link
+          className={`select-none flex flex-col w-full items-center justify-center out-line-orange-100 out-line-4`}
+          to="/"
+        >
             {/* brand logo */}
-            <h1 className={`py-3 font-bold text-2xl font-sunflower drop-shadow-lg `}>
-                Skin Beauty
+            <h1 className={`text-primary-dark font-encode py-3 font-medium text-2xl drop-shadow-lg `}>
+                TDCosmetics
             </h1>
-        </div>
+        </Link>
     );
 };
 
