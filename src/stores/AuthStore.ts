@@ -51,9 +51,7 @@ const useAuthStore = create<AuthStore>()(
              * @param userProfile User profile data
              */
             login: (accessToken: string, refreshToken: string) => {
-                // Set token in axios headers
-              axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-                // Update state
+              // Update state
                 set({
                     accessToken,
                     refreshToken,
