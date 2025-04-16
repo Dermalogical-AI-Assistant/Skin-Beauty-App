@@ -6,6 +6,10 @@
     font-family: sunflower;
 }
 
+.font-encode-sans {
+    font-family: "Encode Sans", sans-serif;
+}
+
 .font-butler {
     font-family: Butler;
 }
@@ -18,6 +22,7 @@
     --color-primary-dark: #505050;
     --color-secondary-dark: #A4A3A2;
     --color-pink-light: #EAA58D;
+
 
     /* font */
     --font-encode: 'Encode Sans Expanded', sans-serif;

@@ -1,4 +1,4 @@
-// src/components/AdminLayout/Navbar.tsx
+// src/components/AdminLayout/NavLink.tsx
 import React from 'react';
 import HeaderCrums from "../../components/HeaderCrums.tsx";
 import AcountMenu from "./AccountMenu.tsx";
