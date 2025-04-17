@@ -14,7 +14,7 @@ import {FORGOT_PASSWORD, REGISTER} from "../../constants/routes.ts";
  * Login page component that handles user authentication
  */
 const LoginPage: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
     const { onSubmitAccountForm, handleLoginPassword} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         setIsLoading(true);
         onSubmitAccountForm(
-            { username, password },
+            { email, password, deviceId: "web" },
             (error) => {
                 setIsLoading(false);
                 console.error('Login failed:', error);
@@ -69,16 +69,16 @@ const LoginPage: React.FC = () => {
                             autoComplete="off"
                             className={`flex flex-col items-center justify-center`}
                         >
-                            {/* Username */}
+                            {/* email */}
                             <Input
                                 className={`w-full  drop-shadow-md`}
-                                label={`Username`}
-                                name={`username`}
+                                label={`email`}
+                                name={`email`}
                                 type={`text`}
-                                placeholder={`Your username`}
+                                placeholder={`Your email`}
                                 required
                                 trim
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) => setemail(e.target.value)}
                             />
 
                             {/* Password */}

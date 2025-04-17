@@ -18,8 +18,9 @@ import {useState} from "react";
  * Interface for login data
  */
 interface LoginData {
-    username: string;
+    email: string;
     password: string;
+    deviceId: string;
 }
 
 /**áđá
@@ -66,16 +67,16 @@ function useAuth() {
      * @param onError Callback function for handling errors
      */
     const onSubmitAccountForm = (
-        data: LoginData,
-        onError: (error: any) => void
+      data: { email: string; password: string; deviceId: string },
+      onError: (error: any) => void
     ) => {
         // Get the intended destination from location state or default to home
         handleLoginPassword.mutate(data, {
             onSuccess: (response) => {
                 console.log("Login success:", response.data);
                 login(
-                    response.data.accessToken,
-                    response.data.refreshToken,
+                    response.data.access_token,
+                    response.data.refresh_token,
                 );
                 // Fetch user profile after login success
                 handleGetProfile.mutate(undefined, {
