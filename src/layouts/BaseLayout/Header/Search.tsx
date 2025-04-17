@@ -29,17 +29,13 @@ const Search: React.FC<SearchProps> = (props) => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={handleToggle}
-        className={`text-gray-700 focus:outline-none flex items-center space-x-4 `}>
+        className="text-gray-700 focus:outline-none flex items-center space-x-4"
+      >
         {/* User menu */}
         <div className="relative flex items-center justify-center">
-          <button className="space-x-2 text-primary-dark focus:outline-none">
-            {props?.icon||<BiUser size={24} />}
-          </button>
-          {/*<input*/}
-          {/*  className={`${!isOpen?'w-0':'w-64'}  h-10 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary-dark`}*/}
-          {/*  type="text"*/}
-          {/*  placeholder="Search..."*/}
-          {/*/>*/}
+          <span className="space-x-2 text-primary-dark focus:outline-none">
+            {props?.icon || <BiUser size={24} />}
+          </span>
         </div>
       </button>
     </div>
