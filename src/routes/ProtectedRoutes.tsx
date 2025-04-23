@@ -1,5 +1,8 @@
 import {ProtectedRoutesWrapper} from "./ProtectedRoutesWrapper.tsx";
 import Dashboard from "../pages/AdminPage/Dashboard";
+import ChatBot from "../pages/ChatBot";
+import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
+import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
 
 /**
  * Routes that require authentication
@@ -19,6 +22,20 @@ export const routesForAuthenticated = [
             {
                 path: "/logout",
                 element: <>hello from logout</>,
+            },
+            {
+              path: "/cosmetic-assistant",
+              element: <ChatBot/>,
+              children: [
+                {
+                  path: "",
+                  element: <WelcomePage/>,
+                },
+                {
+                  path: ":sessionId",
+                  element: <ChatArea />,
+                }
+              ]
             },
         ],
     },
