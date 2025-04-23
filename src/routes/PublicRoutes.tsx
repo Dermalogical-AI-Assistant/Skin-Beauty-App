@@ -4,6 +4,10 @@ import Dashboard from "../pages/AdminPage/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import UserManagement from "../pages/AdminPage/User";
 import HomePage from "../pages/HomePage.tsx";
+import ChatBot from "../pages/ChatBot";
+import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
+import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
+import ChatAreaWrapper from "../pages/ChatBot/ChatMessage/ChatAreaWrapper.tsx";
 
 export const routesForPublic = [
     {
@@ -25,6 +29,20 @@ export const routesForPublic = [
             {
                 path: "users",
                 element: <UserManagement/>,
+            }
+        ]
+    },
+    {
+        path: "/cosmetic-assistant",
+        element: <ChatBot/>,
+        children: [
+            {
+                path: "",
+                element: <WelcomePage/>,
+            },
+            {
+                path: ":sessionId",
+                element: <ChatArea />,
             }
         ]
     },

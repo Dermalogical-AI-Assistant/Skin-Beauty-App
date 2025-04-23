@@ -60,9 +60,9 @@ const BasketList: React.FC<BasketListProps> = (props) => {
         className={`text-gray-700 focus:outline-none flex items-center space-x-4 `}>
         {/* User menu */}
         <div className="relative flex items-center justify-center">
-          <button className="space-x-2 text-primary-dark focus:outline-none">
+          <span className="space-x-2 text-primary-dark focus:outline-none">
             {props?.icon||<BiUser size={24} />}
-          </button>
+          </span>
         </div>
       </button>
 

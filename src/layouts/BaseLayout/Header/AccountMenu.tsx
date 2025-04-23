@@ -53,16 +53,18 @@ const AcountMenu: React.FC<AccountMenuProps> = (props) => {
         className={`${isLogin ? 'block' : 'hidden'} text-gray-700 focus:outline-none flex items-center space-x-4 `}>
         {/* User menu */}
         <div className="relative flex items-center justify-center">
-          <button className="space-x-2 text-primary-dark focus:outline-none">
-            {props?.icon||<BiUser size={24} />}
-            <div className={`${user?.avatar?'hidden':''} w-10 h-10 rounded-md bg-gray-200 overflow-hidden`}>
+          <span className="space-x-2 text-primary-dark focus:outline-none">
+            <div className={`${user?.avatar?'hidden':''}`}>
+              {props?.icon||<BiUser size={24} />}
+            </div>
+            <div className={`${user?.avatar?'':'hidden'} w-10 h-10 rounded-md bg-gray-200 overflow-hidden`}>
               <img
-                src={user?.avatar||''}
+                src={user?.avatar}
                 alt="User"
                 className={`w-full h-full object-cover`}
               />
             </div>
-          </button>
+          </span>
         </div>
       </button>
 
