@@ -47,7 +47,7 @@ const AcountMenu: React.FC = () => {
           <button className="space-x-2 text-gray-700 focus:outline-none">
             <div className="w-10 h-10 rounded-md bg-gray-200 overflow-hidden">
               <img
-                src="https://miguelminambres.com/wp-content/uploads/2021/10/Social-04-810x1024.jpg"
+                src={user?.avatar}
                 alt="User"
                 className="w-full h-full object-cover"
               />

@@ -7,6 +7,10 @@ import HomePage from "../pages/HomePage.tsx";
 import ChatBot from "../pages/ChatBot";
 import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
 import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
+import SkinAnalysisLayout from "../layouts/SkinAnalysis/SkinAnalysisLayout.tsx";
+import UploadSkinPhoto from "../pages/SkinAnalysisPage/UploadSkinPhoto/index.tsx";
+import SkinPhoto from "../pages/SkinAnalysisPage/SkinPhoto/index.tsx";
+import SkinAnalysisResult from "../pages/SkinAnalysisPage/SkinAnalysisResult/index.tsx";
 
 export const routesForPublic = [
     {
@@ -28,6 +32,24 @@ export const routesForPublic = [
             {
                 path: "users",
                 element: <UserManagement/>,
+            }
+        ]
+    },
+    {
+        path: "/skin-analysis",
+        element: <SkinAnalysisLayout/>,
+        children: [
+            {
+                path: "",
+                element: <UploadSkinPhoto/>,
+            },
+            {
+                path: "skin-photo",
+                element: <SkinPhoto/>
+            },
+            {
+                path: "result",
+                element: <SkinAnalysisResult/>
             }
         ]
     },

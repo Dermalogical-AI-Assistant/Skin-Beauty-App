@@ -14,8 +14,7 @@ const AcountMenu: React.FC<AccountMenuProps> = (props) => {
   const { user, logout, isLogin } = useAuthStore();
 
   const handleLogout = () => {
-    logout(); // Gọi hàm logout từ Zustand
-    // navigate("/login"); // Chuyển hướng về trang login
+    logout();
     window.location.reload();
   };
 

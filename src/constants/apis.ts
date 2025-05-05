@@ -1,8 +1,11 @@
 // AUTH
-export const REQUEST_lOGIN_ACCOUNT = "/login";
+export const REQUEST_lOGIN = "/login";
+export const REQUEST_GET_MY_PROFILE = "/self/my-profile"
+export const REQUEST_REGISTER_ACCOUNT = "/local/sign-up";
+export const REQUEST_USERS_MODULE = "/users"
+export const REQUEST_SKIN_ANALYSIS_PREDICT = "/analysis"
+export const REQUEST_FILES_MODULE = "/files"
 export const REQUEST_LOGOUT = ""
-export const REQUEST_UPDATE_PROFILE = "/self/my-profile"
-export const REQUEST_REGISTER_ACCOUNT = "/api/auth/register";
 
 // CHATBOT
 // SESSIONS
