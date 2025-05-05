@@ -37,7 +37,6 @@ type AuthStore = AuthState & AuthActions;
 const useAuthStore = create<AuthStore>()(
     persist(
         (set) => ({
-            // Initial state
             accessToken: null,
             refreshToken: null,
             user: null,
@@ -45,11 +44,6 @@ const useAuthStore = create<AuthStore>()(
             error: null,
             isLogin: false,
 
-            /**
-             * Login user with token and user profile
-             * @param token Authentication token
-             * @param userProfile User profile data
-             */
             login: (accessToken: string, refreshToken: string) => {
               // Update state
                 set({
@@ -61,14 +55,9 @@ const useAuthStore = create<AuthStore>()(
                 });
             },
 
-            /**
-             * Log out the current user
-             */
             logout: () => {
-                // Remove token from axios headers
                 delete axios.defaults.headers.common['Authorization'];
 
-                // Reset state
                 set({
                     accessToken: null,
                     refreshToken: null,
@@ -79,23 +68,16 @@ const useAuthStore = create<AuthStore>()(
                 });
             },
 
-            /**
-             * Update user profile data
-             * @param userProfile Updated user profile data
-             */
             updateUser: (userProfile: any) => {
                 set({ user: userProfile });
             },
 
-            /**
-             * Clear any error in the store
-             */
             clearError: () => {
                 set({ error: null });
             }
         }),
         {
-            name: 'auth-storage', // name of the localStorage key
+            name: 'auth-storage', // name of localStorage key 
             partialize: (state) => ({
                 accessToken: state.accessToken,
                 refreshToken: state.refreshToken,
