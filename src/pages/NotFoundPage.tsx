@@ -1,7 +1,9 @@
 const NotFoundPage: React.FC = () => {
     return (
         <>
-            404 Not Found
+            <p className={`h-screen flex items-center justify-center text-4xl font-playfair text-primary-dark font-bold`}>
+              404 Not Found
+            </p>
         </>
     );
 };

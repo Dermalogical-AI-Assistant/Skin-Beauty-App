@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {routesForPublic} from "./PublicRoutes.tsx";
 import {routesForAuthenticated} from "./ProtectedRoutes.tsx";
+import RootLayout from "../layouts/RootLayout.tsx";
 
 /**
  * Routes component that sets up the application's routing structure
@@ -12,8 +13,14 @@ const Routes = () => {
      * Create a browser router instance with all application routes
      */
     const router = createBrowserRouter([
-        ...routesForPublic,
-        ...routesForAuthenticated,
+      {
+        path: "/",
+        element: <RootLayout />,
+        children: [
+          ...routesForPublic,
+          ...routesForAuthenticated,
+        ],
+      },
     ]);
 
     return <RouterProvider router={router} />;

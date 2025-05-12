@@ -4,19 +4,26 @@ import { AnalysisSummary } from "../../../components/AnalysisSummary";
 import { ProductCarousel } from "../../../components/ProductCarousel";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DEFAULT_SKIN_ANALYSIS_URL } from "../../../constants/properties";
+import ProductSection from "../../HomePage/Sections/ProductSection.tsx";
+import useProducts from "../../../hooks/useProducts.ts";
+import { GetProductRequestParam } from "../../../types/Products.ts";
+import { toast } from "react-toastify";
 
 const SkinAnalysisResult: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const bestSellerParams: GetProductRequestParam = {
+    page: 1,
+    perPage: 10,
+    order: "sold:desc"
+  };
+  const {getProducts} = useProducts();
+  const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
+  const bestSellerProducts = bestSellerData?.data ?? [];
+
   const location = useLocation();
   const { data:skinAnalysisData, url } = location.state || {};
-  useEffect(
-    () => {
-      console.log("jhihi",skinAnalysisData);
-    },
-    [skinAnalysisData]
-  )
 
   const handleRetakePhoto = () => {
     // Logic to retake the photo
@@ -25,9 +32,9 @@ const SkinAnalysisResult: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full w-full py-10">
+    <div className="flex h-full w-full py-10 gap-20  ">
       {/* Left - Detected Image */}
-      <div className="flex w-1/2 flex-col items-center px-4">
+      <div className="flex w-1/2 flex-col items-end px-4 ">
         <div className={`w-3/4`}>
           <div className="relative aspect-square rounded-2xl bg-white/80 drop-shadow-lg">
             <div className="h-full w-full overflow-hidden rounded-xl">
@@ -50,10 +57,10 @@ const SkinAnalysisResult: React.FC = () => {
       </div>
 
       {/* Right - Analysis Summary */}
-      <div className="w-1/2">
-        <div className="w-3/4 bg-white/80 drop-shadow-lg h-full px-10 py-5 rounded-2xl flex flex-col">
+      <div className="w-1/2   px-4 ">
+        <div className="w-3/4 bg-white/80 drop-shadow-lg px-10 py-5 rounded-2xl flex flex-col">
           {/* Analysis Summary at the top */}
-          <div>
+          <div className={`aspect-square `}>
             <AnalysisSummary
               acneDetection={skinAnalysisData?.acneDetection}
               acneSeverity={skinAnalysisData?.acneSeverity}
@@ -61,8 +68,11 @@ const SkinAnalysisResult: React.FC = () => {
             />
           </div>
 
-          {/* Product Carousel in the middle taking remaining space */}
-          <div className="flex-1 flex items-center justify-center">
+          {/*<div className="flex-1 flex items-center justify-center">*/}
+          {/*  <ProductSection   items={bestSellerProducts} />*/}
+          {/*</div>*/}
+
+          <div className="flex items-center justify-center">
             <ProductCarousel />
           </div>
         </div>

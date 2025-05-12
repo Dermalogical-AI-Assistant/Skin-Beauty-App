@@ -11,3 +11,6 @@ export const UNAUTHORIZED = '/401'
 export const ROUTE_CHATBOT = '/cosmetic-assistant'
 
 export const DASHBOARD = '/dashboard'
+
+//shop
+export const PRODUCTS = '/products'

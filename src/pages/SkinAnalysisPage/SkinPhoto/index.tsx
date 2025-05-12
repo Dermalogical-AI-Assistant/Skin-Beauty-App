@@ -4,6 +4,7 @@ import { FaUpload, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import useFiles from "../../../hooks/useFiles";
 import useSkinAnalysis from "../../../hooks/useSkinAnalysis.ts";
+import DotLoader from "../../../components/DotLoader";
 
 const SkinPhoto: React.FC = () => {
   const location = useLocation();
@@ -12,7 +13,7 @@ const SkinPhoto: React.FC = () => {
 
   const { file: imageFile, url: imageURL } = location.state || {};
 
-  const { onSubmitAnalyzeSkin } = useSkinAnalysis()
+  const { onSubmitAnalyzeSkin, isLoading } = useSkinAnalysis()
 
   const handleUpload = async () => {
     if (!imageFile) {
@@ -38,15 +39,6 @@ const SkinPhoto: React.FC = () => {
         toast.error("Upload failed: " + error.message);
       }
     )
-
-    uploadFile.mutate(formData, {
-      onSuccess: (data) => {
-        // const uploadFileResponse = data.data;
-        // console.log({uploadFileResponse})
-        navigate('../result')
-      },
-      onError: (err) => toast.error("Upload failed: " + err.message),
-    });
   };
 
   const handleCancel = () => {
@@ -62,13 +54,20 @@ const SkinPhoto: React.FC = () => {
   }
 
   return (
-    <div className="flex-grow flex flex-col items-center justify-center text-center">
+    <div className="flex flex-col items-center justify-center text-center">
+      <div className={`relative w-1/3 aspect-square `}>
+        <div className={`${isLoading?"":"hidden"} absolute bg-white/20 backdrop-blur-xs w-full h-full`}>
+          <div className={`absolute inset-0 flex items-center justify-center`}>
+            <DotLoader/>
+          </div>
+        </div>
+        <img
+          src={imageURL}
+          alt="Skin Preview"
+          className="aspect-square object-contain rounded-2xl shadow-primary bg-white/50 mb-6"
+        />
+      </div>
 
-      <img
-        src={imageURL}
-        alt="Skin Preview"
-        className="w-1/3 aspect-square object-contain rounded-2xl shadow-primary bg-white/50 mb-6"
-      />
 
       <div className="flex gap-6">
         <button
@@ -83,6 +82,8 @@ const SkinPhoto: React.FC = () => {
         >
           <FaTimes />
         </button>
+
+
       </div>
     </div>
   );

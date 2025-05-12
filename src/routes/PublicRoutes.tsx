@@ -3,7 +3,7 @@ import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
 import Dashboard from "../pages/AdminPage/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import UserManagement from "../pages/AdminPage/User";
-import HomePage from "../pages/HomePage.tsx";
+import HomePage from "../pages/HomePage/HomePage.tsx";
 import ChatBot from "../pages/ChatBot";
 import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
 import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
@@ -11,11 +11,47 @@ import SkinAnalysisLayout from "../layouts/SkinAnalysis/SkinAnalysisLayout.tsx";
 import UploadSkinPhoto from "../pages/SkinAnalysisPage/UploadSkinPhoto/index.tsx";
 import SkinPhoto from "../pages/SkinAnalysisPage/SkinPhoto/index.tsx";
 import SkinAnalysisResult from "../pages/SkinAnalysisPage/SkinAnalysisResult/index.tsx";
+import ProductsPage from "../pages/Products";
+import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
+import DotLoader from "../components/DotLoader";
 
 export const routesForPublic = [
+
     {
-        path: "/",
-        element: <HomePage/>,
+      path: "/",
+      element: <UserBaseLayout/>,
+      children: [
+        {
+          path: "",
+          element: <HomePage />,
+        },
+        {
+          path: "/products",
+          element: <ProductsPage />,
+        },
+        {
+          path: "/skin-analysis",
+          element: <SkinAnalysisLayout/>,
+          children: [
+            {
+              path: "",
+              element: <UploadSkinPhoto/>,
+            },
+            {
+              path: "skin-photo",
+              element: <SkinPhoto/>
+            },
+            {
+              path: "result",
+              element: <SkinAnalysisResult/>
+            }
+          ]
+        },
+        {
+          path: "*",
+          element: <NotFoundPage/>,
+        }
+      ]
     },
     {
         path: "/login",
@@ -34,27 +70,5 @@ export const routesForPublic = [
                 element: <UserManagement/>,
             }
         ]
-    },
-    {
-        path: "/skin-analysis",
-        element: <SkinAnalysisLayout/>,
-        children: [
-            {
-                path: "",
-                element: <UploadSkinPhoto/>,
-            },
-            {
-                path: "skin-photo",
-                element: <SkinPhoto/>
-            },
-            {
-                path: "result",
-                element: <SkinAnalysisResult/>
-            }
-        ]
-    },
-    {
-        path: "*",
-        element: <NotFoundPage/>,
     }
 ];

@@ -23,7 +23,9 @@ const UploadSkinPhoto: React.FC = () => {
 
   return (
     <div className="flex-grow flex flex-col items-center justify-center text-center">
-      <h1 className="text-3xl font-semibold text-pink-light my-10">Analyze Skin</h1>
+      <div className={`flex justify-center items-center`}>
+        <h1 className="text-3xl font-semibold text-pink-light my-10">Analyze Skin</h1>
+      </div>
       <div className="flex-grow flex w-full justify-around items-center px-6  pb-28">
         <div
           className="flex cursor-pointer flex-col items-center transition-transform hover:scale-105"

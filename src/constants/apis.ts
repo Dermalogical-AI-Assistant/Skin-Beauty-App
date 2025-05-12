@@ -17,3 +17,6 @@ export const REQUEST_NEW_CHATBOT_SESSION = "/sessions";
 // MESSAGES
 export const REQUEST_CHATBOT_MESSAGES = "/messages";
 
+//SHOP
+export const REQUEST_PRODUCTS = "/eco/products";
+export const REQUEST_SKINCONCERN = "/eco/skincare_concerns";

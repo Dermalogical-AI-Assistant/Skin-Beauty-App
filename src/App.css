@@ -27,6 +27,8 @@
     /* font */
     --font-encode: 'Encode Sans Expanded', sans-serif;
     --font-baloo: 'Baloo Tamma 2', sans-serif;
+    --font-elsie: 'Elsie', serif;
+    --font-playfair: 'Playfair', serif;
 }
 
 @layer utilities {
