@@ -36,16 +36,16 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
   /**
    * SENT NEW MESSAGE
    */
-  const handleSentMessage = useMutation({
-    mutationKey: ["sent-message", sessionId],
-    mutationFn: (data: NewMessage) => {
-      return axios.post(`${REQUEST_CHATBOT_MESSAGES}`, data);
-    },
-    onSuccess: () => {
-      // Invalidate the query for this specific sessionId to trigger a refetch
-      queryClient.invalidateQueries({ queryKey });
-    }
-  });
+    const handleSentMessage = useMutation({
+      mutationKey: ["sent-message", sessionId],
+      mutationFn: (data: NewMessage) => {
+        return axios.post(`${REQUEST_CHATBOT_MESSAGES}`, data);
+      },
+      onSuccess: () => {
+        // Invalidate the query for this specific sessionId to trigger a refetch
+        queryClient.invalidateQueries({ queryKey });
+      }
+    });
 
   const onSentMessage = (data: NewMessage, onSuccess: (newSession: Message) => void, onError: () => void) => {
     handleSentMessage.mutate(data, {

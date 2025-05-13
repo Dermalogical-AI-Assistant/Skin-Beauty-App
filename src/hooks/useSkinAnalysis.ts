@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { REQUEST_SKIN_ANALYSIS_PREDICT } from "../constants/apis";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { REQUEST_FILES_MODULE, REQUEST_SKIN_ANALYSIS_PREDICT } from "../constants/apis";
 import axios from "../settings/axios";
+import { UploadFileResponse } from "../types/Files.ts";
 
 type MetaData = {
   classes: Record<string, string>;
@@ -9,7 +10,7 @@ type MetaData = {
 
 export type AcneDetection = {
   name: string;
-  class: number;
+  classes: number;
   confidence: number;
   box: { x1: number; y1: number; x2: number; y2: number };
   color: [number, number, number];
@@ -17,7 +18,7 @@ export type AcneDetection = {
 
 type AcneSeverity = {
   name: string;
-  class: number;
+  classes: number;
   confidence: number;
 };
 
@@ -33,26 +34,34 @@ export type SkinAnalysisResult = {
   imageURL?: string;
 };
 
-export const useSkinAnalysis = (skinAnalysisId: string | null) => {
-  const getSkinAnalysis = useQuery<SkinAnalysisResult, Error>({
-    queryKey: ["skin-analysis", skinAnalysisId],
-    queryFn: async () => {
-      if (!skinAnalysisId) throw new Error("No skinAnalysisId provided");
-
-      const response = await axios.get(
-        `${REQUEST_SKIN_ANALYSIS_PREDICT}/${skinAnalysisId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          params: {
-            conf: 0.6,
-          },
+function useSkinAnalysis (){
+  const handleAnalyzeSkin = useMutation({
+    mutationKey: ["analyze-skin"],
+    mutationFn: (data: FormData) => {
+      return axios.post<SkinAnalysisResult>(REQUEST_SKIN_ANALYSIS_PREDICT, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
-
-      return response.data;
+      });
     },
   });
-  return { getSkinAnalysis };
+
+  const onSubmitAnalyzeSkin = (
+    data: FormData,
+    onSuccess: (response:SkinAnalysisResult) => void,
+    onError: (error:Error) => void) => {
+    handleAnalyzeSkin.mutate(data, {
+      onSuccess: (response) => {
+        onSuccess?.(response.data);
+      },
+      onError: (error) => {
+        console.log(error);
+        onError(error);
+      }
+    });
+  };
+  
+  return { onSubmitAnalyzeSkin };
 };
+
+export default useSkinAnalysis;

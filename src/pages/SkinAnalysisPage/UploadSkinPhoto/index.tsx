@@ -10,6 +10,7 @@ const UploadSkinPhoto: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
+      console.log(url)
       navigate("skin-photo", {
         state: { file, url },
       });
@@ -21,18 +22,17 @@ const UploadSkinPhoto: React.FC = () => {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center text-center">
-      <h1 className="text-3xl font-semibold text-[#D28F77]">Analyze Skin</h1>
-
-      <div className="mt-16 flex w-full justify-around px-6">
+    <div className="flex-grow flex flex-col items-center justify-center text-center">
+      <h1 className="text-3xl font-semibold text-pink-light my-10">Analyze Skin</h1>
+      <div className="flex-grow flex w-full justify-around items-center px-6  pb-28">
         <div
           className="flex cursor-pointer flex-col items-center transition-transform hover:scale-105"
           onClick={openFileExplorer}
         >
-          <div className="mb-2 rounded-full bg-[#F2907E] p-5 text-4xl text-white">
+          <div className="mb-2 rounded-full bg-pink-light drop-shadow-pink-light drop-shadow-lg p-5 text-4xl text-white">
             <FaUpload />
           </div>
-          <span className="text-gray-600">Upload image</span>
+          <span className="text-primary-dark/70 text-3xl font-bold py-3">Upload image</span>
           <input
             type="file"
             accept="image/*"
@@ -43,10 +43,10 @@ const UploadSkinPhoto: React.FC = () => {
         </div>
 
         <div className="flex cursor-pointer flex-col items-center transition-transform hover:scale-105">
-          <div className="mb-2 rounded-full bg-[#F2907E] p-5 text-4xl text-white">
+          <div className="mb-2 rounded-full bg-pink-light drop-shadow-pink-light drop-shadow-lg p-5 text-4xl text-white">
             <FaCamera />
           </div>
-          <span className="text-gray-600">Take photo</span>
+          <span className="text-primary-dark/70 text-3xl font-bold py-3">Take photo</span>
         </div>
       </div>
     </div>
