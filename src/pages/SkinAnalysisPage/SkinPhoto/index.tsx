@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaUpload, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import useFiles from "../../../hooks/useFiles";
+import useSkinAnalysis from "../../../hooks/useSkinAnalysis.ts";
 
 const SkinPhoto: React.FC = () => {
   const location = useLocation();
@@ -11,6 +12,8 @@ const SkinPhoto: React.FC = () => {
 
   const { file: imageFile, url: imageURL } = location.state || {};
 
+  const { onSubmitAnalyzeSkin } = useSkinAnalysis()
+
   const handleUpload = async () => {
     if (!imageFile) {
       toast.error("No image file to upload.");
@@ -18,7 +21,23 @@ const SkinPhoto: React.FC = () => {
     }
 
     const formData = new FormData();
-    formData.append("file", imageFile);
+    formData.append("image", imageFile);
+
+    onSubmitAnalyzeSkin(
+      formData,
+      // success
+      (response) => {
+        toast.success("Upload successful!");
+        console.log("response", response);
+        navigate('../result', {
+          state: { data: response,   url: imageURL },
+        });
+      },
+      // error
+      (error) => {
+        toast.error("Upload failed: " + error.message);
+      }
+    )
 
     uploadFile.mutate(formData, {
       onSuccess: (data) => {
@@ -31,7 +50,7 @@ const SkinPhoto: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate("/");
+    navigate(-1)
   };
 
   if (!imageURL) {
@@ -43,11 +62,12 @@ const SkinPhoto: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-white">
+    <div className="flex-grow flex flex-col items-center justify-center text-center">
+
       <img
         src={imageURL}
         alt="Skin Preview"
-        className="w-1/3 aspect-square object-contain rounded-xl shadow-md ring-2 ring-[#FCD5C0] mb-6"
+        className="w-1/3 aspect-square object-contain rounded-2xl shadow-primary bg-white/50 mb-6"
       />
 
       <div className="flex gap-6">

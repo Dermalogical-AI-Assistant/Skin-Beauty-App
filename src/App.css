@@ -34,5 +34,13 @@
         background: rgb(242,144,126);
         background: linear-gradient(315deg, rgba(242,144,126,1) 0%, rgba(246,174,161,1) 32%, rgba(251,217,211,1) 66%, rgba(255,255,255,1) 100%);
     }
+
+    .shadow-primary {
+        --tw-shadow: 10px 10px 25px #d7dadd, -10px -10px 25px #fff;
+        --tw-shadow-colored: 10px 10px 25px var(--tw-shadow-color), -10px -10px 25px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+        var(--tw-ring-shadow, 0 0 #0000),
+        var(--tw-shadow);
+    }
 }
 

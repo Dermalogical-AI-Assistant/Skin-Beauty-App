@@ -3,7 +3,7 @@ export const REQUEST_lOGIN = "/login";
 export const REQUEST_GET_MY_PROFILE = "/self/my-profile"
 export const REQUEST_REGISTER_ACCOUNT = "/local/sign-up";
 export const REQUEST_USERS_MODULE = "/users"
-export const REQUEST_SKIN_ANALYSIS_PREDICT = "/analysis"
+export const REQUEST_SKIN_ANALYSIS_PREDICT = "/skin-analysis/predict"
 export const REQUEST_FILES_MODULE = "/files"
 export const REQUEST_LOGOUT = ""
 

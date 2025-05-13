@@ -1,68 +1,75 @@
 import { AcneDetection, SkinAnalysisResult } from "../../hooks/useSkinAnalysis";
+import { useEffect } from "react";
+import { rgbToHex } from "../../utils/color.ts";
 
 export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
-  const acneDetections = skinAnalysis.acneDetection?.predicts || [];
-  const groupedAcneDetections = Object.values(
-    acneDetections.reduce(
-      (acc: Record<string, AcneDetection[]>, acnePrediction) => {
-        acc[acnePrediction.name] = acc[acnePrediction.name] || [];
-        acc[acnePrediction.name].push(acnePrediction);
-        return acc;
-      },
-      {},
-    ),
-  );
+
+  const counts: { [key: string]: { count: number; hex: string } } = {};
+
+  skinAnalysis.acneDetection?.predicts?.forEach(({ name, color }) => {
+    const hex = rgbToHex(color[0], color[1], color[2]);
+    counts[name] = counts[name]
+      ? { count: counts[name].count + 1, hex }
+      : { count: 1, hex };
+  });
+
+  useEffect(
+    () => {
+      console.log("hahahhaha",skinAnalysis);
+    },
+    [skinAnalysis]
+  )
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold text-[#F3BBA5]">
+      <h2 className="m-5 text-3xl font-bold text-pink-light text-center">
         General Skin Overview
       </h2>
 
-      <div className="space-y-2 text-sm">
-        <p>
-          <strong>Acne Detection</strong>
-        </p>
-        <p>
-          Total acne spots detected: <strong>{acneDetections?.length}</strong>
-        </p>
+      <div className="flex flex-col gap-5">
+        {/*Acne Detection*/}
+        <div>
+          <p className={`text-xl drop-shadow-lg font-semibold`}>Acne Detection</p>
+          <div className={`border-l-4 border-primary-dark/80 pl-3 ml-1`}>
+            <p className={`font-bold`}>
+              Total acne spots detected: <span className={`font-medium`}>{skinAnalysis.acneDetection?.predicts?.length}</span>
+            </p>
+            <div>
+              <p className="">
+                <strong>Types of Acne:</strong>
+              </p>
+              <ul className="ml-3 list-disc list-inside">
+                {Object.entries(counts).map(([name, { count, hex }]) => (
+                  <li
+                    key={name}
+                    className={`py-2`}
+                  >
+                  <span
+                    style={{ color: hex }}
+                    className={`bg-gray-900/80   font-semibold p-2 rounded-full`}
+                  >{name}</span>
 
-        <p className="mt-2">
-          <strong>Types of Acne:</strong>
-        </p>
-        <ul className="ml-6 list-disc">
-          {groupedAcneDetections.map((group, index) => (
-            <li key={index}>
-              {group[0].name}:{" "}
-              <span className="text-orange-600">{group.length}</span>
-            </li>
-          ))}
-        </ul>
-        {/* <ul className="ml-6 list-disc">
-          <li>
-            Blackheads: <span className="text-orange-600">3</span>
-          </li>
-          <li>
-            Inflammatory acne: <span className="text-red-500">2</span>
-          </li>
-          <li>
-            Pustules: <span className="text-green-600">1</span>
-          </li>
-          <li>
-            Clogged pores (hidden acne):{" "}
-            <span className="text-purple-500">1</span>
-          </li>
-        </ul> */}
+                    <span className={`ml-2 p-2 rounded-full drop-shadow-lg bg-white/60 font-semibold`}>
+                  {count}
+                  </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <p className="mt-4">
-          <strong>Acne Severity</strong>
-        </p>
-        <p>
-          Level: <span className="font-medium">{skinAnalysis.acneSeverity?.predicts[0].name}</span>
-        </p>
-        <p>
-          Confidence score: <em>{skinAnalysis.acneSeverity?.predicts[0].confidence}</em>
-        </p>
+        {/*Acne Severity*/}
+        <div>
+          <p className="text-lg font-semibold  drop-shadow-lg">
+            <strong>Acne Severity</strong>
+          </p>
+        <div className={`border-l-4 border-primary-dark/80 pl-3 ml-1`}>
+           <p className={`font-bold`}>
+             Level: <span className="font-medium">{skinAnalysis?.acneSeverity?.predicts[0]?.name}</span>
+           </p>
+         </div>
+        </div>
       </div>
     </div>
   );
