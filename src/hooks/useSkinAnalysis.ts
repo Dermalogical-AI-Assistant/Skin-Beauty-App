@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { REQUEST_FILES_MODULE, REQUEST_SKIN_ANALYSIS_PREDICT } from "../constants/apis";
 import axios from "../settings/axios";
 import { UploadFileResponse } from "../types/Files.ts";
+import { useState } from "react";
 
 type MetaData = {
   classes: Record<string, string>;
@@ -35,6 +36,9 @@ export type SkinAnalysisResult = {
 };
 
 function useSkinAnalysis (){
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleAnalyzeSkin = useMutation({
     mutationKey: ["analyze-skin"],
     mutationFn: (data: FormData) => {
@@ -50,18 +54,23 @@ function useSkinAnalysis (){
     data: FormData,
     onSuccess: (response:SkinAnalysisResult) => void,
     onError: (error:Error) => void) => {
+    setIsLoading(true);
     handleAnalyzeSkin.mutate(data, {
       onSuccess: (response) => {
+        setIsLoading(false);
         onSuccess?.(response.data);
       },
       onError: (error) => {
+        setIsLoading(false);
         console.log(error);
         onError(error);
       }
     });
   };
   
-  return { onSubmitAnalyzeSkin };
+  return {
+    isLoading,
+    onSubmitAnalyzeSkin };
 };
 
 export default useSkinAnalysis;

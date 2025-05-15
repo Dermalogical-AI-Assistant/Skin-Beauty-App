@@ -3,6 +3,7 @@ import Dashboard from "../pages/AdminPage/Dashboard";
 import ChatBot from "../pages/ChatBot";
 import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
 import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
+import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
 
 /**
  * Routes that require authentication
@@ -15,28 +16,35 @@ export const routesForAuthenticated = [
         path: "/",
         element: <ProtectedRoutesWrapper />,
         children: [
-            {
+          {
+            path: "",
+            element: <UserBaseLayout />,
+            children: [
+              {
                 path: "/dashboard",
                 element: <Dashboard />,
-            },
-            {
+              },
+              {
                 path: "/logout",
                 element: <>hello from logout</>,
-            },
-            {
-              path: "/cosmetic-assistant",
-              element: <ChatBot/>,
-              children: [
-                {
-                  path: "",
-                  element: <WelcomePage/>,
-                },
-                {
-                  path: ":sessionId",
-                  element: <ChatArea />,
-                }
-              ]
-            },
-        ],
+              },
+              {
+                path: "/cosmetic-assistant",
+                element: <ChatBot/>,
+                children: [
+                  {
+                    path: "",
+                    element: <WelcomePage/>,
+                  },
+                  {
+                    path: ":sessionId",
+                    element: <ChatArea />,
+                  }
+                ]
+              },
+            ],
+          },
+        ]
+
     },
 ];

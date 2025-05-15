@@ -2,6 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Elsie:wght@400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+:root {
+    /* color */
+    --color-primary: #FAF9F5;
+    --color-secondary: #F5F4ED;
+    --color-primary-dark: #505050;
+    --color-secondary-dark: #A4A3A2;
+    --color-pink-light: #EAA58D;
+
+    --toastify-color-light:#505050;
+    --toastify-color-success:#505050;
+}
 
 @font-face {
     font-family: 'sunflower';

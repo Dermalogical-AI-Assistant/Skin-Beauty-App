@@ -5,7 +5,7 @@ import NavLink from "../BaseLayout/Header/NavLink/NavLink";
 import Search from "../BaseLayout/Header/Search";
 import BasketList from "../BaseLayout/Header/BasketList";
 import AcountMenu from "../BaseLayout/Header/AccountMenu";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import Index from "../BaseLayout/Header";
 
@@ -15,10 +15,7 @@ interface LayoutProps {
 
 const SkinAnalysisLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col h-screen bg-primary">
-      <div className={`sticky top-0`}>
-        <Index/>
-      </div>
+    <div className={`h-screen`}>
         {children || <Outlet />}
     </div>
   );
