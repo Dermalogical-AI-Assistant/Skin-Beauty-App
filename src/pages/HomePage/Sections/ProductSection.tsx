@@ -4,7 +4,7 @@ import { BsBasket } from "react-icons/bs";
 import StarRating from "../../../components/StarRating";
 import { Product } from "../../../types/Products.ts";
 import { Link } from "react-router-dom";
-import { PRODUCTS } from "../../../constants/routes.ts";
+import { ROUTE_PRODUCTS } from "../../../constants/routes.ts";
 import { Currency } from "../../../types/Currency.ts";
 
 interface HorizontalProductScrollProps {
@@ -157,7 +157,7 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
         {/* Product items */}
         {props.items.map((item, index) => (
           <Link
-            to={`${PRODUCTS}/${item.id}`}
+            to={`${ROUTE_PRODUCTS}/${item.id}`}
             key={index}
             className="flex-shrink-0 w-64 mx-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
           >

@@ -13,9 +13,9 @@ const UserHeader: React.FC = () => {
           <BrandLogo />
         </div>
 
-        {/*<div className="flex justify-center flex-1">*/}
-        {/*  <NavLink />*/}
-        {/*</div>*/}
+        <div className="flex justify-center flex-1">
+          <NavLink />
+        </div>
 
         <div className="flex items-center gap-6 justify-end flex-1">
           <Search icon={<IoSearchOutline size={24} />} />

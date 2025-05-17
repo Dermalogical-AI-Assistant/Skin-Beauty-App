@@ -29,7 +29,7 @@ const UserFooter: React.FC = () => {
             <Link to="https://instagram.com/lookfantastic" className="px-3" aria-label="Visit our instagram">
               <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
                    aria-hidden="true">
-                <g clip-path="url(#clip0_1545_19339)">
+                <g clipPath="url(#clip0_1545_19339)">
                   <path
                     d="M9 11.5C10.3807 11.5 11.5 10.3807 11.5 9C11.5 7.61929 10.3807 6.5 9 6.5C7.61929 6.5 6.5 7.61929 6.5 9C6.5 10.3807 7.61929 11.5 9 11.5Z"
                     fill="#333333"></path>

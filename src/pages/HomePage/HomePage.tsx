@@ -1,4 +1,3 @@
-import UserHeader from "../../layouts/BaseLayout/Header";
 import hero_section_image from "../../assets/hero_image_homepage.png";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -6,8 +5,7 @@ import ProductSection from "./Sections/ProductSection.tsx";
 import { GetProductRequestParam, Product } from "../../types/Products.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import useSkinConcern from "../../hooks/useSkinConcern.ts";
-import { PRODUCTS } from "../../constants/routes.ts";
-import UserFooter from "../../layouts/BaseLayout/Footer";
+import { ROUTE_CHATBOT, ROUTE_PRODUCTS, ROUTE_SKIN_ANALYSIS } from "../../constants/routes.ts";
 import { SkincareConcern } from "../../types/SkincareConcern.ts";
 
 const HomePage: React.FC = () => {
@@ -29,9 +27,6 @@ const HomePage: React.FC = () => {
   };
   const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
   const bestSellerProducts = bestSellerData?.data ?? [];
-
-  const { getSkinConcerns } = useSkinConcern();
-  const {data: skinConcernsData, isLoading:isSkinConcernLoading} = getSkinConcerns();
 
   return (
     <div className={`bg-primary relative flex flex-col`}>
@@ -62,13 +57,13 @@ const HomePage: React.FC = () => {
               <div className={`m-1 flex items-center`}>
                 <Link
                   className={`drop-shadow-pink-light bg-pink-light hover:bg-pink-dark m-1 mt-5 rounded-full p-3 text-lg font-bold text-white drop-shadow-lg transition duration-300 ease-in-out`}
-                  to={`/cosmetic-assistant`}
+                  to={ROUTE_CHATBOT}
                 >
                   💬 Talk to Our Beauty Chatbot
                 </Link>
                 <Link
                   className={`text-primary-dark hover:bg-pink-dark m-1 mt-5 rounded-full bg-white p-3 text-lg font-bold drop-shadow-[0_4px_40px] drop-shadow-lg transition duration-300 ease-in-out`}
-                  to={`/skin-analysis`}
+                  to={ROUTE_SKIN_ANALYSIS}
                 >
                   📷 Analyze Skin
                 </Link>
@@ -94,7 +89,7 @@ const HomePage: React.FC = () => {
             <div className="flex flex-wrap h-full w-full justify-center py-4">
               {SkincareConcern.getAll().map((item, index) => (
                 <Link
-                  to={`${PRODUCTS}?pageTitle=${item.label}&&skincare_concern=${item.value}`}
+                  to={`${ROUTE_PRODUCTS}?pageTitle=${item.label}&&skincare_concern=${item.value}`}
                   key={index}
                   className="p-3 my-3 bg-pink-light mx-2  text-nowrap rounded-full text-white font-bold"
                 >
