@@ -1,25 +1,21 @@
 import NavLinkItem from "./NavLinkItem.tsx";
+import { ROUTE_CHATBOT, ROUTE_MY_ORDERS, ROUTE_PRODUCTS, ROUTE_SKIN_ANALYSIS } from "../../../../constants/routes.ts";
 
 export const navLinks = [
   {
-    to: "/products",
+    to: ROUTE_PRODUCTS,
     label: "Products",
   },
   {
-    to: "/admin/users",
-    label: "Blogs",
+    to: ROUTE_SKIN_ANALYSIS,
+    label: "Skin Analysis",
   },
   {
-    to: "/admin/users",
-    label: "Manufacturing",
-  },
-  {
-    to: "/admin/users",
-    label: "Packaging",
-  },
-  {
-    to: "/",
-    label: "Home",
+    to: ROUTE_CHATBOT,
+    label: "AI Assistant",
+  },{
+    to: ROUTE_MY_ORDERS,
+    label: "Orders",
   }
 ];
 

@@ -14,6 +14,7 @@ import SkinAnalysisResult from "../pages/SkinAnalysisPage/SkinAnalysisResult/ind
 import ProductsPage from "../pages/Products";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
 import DotLoader from "../components/DotLoader";
+import { Outlet } from "react-router-dom";
 
 export const routesForPublic = [
 
@@ -27,7 +28,17 @@ export const routesForPublic = [
         },
         {
           path: "/products",
-          element: <ProductsPage />,
+          element: <Outlet/>,
+          children: [
+            {
+              path:"",
+              element: <ProductsPage />
+            },
+            {
+              path: ":id",
+              element: <>product details</>,
+            },
+          ]
         },
         {
           path: "/skin-analysis",

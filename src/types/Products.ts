@@ -22,6 +22,7 @@ export class GetProductRequestParam {
   page?: number = 1;
   perPage?: number = 10;
   order?: string;
+  skincareConcerns?: string[];
 }
 
 export type GetProductsResponse = GenericResponseType<Product>;

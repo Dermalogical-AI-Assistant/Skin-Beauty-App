@@ -19,7 +19,7 @@ const NavLinkItem: React.FC<NavLinkItemProps> = ({ to, label, icon }) => {
       `}
     >
       {icon && <span>{icon}</span>}
-      <span className={`font-encode-sans font-normal text-lg drop-shadow-md"`}>{label}</span>
+      <span className={`font-encode-sans font-normal text-lg drop-shadow-md truncate"`}>{label}</span>
     </RouterNavLink>
   );
 };

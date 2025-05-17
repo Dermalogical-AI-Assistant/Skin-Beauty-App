@@ -1,5 +1,6 @@
 // ContextMenuItem.tsx
 import React from 'react';
+import { Link } from "react-router-dom";
 
 interface ContextMenuItemProps {
   icon?: React.ReactNode;
@@ -14,10 +15,10 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ( props) => {
   if (props.href) {
     return (
       <li>
-        <a href={props.href} className={classes}>
+        <Link to={props.href} className={classes}>
           {props.icon && <span className="mr-2">{props.icon}</span>}
           {props.label}
-        </a>
+        </Link>
       </li>
     );
   }
