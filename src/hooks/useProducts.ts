@@ -1,7 +1,7 @@
 import { REQUEST_PRODUCTS } from "../constants/apis";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios";
-import { GetProductRequestParam, GetProductsResponse } from "../types/Products.ts";
+import { GetProductRequestParam, GetProductsResponse, Product } from "../types/Products.ts";
 import qs from "qs";
 
 function useProducts() {
@@ -22,8 +22,24 @@ function useProducts() {
     });
   };
 
+  const getProductDetails = (id:string) => {
+    return useQuery<Product>({
+      queryKey: ["product", id],
+      queryFn: async ({ queryKey }) => {
+        const [, id] = queryKey as [string, GetProductRequestParam];
+        const res = await axios.get<Product>(
+          `${ REQUEST_PRODUCTS }/${ id }`);
+
+        console.log(res.data);
+        return res.data as Product;
+      },
+      refetchOnWindowFocus: false,
+    });
+  };
+
   return {
     getProducts,
+    getProductDetails
   };
 }
 

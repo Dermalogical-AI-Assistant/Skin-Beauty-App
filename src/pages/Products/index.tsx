@@ -242,7 +242,7 @@ const ProductsPage: React.FC = () => {
                       <Link
                         to={`${ROUTE_PRODUCTS}/${item.id}`}
                         key={index}
-                        className="flex-shrink-0 mx-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
+                        className="flex-shrink-0 my-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
                       >
                         <ProductItem item={item} />
                       </Link>
