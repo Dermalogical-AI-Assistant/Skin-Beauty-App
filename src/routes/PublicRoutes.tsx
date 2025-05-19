@@ -4,17 +4,14 @@ import Dashboard from "../pages/AdminPage/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import UserManagement from "../pages/AdminPage/User";
 import HomePage from "../pages/HomePage/HomePage.tsx";
-import ChatBot from "../pages/ChatBot";
-import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
-import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
 import SkinAnalysisLayout from "../layouts/SkinAnalysis/SkinAnalysisLayout.tsx";
 import UploadSkinPhoto from "../pages/SkinAnalysisPage/UploadSkinPhoto/index.tsx";
 import SkinPhoto from "../pages/SkinAnalysisPage/SkinPhoto/index.tsx";
 import SkinAnalysisResult from "../pages/SkinAnalysisPage/SkinAnalysisResult/index.tsx";
 import ProductsPage from "../pages/Products";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
-import DotLoader from "../components/DotLoader";
 import { Outlet } from "react-router-dom";
+import ProductDetails from "../pages/Products/ProductDetails.tsx";
 
 export const routesForPublic = [
 
@@ -36,7 +33,7 @@ export const routesForPublic = [
             },
             {
               path: ":id",
-              element: <>product details</>,
+              element: <ProductDetails/>,
             },
           ]
         },
