@@ -55,11 +55,39 @@ const ProductDetails: React.FC = () => {
     setQuantity(prev => prev > 1 ? prev - 1 : 1);
   };
 
-  const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (value > 0) {
-      setQuantity(value);
+  // Add to cart handler
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    const cartItem = {
+      id: product.id,
+      image: productImages[0] || product.thumbnail,
+      title: product.title,
+      quantity: quantity,
+      price: product.price,
+      currency: product.currency,
+      addedAt: new Date().toISOString()
+    };
+
+    // Get existing cart from localStorage
+    const existingCart = localStorage.getItem('cart');
+    let cart = existingCart ? JSON.parse(existingCart) : [];
+
+    // Check if product already exists in cart
+    const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+    if (existingItemIndex > -1) {
+      // If product exists, update quantity
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      // If new product, add to cart
+      cart.push(cartItem);
     }
+
+    // Save updated cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Optional: Show success message or feedback
   };
 
   // Toggle expandable sections
@@ -186,8 +214,8 @@ const ProductDetails: React.FC = () => {
               </div>
 
               {/* Quantity Selector */}
-              <div className="mb-6">
-                <label className="block text-primary-dark/90 font-medium mb-2">Quantity</label>
+              <div className="mb-6 flex items-center gap-1">
+                <label className="flex text-primary-dark/90 font-medium">Quantity</label>
                 <div className="flex items-center border border-primary-dark/20 rounded-lg w-fit">
                   <button
                     onClick={decreaseQuantity}
@@ -196,13 +224,7 @@ const ProductDetails: React.FC = () => {
                   >
                     <Minus className="h-4 w-4 text-primary-dark" />
                   </button>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    className="w-16 text-center py-2 border-none outline-none bg-transparent text-primary-dark"
-                    min="1"
-                  />
+                  <span className={`px-2`}>{quantity}</span>
                   <button
                     onClick={increaseQuantity}
                     className="p-2 hover:bg-primary-dark/5 transition-colors"
@@ -213,7 +235,9 @@ const ProductDetails: React.FC = () => {
               </div>
 
               {/* Add to cart button */}
-              <button className="w-full bg-primary-dark text-white py-3 px-6 rounded-lg hover:bg-primary-dark/90 transition-colors font-medium">
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-primary-dark text-white py-3 px-6 rounded-lg hover:bg-primary-dark/90 transition-colors font-medium">
                 Add to Cart
               </button>
             </div>
