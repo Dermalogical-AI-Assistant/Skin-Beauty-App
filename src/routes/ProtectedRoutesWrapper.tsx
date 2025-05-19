@@ -3,7 +3,7 @@ import useAuthStore from "../stores/AuthStore";
 
 export const ProtectedRoutesWrapper = () => {
     const { accessToken } = useAuthStore();
-    const location = useLocation(); // Lấy đường dẫn hiện tại
+    const location = useLocation();
 
     if (!accessToken) {
         return <Navigate to="/login"  state={{ historyLocation : location }}  />;

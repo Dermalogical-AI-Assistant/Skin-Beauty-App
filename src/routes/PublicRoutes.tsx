@@ -12,6 +12,8 @@ import ProductsPage from "../pages/Products";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
 import { Outlet } from "react-router-dom";
 import ProductDetails from "../pages/Products/ProductDetails.tsx";
+import ShoppingBasket from "../pages/ShoppingBasket";
+import { ROUTE_BASKET } from "../constants/routes.ts";
 
 export const routesForPublic = [
 
@@ -22,6 +24,10 @@ export const routesForPublic = [
         {
           path: "",
           element: <HomePage />,
+        },
+        {
+          path: ROUTE_BASKET,
+          element: <ShoppingBasket />,
         },
         {
           path: "/products",
