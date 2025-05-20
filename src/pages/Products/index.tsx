@@ -21,8 +21,8 @@ const ProductsPage: React.FC = () => {
   const title = searchParams.get("pageTitle") || "";
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "createdAt:desc";
-  const page = parseInt(searchParams.get("page") || "1");
-  const pageSize = parseInt(searchParams.get("pageSize") || "10");
+  const page = parseInt(searchParams.get("page") || "0");
+  const pageSize = parseInt(searchParams.get("pageSize") || "20");
   const skincareConcernsParam = searchParams.get("skincareConcerns") || "";
   const selectedSkincareConcerns = skincareConcernsParam ? skincareConcernsParam.split(',') : [];
 
@@ -70,7 +70,7 @@ const ProductsPage: React.FC = () => {
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 1 || (data && newPage > Math.ceil((data.meta?.total || 0) / pageSize))) {
+    if (newPage < 0 || (data && newPage > (Math.ceil((data.meta?.total || 0) / pageSize))-1)) {
       return;
     }
     updateUrlParams({ page: newPage });
@@ -249,21 +249,29 @@ const ProductsPage: React.FC = () => {
                     ))}
                   </div>
                 </div>
+
                 <div className={`flex items-center justify-center py-5 text-primary-dark/70 gap-10 my-7`}>
                   <button
-                    className={`w-10 h-10 ${page===1?"cursor-not-allowed text-primary-dark/20":" cursor-pointer hover:bg-white/60"} flex items-center justify-center drop-shadow-lg rounded-full`}
+                    className={`w-10 h-10 ${page===0?"cursor-not-allowed text-primary-dark/20":" cursor-pointer hover:bg-white/60"} flex items-center justify-center drop-shadow-lg rounded-full`}
                     onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 1}
+                    disabled={page === 0}
                   >
                     <MdOutlineNavigateBefore size={32}/>
                   </button>
+
                   <span>
-                  Page {page} of {Math.ceil((data?.meta?.total ?? 0) / pageSize)}
-                </span>
+                    {
+                      data?.meta?.total === 0 ?
+                        `No items found`
+                        :
+                        `Page ${page+1} of ${Math.ceil((data?.meta?.total ?? 0) / pageSize)}`
+                    }
+
+                  </span>
                   <button
-                    className={`${page >= Math.ceil((data?.meta?.total ?? 0) / pageSize)?"cursor-not-allowed text-primary-dark/20":" cursor-pointer hover:bg-white/60" } w-10 h-10 flex items-center justify-center drop-shadow-lg rounded-full`}
+                    className={`${page >= Math.ceil((data?.meta?.total ?? 0) / pageSize)-1?"cursor-not-allowed text-primary-dark/20":" cursor-pointer hover:bg-white/60" } w-10 h-10 flex items-center justify-center drop-shadow-lg rounded-full`}
                     onClick={() => handlePageChange(page + 1)}
-                    disabled={page >= Math.ceil((data?.meta?.total ?? 0) / pageSize)}
+                    disabled={page >= Math.ceil((data?.meta?.total ?? 0) / pageSize)-1}
                   >
                     <MdOutlineNavigateNext size={32}/>
                   </button>

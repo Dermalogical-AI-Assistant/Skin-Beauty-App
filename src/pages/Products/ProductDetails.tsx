@@ -179,7 +179,7 @@ const ProductDetails: React.FC = () => {
               <div className="flex items-baseline mb-4">
                 <h1 className="font-semibold text-2xl text-primary-dark/90 truncate">{product?.title}</h1>
                 <span className="text-lg text-primary-dark/60 whitespace-nowrap flex-shrink-0 ml-4">
-                  sold {product?.sold}
+                  sold {product?.sold || 0}
                 </span>
               </div>
 
@@ -262,7 +262,7 @@ const ProductDetails: React.FC = () => {
                 {expandedSections.howToUse && (
                   <div className="pb-4">
                     <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.howToUse || "Apply a small amount to clean skin. Gently massage until absorbed. Use daily for best results."}
+                      {product?.howToUse || "None"}
                     </p>
                   </div>
                 )}
@@ -284,7 +284,7 @@ const ProductDetails: React.FC = () => {
                 {expandedSections.fullIngredientsList && (
                   <div className="pb-4">
                     <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.fullIngredientsList || "Water, Glycerin, Niacinamide, Hyaluronic Acid, Vitamin C, Retinol, Peptides, Ceramides, and other beneficial ingredients."}
+                      {product?.fullIngredientsList || "None"}
                     </p>
                   </div>
                 )}
@@ -306,7 +306,7 @@ const ProductDetails: React.FC = () => {
                 {expandedSections.ingredientBenefits && (
                   <div className="pb-4">
                     <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.ingredientBenefits || "Niacinamide helps minimize pores, Hyaluronic Acid provides deep hydration, Vitamin C brightens skin, and Peptides support skin elasticity."}
+                      {product?.ingredientBenefits || "None"}
                     </p>
                   </div>
                 )}
