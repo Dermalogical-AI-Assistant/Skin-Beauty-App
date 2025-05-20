@@ -22,8 +22,15 @@ const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
 
   return (
     <div className="flex items-center">
-      <span className={`flex items-center`}>{stars}</span>
-      <span className="text-sm  leading-none  align-middle">{rating}</span>
+      {
+        rating && rating > 0 ? (
+          <>
+            <span className={`flex items-center`}>{stars}</span>
+            <span className={`text-sm  leading-none  align-middle `}>{rating}</span>
+          </>
+        ):<></>
+      }
+
     </div>
   );
 };
