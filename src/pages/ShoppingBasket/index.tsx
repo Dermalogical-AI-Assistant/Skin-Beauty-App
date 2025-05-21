@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Check } from 'lucide-react';
+import useCart from "../../hooks/useCart.ts";
+import { ROUTE_CHECKOUT } from "../../constants/routes.ts";
+import { useNavigate } from "react-router-dom";
+import useOrders from "../../hooks/useOrder.ts";
+import { Order } from "../../types/Order.ts";
 
 interface BasketItem {
   id: string;
@@ -14,9 +19,10 @@ interface BasketItem {
 }
 
 const ShoppingBasket: React.FC = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<BasketItem[]>([]);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Function to get cart items from localStorage
   const getCartItems = (): BasketItem[] => {
@@ -169,22 +175,84 @@ const ShoppingBasket: React.FC = () => {
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + shipping + tax;
 
-  const handleCheckout = () => {
+  const { onAddItemsToCart, isLoading: isCartLoading } = useCart();
+  const { onRequestOrder, isLoading } = useOrders();
+
+
+  const handleCheckout = async () => {
     if (selectedItems.size === 0) {
       alert('Please select at least one item to checkout');
       return;
     }
 
-    setIsLoading(true);
-    // Simulate checkout process
-    setTimeout(() => {
-      setIsLoading(false);
-      alert(`Checkout successful! Total: $${total.toFixed(2)}`);
-    }, 2000);
+    setIsCheckingOut(true);
+
+    try {
+      // Get only selected items
+      const itemsToCheckout = cartItems
+        .filter(item => selectedItems.has(item.id))
+        .map(({ id, quantity }) => ({ productId: id, quantity }));
+
+      // // Use Promise to properly handle the async operation and get results
+      // const results = await new Promise<any[]>((resolve, reject) => {
+      //   onAddItemsToCart(
+      //     itemsToCheckout,
+      //     (data) => {
+      //       resolve(data);
+      //     },
+      //     (error) => {
+      //       reject(error);
+      //     }
+      //   );
+      // });
+
+      // // Extract successful product IDs from results
+      // const successfulProductIds = results.map(result => {
+      //   // Assuming each result has a productId or we can extract it somehow
+      //   // Adjust this based on the actual structure of your API response
+      //   return result?.data?.productId || result?.config?.url?.split('/')?.pop() || 'unknown';
+      // });
+
+      // Log successful product IDs
+      // console.log('Successfully added products:', successfulProductIds);
+
+      const orderItems = itemsToCheckout.map((item) => ({
+        productId: item.productId, // Adjust based on your data structure
+        quantity: item.quantity,
+        note: ""
+      }));
+
+      onRequestOrder(
+        orderItems,
+        (response) => {
+          console.log("✅ Order created successfully:", response);
+          const remainingItems = cartItems.filter(item => !selectedItems.has(item.id));
+          setCartItems(remainingItems);
+          saveCartItems(remainingItems);
+          setSelectedItems(new Set());
+          navigate(`${ROUTE_CHECKOUT}/${response.order.id}`);
+        },
+        (error: Error) => {
+          console.error("❌ Error creating order:", error);
+        }
+      );
+
+      // Optionally remove checked out items from cart
+
+
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      alert(`Checkout failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
+  // Determine if checkout button should be disabled
+  const isCheckoutDisabled = selectedItems.size === 0 || isCheckingOut || isCartLoading;
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-primary py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -201,7 +269,7 @@ const ShoppingBasket: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm">
+            <div className="bg-white/80 rounded-lg shadow-sm">
               {/* Select All Header */}
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
@@ -339,7 +407,7 @@ const ShoppingBasket: React.FC = () => {
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
+            <div className="bg-white/80 rounded-lg shadow-sm p-6 sticky top-8">
               <h2 className="text-xl font-semibold text-primary-dark mb-4">Order Summary</h2>
 
               <div className="space-y-3 mb-6">
@@ -381,10 +449,10 @@ const ShoppingBasket: React.FC = () => {
 
               <button
                 onClick={handleCheckout}
-                disabled={selectedItems.size === 0 || isLoading}
+                disabled={isCheckoutDisabled}
                 className="w-full bg-pink-light text-white py-3 px-4 rounded-md font-medium hover:bg-pink-light/90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {isLoading ? (
+                {isCheckingOut ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                 ) : (
                   `Checkout (${selectedItems.size} items)`
