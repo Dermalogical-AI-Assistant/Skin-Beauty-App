@@ -1,0 +1,118 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { REQUEST_CREATE_ORDER, REQUEST_ORDER_DETAIL, REQUEST_UPDATE_ORDER } from "../constants/apis";
+import axios from "../settings/axios";
+import { useState } from "react";
+import { Order, ResGetOrderById, ResOrder } from "../types/Order.ts";
+import { GetProductRequestParam, GetProductsResponse, Product } from "../types/Products.ts";
+
+type OrderItem = {
+  productId: string;
+  quantity: number;
+  note: string;
+}
+
+export type ReqModifyOrder = {
+  orderId: string;
+  modifyData:{
+    shippingAddressId:string;
+    status:string;
+    shippingFee:number;
+    paymentMethod:string;
+    paymentStatus:string;
+  }
+
+}
+
+type ReqOrder = {
+  orderItems: OrderItem[]
+};
+
+function useOrders (){
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateOrder = useMutation({
+    mutationKey: ["create-orders"],
+    mutationFn: (data: OrderItem[]) => {
+      const dataOrder: ReqOrder = {
+        orderItems:data
+      }
+      return axios.post<ResOrder>(REQUEST_CREATE_ORDER, dataOrder, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+  });
+
+  const onRequestOrder = (
+    data: OrderItem[],
+    onSuccess: (response:ResOrder) => void,
+    onError: (error:Error) => void
+  ) => {
+    setIsLoading(true);
+    handleCreateOrder.mutate(data, {
+      onSuccess: (response) => {
+        setIsLoading(false);
+        onSuccess?.(response.data);
+      },
+      onError: (error) => {
+        setIsLoading(false);
+        console.log(error);
+        onError(error);
+      }
+    });
+  };
+
+  const handleUpdateOrder = useMutation({
+    mutationKey: ["update-orders"],
+    mutationFn: (data: ReqModifyOrder) => {
+      return axios.put<ResOrder>(`${REQUEST_UPDATE_ORDER}/${data.orderId}`, data.modifyData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+  });
+
+  const onRequestUpdateOrder = (
+    data: ReqModifyOrder,
+    onSuccess: (response:ResOrder) => void,
+    onError: (error:Error) => void
+  ) => {
+    setIsLoading(true);
+    handleUpdateOrder.mutate(data, {
+      onSuccess: (response) => {
+        setIsLoading(false);
+        onSuccess?.(response.data);
+      },
+      onError: (error) => {
+        setIsLoading(false);
+        console.log(error);
+        onError(error);
+      }
+    });
+  };
+
+  const getOrder = (id:string) => {
+    return useQuery<ResGetOrderById>({
+      queryKey: ["order", id],
+      queryFn: async ({ queryKey }) => {
+        const [, id] = queryKey as [string, string];
+        const res = await axios.get<ResGetOrderById>(
+          `${ REQUEST_ORDER_DETAIL }/${ id }`);
+        return res.data;
+      },
+      refetchOnWindowFocus: false,
+    });
+  };
+
+  return {
+    isLoading,
+    onRequestOrder,
+    onRequestUpdateOrder,
+    getOrder
+  };
+};
+
+export default useOrders;

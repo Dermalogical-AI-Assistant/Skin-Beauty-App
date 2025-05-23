@@ -4,6 +4,9 @@ import ChatBot from "../pages/ChatBot";
 import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
 import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
+import { ROUTE_CHECKOUT, ROUTE_MY_ORDER } from "../constants/routes.ts";
+import CheckoutPage from "../pages/CheckoutPage";
+import OrderPage from "../pages/OrderPage";
 
 /**
  * Routes that require authentication
@@ -12,39 +15,46 @@ import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
  * @type {Array<Object>}
  */
 export const routesForAuthenticated = [
-    {
-        path: "/",
-        element: <ProtectedRoutesWrapper />,
+  {
+    path: "/",
+    element: <ProtectedRoutesWrapper />,
+    children: [
+      {
+        path: "",
+        element: <UserBaseLayout />,
         children: [
           {
-            path: "",
-            element: <UserBaseLayout />,
+            path: "/dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/logout",
+            element: <>hello from logout</>,
+          },
+          {
+            path: `${ROUTE_CHECKOUT}/:orderId`,
+            element: <CheckoutPage />,
+          },
+          {
+            path:ROUTE_MY_ORDER,
+            element: <OrderPage />,
+          },
+          {
+            path: "/cosmetic-assistant",
+            element: <ChatBot />,
             children: [
               {
-                path: "/dashboard",
-                element: <Dashboard />,
+                path: "",
+                element: <WelcomePage />,
               },
               {
-                path: "/logout",
-                element: <>hello from logout</>,
-              },
-              {
-                path: "/cosmetic-assistant",
-                element: <ChatBot/>,
-                children: [
-                  {
-                    path: "",
-                    element: <WelcomePage/>,
-                  },
-                  {
-                    path: ":sessionId",
-                    element: <ChatArea />,
-                  }
-                ]
+                path: ":sessionId",
+                element: <ChatArea />,
               },
             ],
           },
-        ]
-
-    },
+        ],
+      },
+    ],
+  },
 ];
