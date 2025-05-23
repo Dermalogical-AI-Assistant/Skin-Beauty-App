@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MapPin, CreditCard, ShoppingBag, Tag, Plus, Check, ArrowLeft } from "lucide-react";
-import { useLocation, useParams } from "react-router-dom";
+import { MapPin, CreditCard, ShoppingBag, ArrowLeft } from "lucide-react";
+import { useParams } from "react-router-dom";
 import useOrders, { ReqModifyOrder } from "../../hooks/useOrder.ts";
-import { Order, ResGetOrderById } from "../../types/Order.ts";
+import { ResGetOrderById } from "../../types/Order.ts";
 import ShippingAddress from "../../components/Modal/ShippingAddress.tsx";
 import Modal from "../../components/Modal";
 
@@ -11,15 +11,14 @@ const CheckoutPage = () => {
   const { orderId } = useParams<{ orderId: string }>();
 
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const location = useLocation();
   const hasRequestedOrder = useRef(false);
 
-  const {getOrder, isLoading, onRequestUpdateOrder } = useOrders();
+  const {getOrderById, isLoading, onRequestUpdateOrder } = useOrders();
   const [order, setOrder] = useState<ResGetOrderById | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRequestingOrder, setIsRequestingOrder] = useState(false);
 
-  const {data, refetch: refreshOrder} = getOrder(orderId||"");
+  const {data, refetch: refreshOrder} = getOrderById(orderId||"");
 
   useEffect(() => {
     if (data) {
@@ -58,18 +57,6 @@ const CheckoutPage = () => {
       }
     )
   }
-
-  const handleApplyCoupon = () => {
-    // This functionality might be moved to server-side in the future
-    // For now, coupon handling should be done when creating the order
-    console.log("Coupon functionality should be handled server-side");
-  };
-
-  const handleRemoveCoupon = () => {
-    // This functionality might be moved to server-side in the future
-    console.log("Coupon removal should be handled server-side");
-  };
-
 
   // Show error state
   if (error) {
