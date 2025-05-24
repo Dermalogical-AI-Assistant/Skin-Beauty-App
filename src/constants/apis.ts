@@ -23,6 +23,7 @@ export const REQUEST_SKINCONCERN = "/eco/skincare_concerns";
 export const REQUEST_ADD_PRODUCT_TO_CART = "/eco/cart-items";
 
 export const REQUEST_CREATE_ORDER = "/eco/order-items";
+export const REQUEST_MY_ORDERS = "/eco/my-orders";
 export const REQUEST_ORDER_DETAIL = "/eco/orders";
 export const REQUEST_UPDATE_ORDER = "/eco/orders";
 

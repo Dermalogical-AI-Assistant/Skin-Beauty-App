@@ -1,6 +1,8 @@
 import { ShippingAddress } from "./ShippingAddress.ts";
 import { Product } from "./Products.ts";
 
+export type OrderStatus = "DRAF" | "PENDING" | "CONFIRMED" | "SHIPPING" | "DELIVERED" | "CANCELED";
+
 export type OrderItem = {
   id: string;
   note: string;
@@ -19,10 +21,11 @@ export type Order = {
   totalDiscount: number;
   shippingFee: number;
   finalAmount: number;
-  status: string;
+  status: OrderStatus;
   paymentMethod: string;
   paymentStatus: string;
   orderItems: OrderItem[];
+  createdAt: string;
 }
 
 export type ResOrder = {
@@ -33,11 +36,17 @@ export type ResOrder = {
     totalDiscount: number;
     shippingFee: number;
     finalAmount: number;
-    status: string;
+    status: OrderStatus;
     paymentMethod: string;
     paymentStatus: string;
   };
   orderItems: OrderItem[];
 };
+
+export type GetMyOrdersRequestParam = {
+    page: number;
+    perPage: number;
+    status?: OrderStatus;
+}
 
 export type ResGetOrderById = Order

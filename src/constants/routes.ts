@@ -23,4 +23,5 @@ export const ROUTE_PRODUCTS = '/products'
 export const ROUTE_MY_ORDERS = '/my-orders'
 export const ROUTE_BASKET = '/basket'
 export const ROUTE_CHECKOUT = '/checkout'
-export const ROUTE_MY_ORDER = '/my-order'
+export const ROUTE_MY_ORDER = '/my-orders'
+

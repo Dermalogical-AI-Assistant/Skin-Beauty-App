@@ -6,7 +6,7 @@ import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
 import { ROUTE_CHECKOUT, ROUTE_MY_ORDER } from "../constants/routes.ts";
 import CheckoutPage from "../pages/CheckoutPage";
-import OrderPage from "../pages/OrderPage";
+import OrdersPage from "../pages/OrderPage";
 
 /**
  * Routes that require authentication
@@ -37,7 +37,7 @@ export const routesForAuthenticated = [
           },
           {
             path:ROUTE_MY_ORDER,
-            element: <OrderPage />,
+            element: <OrdersPage />,
           },
           {
             path: "/cosmetic-assistant",

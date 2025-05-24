@@ -1,9 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { REQUEST_CREATE_ORDER, REQUEST_ORDER_DETAIL, REQUEST_UPDATE_ORDER } from "../constants/apis";
+import {
+  REQUEST_CREATE_ORDER,
+  REQUEST_MY_ORDERS,
+  REQUEST_ORDER_DETAIL,
+  REQUEST_UPDATE_ORDER
+} from "../constants/apis";
 import axios from "../settings/axios";
 import { useState } from "react";
-import { Order, ResGetOrderById, ResOrder } from "../types/Order.ts";
-import { GetProductRequestParam, GetProductsResponse, Product } from "../types/Products.ts";
+import { GetMyOrdersRequestParam, Order, ResGetOrderById, ResOrder } from "../types/Order.ts";
+import qs from "qs";
+import { GenericResponseType } from "../types/common.ts";
 
 type OrderItem = {
   productId: string;
@@ -94,7 +100,7 @@ function useOrders (){
     });
   };
 
-  const getOrder = (id:string) => {
+  const getOrderById = (id:string) => {
     return useQuery<ResGetOrderById>({
       queryKey: ["order", id],
       queryFn: async ({ queryKey }) => {
@@ -107,11 +113,35 @@ function useOrders (){
     });
   };
 
+  const getOrders = (params: GetMyOrdersRequestParam) => {
+    return useQuery<GenericResponseType<Order>>({
+      queryKey: ["product", params],
+      queryFn: async ({ queryKey }) => {
+        const [, params] = queryKey as [string, GetMyOrdersRequestParam];
+
+        //drop status when status is undefined
+        if (params.status === undefined || params.status === null || params.status === "") {
+          delete params.status;
+        }
+
+        const res = await axios.get<GenericResponseType<Order>>(REQUEST_MY_ORDERS, {
+          params,
+          paramsSerializer: {
+            serialize: (params) =>
+              qs.stringify(params, { arrayFormat: 'repeat' }) // skincareConcerns=DRY_SKIN&skincareConcerns=ACNE
+          },});
+        return res.data;
+      },
+      refetchOnWindowFocus: false,
+    });
+  };
+
   return {
     isLoading,
     onRequestOrder,
     onRequestUpdateOrder,
-    getOrder
+    getOrderById,
+    getOrders
   };
 };
 
