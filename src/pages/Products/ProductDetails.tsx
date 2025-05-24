@@ -5,10 +5,13 @@ import { SkincareConcern } from "../../types/SkincareConcern.ts";
 import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
+import { Currency } from "../../types/Currency.ts";
+import CommentsSection from "../../components/Comment";
 import { getCurrencySymbol } from "../../utils/currency.ts";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
+
   const { getProductDetails } = useProducts();
   const { data: product, isLoading } = getProductDetails(id||"");
 
@@ -207,7 +210,7 @@ const ProductDetails: React.FC = () => {
 
               {/* Price */}
               <div className="flex items-center gap-1 mb-6">
-                <span className="text-primary-dark/70 text-xl">{product && getCurrencySymbol(product?.currency)}</span>
+                <span className="text-primary-dark/70 text-xl">{product && Currency.getSymbol(product?.currency)}</span>
                 <p className="text-primary-dark text-3xl font-semibold">{product?.price}</p>
               </div>
 
@@ -310,6 +313,9 @@ const ProductDetails: React.FC = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div>
+            <CommentsSection productId={id||''}/>
           </div>
         </div>
       </div>

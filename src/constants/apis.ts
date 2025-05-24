@@ -30,3 +30,6 @@ export const REQUEST_UPDATE_ORDER = "/eco/orders";
 
 export const REQUEST_MY_SHIPPING_ADDRESS = "/eco/my-shipping-addresses";
 export const REQUEST_CREATE_SHIPPING_ADDRESS = "/eco/shipping-addresses";
+
+export const REQUEST_COMMENTS = "/eco/comments-product";
+export const REQUEST_CREATE_COMMENT = "/eco/comments";

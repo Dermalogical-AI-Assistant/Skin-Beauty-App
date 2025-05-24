@@ -2,10 +2,10 @@ import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuthStore from "../stores/AuthStore";
 
 export const ProtectedRoutesWrapper = () => {
-    const { accessToken } = useAuthStore();
+    const { isLogin } = useAuthStore();
     const location = useLocation();
 
-    if (!accessToken) {
+    if (!isLogin) {
         return <Navigate to="/login"  state={{ historyLocation : location }}  />;
     }
 
