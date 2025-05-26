@@ -3,6 +3,15 @@ import { Product } from "./Products.ts";
 
 export type OrderStatus = "DRAF" | "PENDING" | "CONFIRMED" | "SHIPPING" | "DELIVERED" | "CANCELED";
 
+export enum E_OrderStatus {
+  DRAF = "DRAF",
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  SHIPPING = "SHIPPING",
+  DELIVERED = "DELIVERED",
+  CANCELED = "CANCELED",
+}
+
 export type OrderItem = {
   id: string;
   note: string;
