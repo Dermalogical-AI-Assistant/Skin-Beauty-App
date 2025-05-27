@@ -5,6 +5,7 @@ import { SkincareConcern } from "../../types/SkincareConcern.ts";
 import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
+import { getCurrencySymbol } from "../../utils/currency.ts";
 import { Currency } from "../../types/Currency.ts";
 import CommentsSection from "../../components/Comment";
 import { getCurrencySymbol } from "../../utils/currency.ts";
@@ -210,7 +211,7 @@ const ProductDetails: React.FC = () => {
 
               {/* Price */}
               <div className="flex items-center gap-1 mb-6">
-                <span className="text-primary-dark/70 text-xl">{product && Currency.getSymbol(product?.currency)}</span>
+                <span className="text-primary-dark/70 text-xl">{product && getCurrencySymbol(product?.currency)}</span>
                 <p className="text-primary-dark text-3xl font-semibold">{product?.price}</p>
               </div>
 
