@@ -5,7 +5,7 @@ import { SkincareConcern } from "../../types/SkincareConcern.ts";
 import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
-import { Currency } from "../../types/Currency.ts";
+import { getCurrencySymbol } from "../../utils/currency.ts";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
@@ -178,23 +178,21 @@ const ProductDetails: React.FC = () => {
               {/* Product title */}
               <div className="flex items-baseline mb-4">
                 <h1 className="font-semibold text-2xl text-primary-dark/90 truncate">{product?.title}</h1>
-                <span className="text-lg text-primary-dark/60 whitespace-nowrap flex-shrink-0 ml-4">
-                  sold {product?.sold || 0}
-                </span>
               </div>
 
-              <StarRating rating={product?.averageRating} />
 
               {/* Product description */}
               <div className="mb-6">
                 <p className="text-primary-dark/80 leading-relaxed">{product?.description}</p>
               </div>
-
+              <div className={`pb-3`}>
+                <StarRating rating={product?.averageRating} />
+              </div>
               {/* Skincare Concerns - Rounded pills */}
               {product?.skincareConcerns && product.skincareConcerns.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-primary-dark/90 mb-3">Skin Concerns</h3>
-                  <div className="flex flex-wrap gap-2">
+                <div className="mb-6 flex items-center gap-2">
+                  <h3 className="text-lg font-medium text-primary-dark/90">Skin Concerns:</h3>
+                  <div className="flex flex-wrap items-center gap-2">
                     {product.skincareConcerns.map((concern, index) => (
                       <span
                         key={index}
@@ -209,7 +207,7 @@ const ProductDetails: React.FC = () => {
 
               {/* Price */}
               <div className="flex items-center gap-1 mb-6">
-                <span className="text-primary-dark/70 text-xl">{product && Currency.getSymbol(product?.currency)}</span>
+                <span className="text-primary-dark/70 text-xl">{product && getCurrencySymbol(product?.currency)}</span>
                 <p className="text-primary-dark text-3xl font-semibold">{product?.price}</p>
               </div>
 

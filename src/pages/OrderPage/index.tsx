@@ -41,7 +41,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -52,7 +52,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -63,7 +63,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -74,7 +74,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -85,7 +85,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -96,7 +96,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )
@@ -107,7 +107,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
           </div>
         </TabContent>
       )

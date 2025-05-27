@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { LogOut, Settings, User } from 'lucide-react';
 import useAuthStore from "../../stores/AuthStore.ts";
 import { Link } from "react-router-dom";
+import { MdSwapHoriz } from "react-icons/md";
 
 const AcountMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,6 +74,14 @@ const AcountMenu: React.FC = () => {
                 className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 transition"
               >
                 <Settings size={16} className="mr-2" /> Settings
+              </a>
+            </li>
+            <li>
+              <a
+                href={`/`}
+                className="flex items-center px-4 py-2 text-sm transition hover:bg-gray-100"
+              >
+                <MdSwapHoriz size={16} className="mr-2" /> Swith to User Page
               </a>
             </li>
             <li>

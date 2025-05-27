@@ -4,7 +4,7 @@ import ChatBot from "../pages/ChatBot";
 import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
 import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
 import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
-import { ROUTE_CHECKOUT, ROUTE_MY_ORDER } from "../constants/routes.ts";
+import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../constants/routes.ts";
 import CheckoutPage from "../pages/CheckoutPage";
 import OrdersPage from "../pages/OrderPage";
 
@@ -33,6 +33,10 @@ export const routesForAuthenticated = [
           },
           {
             path: `${ROUTE_CHECKOUT}/:orderId`,
+            element: <CheckoutPage />,
+          },
+          {
+            path: `${ROUTE_ORDER_DETAILS}/:orderId`,
             element: <CheckoutPage />,
           },
           {
