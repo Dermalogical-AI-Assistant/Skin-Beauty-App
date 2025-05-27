@@ -6,9 +6,13 @@ import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import { getCurrencySymbol } from "../../utils/currency.ts";
+import { Currency } from "../../types/Currency.ts";
+import CommentsSection from "../../components/Comment";
+import { getCurrencySymbol } from "../../utils/currency.ts";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
+
   const { getProductDetails } = useProducts();
   const { data: product, isLoading } = getProductDetails(id||"");
 
@@ -310,6 +314,9 @@ const ProductDetails: React.FC = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div>
+            <CommentsSection productId={id||''}/>
           </div>
         </div>
       </div>
