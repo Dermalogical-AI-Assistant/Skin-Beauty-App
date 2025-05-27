@@ -5,8 +5,6 @@ import { SkincareConcern } from "../../types/SkincareConcern.ts";
 import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
-import { getCurrencySymbol } from "../../utils/currency.ts";
-import { Currency } from "../../types/Currency.ts";
 import CommentsSection from "../../components/Comment";
 import { getCurrencySymbol } from "../../utils/currency.ts";
 
