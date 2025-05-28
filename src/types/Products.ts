@@ -15,7 +15,8 @@ export type Product = {
   ingredientBenefits: string;
   fullIngredientsList: string;
   skincareConcerns: string[];
-  sold: number;
+  soldQuantity: number;
+  totalQuantity: number;
   createdAt: string
 }
 
@@ -74,6 +75,5 @@ export type ResCreateProduct = {
   skincareConcerns: E_SkincareConcern[];
   totalQuantity: number;
   createdAt: string;
-
 };
 

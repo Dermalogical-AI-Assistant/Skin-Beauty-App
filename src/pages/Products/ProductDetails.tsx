@@ -209,7 +209,7 @@ const ProductDetails: React.FC = () => {
 
               {/* Price */}
               <div className="flex items-center gap-1 my-2">
-                <span className="text-primary-dark/70 text-xl">{product && getCurrencySymbol(product?.currency)}</span>
+                <span className="text-primary-dark/70 text-xl">£</span>
                 <p className="text-primary-dark text-3xl font-semibold">{product?.price}</p>
               </div>
 

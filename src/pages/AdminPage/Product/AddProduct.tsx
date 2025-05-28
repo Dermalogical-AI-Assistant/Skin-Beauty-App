@@ -21,7 +21,7 @@ const CreateProduct: React.FC = () => {
     title: "",
     price: 0,
     totalQuantity: 0,
-    currency: "DOLLAR",
+    currency: "POUND",
     description: "",
     howToUse: "",
     ingredientBenefits: "",
@@ -364,7 +364,7 @@ const CreateProduct: React.FC = () => {
               </div>
               <div className="">
                 <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                  Price *
+                  Price(£) *
                 </label>
                 <input
                   type="number"
@@ -375,23 +375,6 @@ const CreateProduct: React.FC = () => {
                   placeholder="0.00"
                   required
                 />
-              </div>
-
-              <div className="w-32">
-                <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                  Currency
-                </label>
-                <select
-                  value={productData.currency}
-                  onChange={(e) => setProductData(prev => ({ ...prev, currency: e.target.value }))}
-                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="DOLLAR">USD</option>
-                  <option value="VND">VND</option>
-                  <option value="EURO">EUR</option>
-                  <option value="POUND">POUND</option>
-                </select>
-
               </div>
             </div>
 

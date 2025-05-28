@@ -24,7 +24,7 @@ const ProductDetails: React.FC = () => {
     title: "",
     price: 0,
     totalQuantity: 0,
-    currency: "DOLLAR",
+    currency: "POUND",
     description: "",
     howToUse: "",
     ingredientBenefits: "",
@@ -465,7 +465,7 @@ const ProductDetails: React.FC = () => {
             </div>
 
             <div className="flex gap-4">
-              <div className="">
+              <div className="w-full">
                 <label className="block text-sm font-medium text-primary-dark/70 mb-2">
                   Quantity *
                 </label>
@@ -486,9 +486,9 @@ const ProductDetails: React.FC = () => {
                 )}
 
               </div>
-              <div className={`flex-1`}>
+              <div className={`w-full`}>
                 <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                  Price *
+                  Price (£) *
                 </label>
                 {isEditMode ? (
                   <input
@@ -503,27 +503,6 @@ const ProductDetails: React.FC = () => {
                 ) : (
                   <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
                     {productData.price || 0}
-                  </div>
-                )}
-              </div>
-
-              <div className="w-32">
-                <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                  Currency
-                </label>
-                {isEditMode ? (
-                  <select
-                    value={productData.currency}
-                    onChange={(e) => setProductData(prev => ({ ...prev, currency: e.target.value }))}
-                    className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="DOLLAR">USD</option>
-                    <option value="VND">VND</option>
-                    <option value="EUR">EUR</option>
-                  </select>
-                ) : (
-                  <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
-                    {productData.currency || "USD"}
                   </div>
                 )}
               </div>

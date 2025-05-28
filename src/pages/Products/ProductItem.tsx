@@ -31,7 +31,7 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
             <div className="mb-2">
               <div className={`flex justify-between font-medium text-gray-900 mb-1`}>
                 <h3 className="font-semibold text-primary-dark/90 truncate">{props.item.title}</h3>
-                <span className={`text-primary-dark/60 whitespace-nowrap pl-2 flex-shrink-0`}>sold {props.item.sold}</span>
+                <span className={`text-primary-dark/60 whitespace-nowrap pl-2 flex-shrink-0`}>sold {props.item.soldQuantity}</span>
               </div>
               <StarRating rating={props.item.averageRating} />
             </div>
@@ -41,8 +41,8 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
 
             {/*Price*/}
             <div className={`flex justify-between items-center mt-2`}>
-              <div className={`flex items-center`}>
-                <span>{Currency.getSymbol(props.item.currency)}</span>
+              <div className={`flex items-center gap-1`}>
+                <span className={`text-primary-dark/90`}>£</span>
                 <p className="text-primary-dark text-lg font-semibold">{props.item.price}</p>
               </div>
               <button className="bg-pink-light text-white py-1 px-3 rounded-full text-sm transition-colors duration-300 w-10 h-10 flex items-center justify-center">

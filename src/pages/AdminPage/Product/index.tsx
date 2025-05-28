@@ -15,6 +15,7 @@ import StarRating from "../../../components/StarRating";
 import { Link, useNavigate } from "react-router-dom";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
+import { convertDate } from "../../../utils/date.ts";
 
 const ProductManagement: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -62,32 +63,6 @@ const ProductManagement: React.FC = () => {
 
   const products = data?.data ?? [];
   const total = data?.meta?.total ?? 0;
-
-  const handleSaveUser = async (userData: any) => { // Sử dụng any thay cho UserFormData
-    const { isCreate, ...user } = userData;
-    if (userData.isCreate) {
-      createUser.mutate(userData, {
-        onSuccess: (_data) => {
-          toast.success("Create user successfully!");
-          refetch();
-        },
-        onError: (error) => {
-          toast.error(`Oops! Something went wrong:${error.message}`);
-        },
-      });
-    } else {
-      updateUser.mutate(userData, {
-        onSuccess: (_data) => {
-          toast.success("Update user successfully!");
-          refetch();
-        },
-        onError: (error) => {
-          toast.error(`Oops! Something went wrong:${error.message}`);
-        },
-      });
-    }
-    setOpenUserDetailDialog(false);
-  };
 
   const ProductTableColGroup = () => (
     <colgroup>
@@ -161,10 +136,10 @@ const ProductManagement: React.FC = () => {
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skin Concerns</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Inventory (Count)</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">In Stock</th>
                       <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sold</th>
                       <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rattings</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
                       <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                     </tr>
                     </thead>
@@ -192,20 +167,10 @@ const ProductManagement: React.FC = () => {
                             <div className="font-medium text-sm">{product.title}</div>
                           </div>
                         </td>
-
-                        {/*{*/}
-                        {/*  product?.skincareConcerns?.map(*/}
-                        {/*    (concern, idx) => (*/}
-                        {/*      <td key={idx} className="px-4 py-3 text-sm">*/}
-                        {/*        {SkincareConcern.getLabel(concern as E_SkincareConcern)}*/}
-                        {/*      </td>*/}
-                        {/*  )*/}
-                        {/*  )*/}
-                        {/*}*/}
                         <td className="px-4 py-3 text-sm text-center">{0}</td>
-                        <td className="px-4 py-3 text-sm text-center">{0}</td>
-                        <td className="px-4 py-3 text-sm text-center">{product.sold || 0}</td>
-                        <td className="px-4 py-3 text-sm text-center"><StarRating rating={product?.averageRating || 0} /></td>
+                        <td className="px-4 py-3 text-sm text-center">{product.soldQuantity || 0}</td>
+                        <td className="px-4 py-3 text-sm flex items-center justify-center"><StarRating rating={product?.averageRating || 0} /></td>
+                        <td className="px-4 py-3 text-sm ">{convertDate(product.createdAt)}</td>
                         <td className="px-4 py-3 text-sm text-center">
                           <div className="flex justify-center">
                             <ContextMenu icon={<BsThreeDots size={24} />}>

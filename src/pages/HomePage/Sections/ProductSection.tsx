@@ -177,7 +177,7 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
                 <div className="mb-2">
                   <div className={`flex justify-between font-medium text-gray-900 mb-1`}>
                     <h3 className="font-semibold text-primary-dark/90 truncate">{item.title}</h3>
-                    <span className={`text-primary-dark/60 whitespace-nowrap pl-2 flex-shrink-0`}>sold {item.sold}</span>
+                    <span className={`text-primary-dark/60 whitespace-nowrap pl-2 flex-shrink-0`}>sold {item.soldQuantity}</span>
                   </div>
                   <StarRating rating={item.averageRating} />
                 </div>
