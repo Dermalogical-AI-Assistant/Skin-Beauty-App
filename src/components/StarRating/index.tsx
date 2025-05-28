@@ -26,7 +26,7 @@ const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
   }, [rating]);
 
   return (
-    <div className="flex items-center space-x-1">
+    <div className="flex items-center">
         <span className={`flex items-center`}>{starts}</span>
     </div>
   );

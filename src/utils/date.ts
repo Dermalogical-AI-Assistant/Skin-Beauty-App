@@ -6,8 +6,5 @@ export const convertDate = (dateStr?: string) => {
         });
     }
 
-    return new Date().toLocaleString("en-GB", {
-        timeZone: "UTC",
-        dateStyle: "short",
-    });
+    return "N/A";
 };
