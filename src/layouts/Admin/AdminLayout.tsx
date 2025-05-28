@@ -16,19 +16,23 @@ const AdminLayout: React.FC<LayoutProps> = ({ children }) => {
     };
 
     return (
-        <div className="flex h-screen font-baloo text-primary-dark bg-primary">
-            {/* Sidebar */}
-            <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-
-            {/* Main Content */}
-            <div className="flex flex-col flex-1 bg-white m-5 rounded-2xl shadow-lg p-2">
-              <Navbar/>
-
-              <main className="flex-1 overflow-autobg-white m-4">
-                  {children || <Outlet />}
-              </main>
-            </div>
+      <div className="flex h-screen font-baloo text-primary-dark bg-primary">
+        {/* Sidebar */}
+        <div className={"p-5"}>
+          <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         </div>
+        {/* Main Content */}
+        <div className={"h-full p-5 flex flex-1 overflow-hidden"}>
+          <div className="h-full flex flex-col flex-1 bg-white rounded-2xl shadow-lg py-6">
+            <Navbar/>
+            <main className="h-full overflow-hidden">
+              <div className="h-full">
+              {children || <Outlet />}
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
     );
 };
 

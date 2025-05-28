@@ -25,7 +25,7 @@ const ContextMenu: React.FC<ContexMenuProps> = (props) => {
 
   return (
     <div
-      className="absolute right-0" ref={dropdownRef}
+      className="relative" ref={dropdownRef}
       onClick={()=>{setIsOpen(!isOpen)}}
     >
 
@@ -44,7 +44,7 @@ const ContextMenu: React.FC<ContexMenuProps> = (props) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-200 z-50">
+        <div className="absolute right-0 mt-2 max-w-48 px-4 py-2 bg-white shadow-lg rounded-lg ring-1 ring-gray-200 z-50">
           <ul className="py-1">
             {props.children}
           </ul>

@@ -14,6 +14,7 @@ import { Outlet } from "react-router-dom";
 import ProductDetails from "../pages/Products/ProductDetails.tsx";
 import ShoppingBasket from "../pages/ShoppingBasket";
 import { ROUTE_BASKET } from "../constants/routes.ts";
+import ProductManagement from "../pages/AdminPage/Product";
 
 export const routesForPublic = [
 
@@ -70,19 +71,5 @@ export const routesForPublic = [
     {
         path: "/login",
         element: <LoginPage/>,
-    },
-    {
-        path: "/admin",
-        element: <AdminLayout/>,
-        children: [
-            {
-                path: "dashboard",
-                element: <Dashboard/>,
-            },
-            {
-                path: "users",
-                element: <UserManagement/>,
-            }
-        ]
     }
 ];

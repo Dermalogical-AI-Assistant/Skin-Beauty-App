@@ -181,19 +181,13 @@ const ProductDetails: React.FC = () => {
               <div className="flex items-baseline mb-4">
                 <h1 className="font-semibold text-2xl text-primary-dark/90 truncate">{product?.title}</h1>
               </div>
-
-
-              {/* Product description */}
-              <div className="mb-6">
-                <p className="text-primary-dark/80 leading-relaxed">{product?.description}</p>
-              </div>
-              <div className={`pb-3`}>
-                <StarRating rating={product?.averageRating} />
+              <div className={`pb-3 flex items-center gap-2 text-primary-dark/70`}>
+                <StarRating rating={product?.averageRating} /> (0)
               </div>
               {/* Skincare Concerns - Rounded pills */}
               {product?.skincareConcerns && product.skincareConcerns.length > 0 && (
-                <div className="mb-6 flex items-center gap-2">
-                  <h3 className="text-lg font-medium text-primary-dark/90">Skin Concerns:</h3>
+                <div className="my-2 flex gap-2">
+                  <h3 className="text-lg font-medium text-primary-dark/90 whitespace-nowrap">Skin Concerns:</h3>
                   <div className="flex flex-wrap items-center gap-2">
                     {product.skincareConcerns.map((concern, index) => (
                       <span
@@ -206,9 +200,15 @@ const ProductDetails: React.FC = () => {
                   </div>
                 </div>
               )}
+              {/* Product description */}
+              <div className="my-2">
+                <p className="text-primary-dark/80 leading-relaxed">{product?.description}</p>
+              </div>
+
+
 
               {/* Price */}
-              <div className="flex items-center gap-1 mb-6">
+              <div className="flex items-center gap-1 my-2">
                 <span className="text-primary-dark/70 text-xl">{product && getCurrencySymbol(product?.currency)}</span>
                 <p className="text-primary-dark text-3xl font-semibold">{product?.price}</p>
               </div>

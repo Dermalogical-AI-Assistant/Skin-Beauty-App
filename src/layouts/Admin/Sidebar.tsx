@@ -2,6 +2,12 @@ import React from 'react';
 import { Home } from 'lucide-react';
 import BrandLogo from '../../components/BrandLogo';
 import { useLocation, Link } from 'react-router-dom';
+import { HiOutlineCollection } from "react-icons/hi";
+import { TbCategory2 } from "react-icons/tb";
+import { LuBoxes } from "react-icons/lu";
+import { BsShop } from "react-icons/bs";
+import { CgNotes } from "react-icons/cg";
+import { TbTruckDelivery } from "react-icons/tb";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -44,6 +50,50 @@ const navItems: NavItem[] = [
       },
     ],
   },
+  {
+    type: 'group',
+    name: 'Shops',
+    index: 0,
+    children: [
+      {
+        path: '/admin/products',
+        name: 'Products',
+        type: 'item',
+        icon: <LuBoxes size={18} />,
+      },
+      {
+        path: '/admin/categories',
+        name: 'Categories',
+        type: 'item',
+        icon: <TbCategory2 size={18} />,
+      },
+      {
+        path: '/admin/collections',
+        name: 'Collections',
+        type: 'item',
+        icon: <HiOutlineCollection size={18} />,
+      },
+      {
+        path: '/admin/orders',
+        name: 'Orders',
+        type: 'item',
+        icon: <BsShop size={18} />,
+      },
+      {
+        path: '/admin/invoices',
+        name: 'Invoices',
+        type: 'item',
+        icon: <CgNotes size={18} />,
+      },
+      {
+        path: '/admin/deliverys',
+        name: 'Deliverys',
+        type: 'item',
+        icon: <TbTruckDelivery size={18} />,
+      },
+    ],
+  },
+
 ];
 
 const renderNavItems = (items: NavItem[], currentPath: string) => {
@@ -66,7 +116,7 @@ const renderNavItems = (items: NavItem[], currentPath: string) => {
         <Link
           key={index}
           to={item.path || '#'}
-          className={`flex items-center gap-3 text-sm px-3 py-2 rounded-lg transition-colors text-gray-700 
+          className={`flex items-center gap-3 text-sm px-3 py-2 my-3 rounded-lg transition-colors text-gray-700 
             ${isActive ? 'bg-primary shadow-sm' : ' hover:bg-gray-100'}`}
         >
           {item.icon}
@@ -85,7 +135,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   return (
     <aside
-      className={`min-w-64 max-w-72 h-full bg-white shadow-md transition-transform duration-300 ease-in-out
+      className={` rounded-2xl min-w-64 max-w-72 h-full bg-white shadow-md transition-transform duration-300 ease-in-out
                   ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">

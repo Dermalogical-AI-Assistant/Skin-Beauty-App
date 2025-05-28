@@ -5,6 +5,7 @@ import { MdSwapHoriz } from "react-icons/md";
 import { BiUser } from "react-icons/bi";
 import useAuthStore from "../../../stores/AuthStore.ts";
 import { ADMIN } from "../../../constants/routes.ts";
+import { RoleType } from "../../../types/Users.ts";
 
 interface AccountMenuProps {
   icon?: React.ReactNode;
@@ -97,14 +98,17 @@ const AcountMenu: React.FC<AccountMenuProps> = (props) => {
                 <Settings size={16} className="mr-2" /> Settings
               </a>
             </li>
-            <li>
-              <a
-                href={`${ADMIN}`}
-                className="flex items-center px-4 py-2 text-sm transition hover:bg-gray-100"
-              >
-                <MdSwapHoriz size={16} className="mr-2" /> Go to Admin Panel
-              </a>
-            </li>
+            {
+              user?.role === RoleType.ADMIN &&
+              (<li>
+                <a
+                  href={`${ADMIN}`}
+                  className="flex items-center px-4 py-2 text-sm transition hover:bg-gray-100"
+                >
+                  <MdSwapHoriz size={16} className="mr-2" /> Go to Admin Panel
+                </a>
+              </li>)
+            }
             <li>
               <button
                 className="flex w-full items-center px-4 py-2 text-left text-sm transition hover:bg-gray-100"
