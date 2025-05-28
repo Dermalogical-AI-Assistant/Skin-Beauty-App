@@ -10,7 +10,7 @@ interface ContextMenuItemProps {
 }
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ( props) => {
-  const classes = "flex items-center px-4 py-2 text-sm hover:bg-gray-100 transition";
+  const classes = "flex items-center px-4 py-2 text-sm  rounded-lg  hover:bg-gray-100 transition";
 
   if (props.href) {
     return (

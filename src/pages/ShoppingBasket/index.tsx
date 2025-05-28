@@ -5,6 +5,8 @@ import { ROUTE_CHECKOUT } from "../../constants/routes.ts";
 import { useNavigate } from "react-router-dom";
 import useOrders from "../../hooks/useOrder.ts";
 import { Order } from "../../types/Order.ts";
+import Modal from "../../components/Modal";
+import CreateShippingAddress from "../../components/Modal/CreateShippingAddress.tsx";
 
 interface BasketItem {
   id: string;
@@ -23,6 +25,8 @@ const ShoppingBasket: React.FC = () => {
   const [cartItems, setCartItems] = useState<BasketItem[]>([]);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const [showAddressForm, setShowAddressForm] = useState(false);
 
   // Function to get cart items from localStorage
   const getCartItems = (): BasketItem[] => {
@@ -233,6 +237,7 @@ const ShoppingBasket: React.FC = () => {
           navigate(`${ROUTE_CHECKOUT}/${response.order.id}`);
         },
         (error: Error) => {
+          setShowAddressForm(true)
           console.error("❌ Error creating order:", error);
         }
       );
@@ -253,6 +258,20 @@ const ShoppingBasket: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-primary py-8">
+      {showAddressForm && (
+        <Modal>
+          <div className={`h-2/3 w-1/2 overflow-y-auto`}>
+            <CreateShippingAddress
+              onClose={()=>setShowAddressForm(false)}
+              onAddressAdded={() => {
+                setShowAddressForm(false);
+                handleCheckout();
+              }
+            }
+            />
+          </div>
+        </Modal>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

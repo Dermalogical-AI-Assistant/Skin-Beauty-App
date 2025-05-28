@@ -28,4 +28,8 @@ export const ROUTE_CHECKOUT = '/checkout'
 export const ROUTE_ORDER_DETAILS = '/orders'
 export const ROUTE_MY_ORDER = '/my-orders'
 
+//shop
+//admin
+export const ROUTE_ADMIN_PRODUCTS = '/admin/products'
+
 

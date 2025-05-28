@@ -34,7 +34,7 @@ const AcountMenu: React.FC = () => {
         className={`font-bold ${isLogin ? 'hidden' : 'block px-5'} text-secondary-dark hover:text-primary-dark focus:outline-none`}
         to="/login"
       >Sign in</Link>
-      <button
+      <div
         onClick={handleToggle}
         className={`${isLogin ? 'block' : 'hidden'} text-gray-700 focus:outline-none flex items-center space-x-4 `}>
         {/* Notifications */}
@@ -55,7 +55,7 @@ const AcountMenu: React.FC = () => {
             </div>
           </button>
         </div>
-      </button>
+      </div>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-200 z-50">

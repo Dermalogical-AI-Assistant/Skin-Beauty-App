@@ -7,6 +7,12 @@ import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
 import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../constants/routes.ts";
 import CheckoutPage from "../pages/CheckoutPage";
 import OrdersPage from "../pages/OrderPage";
+import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
+import UserManagement from "../pages/AdminPage/User";
+import ProductManagement from "../pages/AdminPage/Product";
+import { Outlet } from "react-router-dom";
+import CreateProduct from "../pages/AdminPage/Product/AddProduct.tsx";
+import ProductDetails from "../pages/AdminPage/Product/ProductDetails.tsx";
 
 /**
  * Routes that require authentication
@@ -19,6 +25,38 @@ export const routesForAuthenticated = [
     path: "/",
     element: <ProtectedRoutesWrapper />,
     children: [
+      {
+        path: "/admin",
+        element: <AdminLayout/>,
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard/>,
+          },
+          {
+            path: "users",
+            element: <UserManagement/>,
+          },
+          {
+            path: "products",
+            element: <Outlet/>,
+            children: [
+              {
+                path: "",
+                element: <ProductManagement/>,
+              },
+              {
+                path: "new-product",
+                element: <CreateProduct/>,
+              },
+              {
+                path: ":productId",
+                element: <ProductDetails/>,
+              },
+            ]
+          }
+        ]
+      },
       {
         path: "",
         element: <UserBaseLayout />,

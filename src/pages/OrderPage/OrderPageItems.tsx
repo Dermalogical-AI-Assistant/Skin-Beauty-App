@@ -291,7 +291,7 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
             <p className="mb-4 text-gray-500">
               You haven't placed any orders yet.
             </p>
-            <button className="from-pink-light rounded-lg bg-gradient-to-r to-purple-300 px-6 py-2 text-white transition-all hover:from-pink-600 hover:to-purple-400">
+            <button className=" rounded-lg bg-gradient-to-r from-pink-light to-purple-300 px-6 py-2 text-white transition-all hover:from-pink-600 hover:to-purple-400">
               Start Shopping
             </button>
           </div>

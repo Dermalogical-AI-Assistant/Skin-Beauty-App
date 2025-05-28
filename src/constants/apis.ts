@@ -33,3 +33,12 @@ export const REQUEST_CREATE_SHIPPING_ADDRESS = "/eco/shipping-addresses";
 
 export const REQUEST_COMMENTS = "/eco/comments-product";
 export const REQUEST_CREATE_COMMENT = "/eco/comments";
+
+//STORAGE
+export const REQUEST_UPLOAD_FILE = "/storage/upload/image";
+
+// PRODUCTS
+// ADMIN
+export const REQUEST_ADMIN_PRODUCTS = "/eco/admin/products";
+export const REQUEST_CREATE_PRODUCT = "/eco/products";
+
