@@ -8,6 +8,8 @@ import { LuBoxes } from "react-icons/lu";
 import { BsShop } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 import { TbTruckDelivery } from "react-icons/tb";
+import { MdOutlineDiscount } from "react-icons/md";
+
 
 interface SidebarProps {
   isOpen: boolean;
@@ -62,35 +64,17 @@ const navItems: NavItem[] = [
         icon: <LuBoxes size={18} />,
       },
       {
-        path: '/admin/categories',
-        name: 'Categories',
+        path: '/admin/discounts',
+        name: 'Discounts',
         type: 'item',
-        icon: <TbCategory2 size={18} />,
-      },
-      {
-        path: '/admin/collections',
-        name: 'Collections',
-        type: 'item',
-        icon: <HiOutlineCollection size={18} />,
+        icon: <MdOutlineDiscount size={18} />,
       },
       {
         path: '/admin/orders',
         name: 'Orders',
         type: 'item',
         icon: <BsShop size={18} />,
-      },
-      {
-        path: '/admin/invoices',
-        name: 'Invoices',
-        type: 'item',
-        icon: <CgNotes size={18} />,
-      },
-      {
-        path: '/admin/deliverys',
-        name: 'Deliverys',
-        type: 'item',
-        icon: <TbTruckDelivery size={18} />,
-      },
+      }
     ],
   },
 

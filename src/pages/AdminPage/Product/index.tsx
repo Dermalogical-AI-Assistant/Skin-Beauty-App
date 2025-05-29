@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { MultiSelect } from "@mantine/core";
 import { BsThreeDots } from "react-icons/bs";
 import "@mantine/core/styles.css";
@@ -18,217 +18,253 @@ import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
 import { convertDate } from "../../../utils/date.ts";
 
 const ProductManagement: React.FC = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(10);
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<ProductStatus[]>([]);
-  const [openUserDetailDialog, setOpenUserDetailDialog] = useState(false);
-  const { createUser, updateUser } = useUsers();
   const {getProducts} = useAdminProduct();
-  const {data, isLoading, refetch} = getProducts();
-  const headerRef = useRef<HTMLTableElement>(null);
-  const bodyRef = useRef<HTMLTableElement>(null);
   const navigate = useNavigate();
-
-  // Đồng bộ chiều rộng các cột giữa header và body
-  useEffect(() => {
-    const syncColumnWidths = () => {
-      if (!headerRef.current || !bodyRef.current) return;
-
-      const headerCells = headerRef.current.querySelectorAll('th');
-      const firstRowCells = bodyRef.current.querySelector('tr')?.querySelectorAll('td');
-
-      if (headerCells && firstRowCells && headerCells.length === firstRowCells.length) {
-        for (let i = 0; i < headerCells.length; i++) {
-          const width = Math.max(headerCells[i].offsetWidth, firstRowCells[i].offsetWidth);
-          headerCells[i].style.width = `${width}px`;
-          if (firstRowCells[i]) firstRowCells[i].style.width = `${width}px`;
-        }
-      }
-    };
-
-    syncColumnWidths();
-    window.addEventListener('resize', syncColumnWidths);
-
-    return () => {
-      window.removeEventListener('resize', syncColumnWidths);
-    };
-  }, [data?.data]);
 
   const params: GetProductsRequestParam = {
     search,
     status: selectedStatus,
     page,
-    perPage: 10,
+    perPage,
   };
+
+  const {data, isLoading, refetch: refreshProducts} = getProducts(params);
 
   const products = data?.data ?? [];
   const total = data?.meta?.total ?? 0;
-
-  const ProductTableColGroup = () => (
-    <colgroup>
-      <col style={{ width: '5%' }} />
-      <col style={{ width: '25%' }} />
-      <col style={{ width: '15%' }} />
-      <col style={{ width: '20%' }} />
-      <col style={{ width: '15%' }} />
-      <col style={{ width: '15%' }} />
-      <col style={{ width: '5%' }} />
-    </colgroup>
-  );
 
   const handleRowClick = (productId: string) => {
     console.log("Row clicked", productId);
     navigate(`${ROUTE_ADMIN_PRODUCTS}/${productId}`);
   }
 
+  const handlePerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage);
+    setPage(0)
+    refreshProducts();
+  }
+
   return (
     <AdminContentLayout title={"Product Management"} subtitle="Manage your products effectively">
+      {/* Controls */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="text-lg font-semibold">All products</div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="rounded-md border border-transparent bg-gray-100 px-3 text-xs"
+          />
 
+          <MultiSelect
+            data={[
+              { value: ProductStatus.ACTIVE, label: "Active" },
+              { value: ProductStatus.DRAF, label: "Draf" },
+              { value: ProductStatus.ACHIVE, label: "Achive" },
+            ]}
+            value={selectedStatus}
+            onChange={(value) => setSelectedStatus(value as ProductStatus[])}
+            placeholder="Select Status(s)"
+            className="min-w-[160px]"
+            size="xs"
+          />
 
-        {/* Controls */}
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-lg font-semibold">All products</div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="rounded-md border border-transparent bg-gray-100 px-3 text-xs"
-            />
+          <Link
+            className="inline-flex items-center rounded-md bg-pink-light px-4 py-2 text-xs font-semibold text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            to="/admin/products/new-product"
 
-            <MultiSelect
-              data={[
-                { value: ProductStatus.ACTIVE, label: "Active" },
-                { value: ProductStatus.DRAF, label: "Draf" },
-                { value: ProductStatus.ACHIVE, label: "Achive" },
-              ]}
-              value={selectedStatus}
-              onChange={(value) => setSelectedStatus(value as ProductStatus[])}
-              placeholder="Select Status(s)"
-              className="min-w-[160px]"
-              size="xs"
-            />
-
-            <Link
-              className="inline-flex items-center rounded-md bg-pink-light px-4 py-2 text-xs font-semibold text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              to="/admin/products/new-product"
-
-            >
-              + New Product
-            </Link>
-          </div>
+          >
+            + New Product
+          </Link>
         </div>
+      </div>
 
-        {/* Table với cách xử lý đặc biệt để giữ các cột căn chỉnh */}
-        <div className="rounded-lg bg-white shadow">
-          {isLoading ? (
-            <Loading entityName="Products"></Loading>
-          ) : (
-            <div className="overflow-hidden">
-              {/* Container cho bảng */}
-              <div className="w-full">
-                {/* Table Header */}
-                <div className="sticky top-0 z-10 w-full">
-                  <table ref={headerRef} className="min-w-full table-fixed divide-y divide-gray-200">
-                    <ProductTableColGroup/>
-                    <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">In Stock</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sold</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rattings</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                    </tr>
-                    </thead>
-                  </table>
-                </div>
-                {/* Table Body - Scrollable Container */}
-                <div className="overflow-y-auto max-h-[calc(100vh-400px)] min-h-[300px]">
-                  <table ref={bodyRef} className="min-w-full table-fixed divide-y divide-gray-200">
-                    <ProductTableColGroup/>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                    {products.map((product: Product, index) => (
-                      <tr
-                        key={product.id}
-                        className="hover:bg-gray-50"
-                        onClick={() => handleRowClick(product.id)}
+      {/* Table */}
+      <div className="rounded-lg bg-white shadow overflow-hidden">
+        {isLoading ? (
+          <Loading entityName="Products"></Loading>
+        ) : (
+          <div className="overflow-x-auto">
+            <div className="max-h-[calc(100vh-400px)] overflow-y-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <colgroup>
+                  <col className="w-[5%]" />
+                  <col className="w-[25%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[20%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[5%]" />
+                </colgroup>
+                <thead className="bg-gray-50 sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    #
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Products
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    In Stock
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Sold
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Ratings
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Created At
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                {products.map((product: Product, index) => (
+                  <tr
+                    key={product.id}
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleRowClick(product.id)}
+                  >
+                    <td className="px-4 py-3 text-sm whitespace-nowrap">
+                      {params?.page * params?.perPage + index + 1}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center">
+                        <img
+                          src={product?.thumbnail || DEFAULT_AVATAR_URL}
+                          alt="avatar"
+                          className="h-8 w-8 rounded-full mr-2"
+                        />
+                        <div className="font-medium text-sm">{product.title}</div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          {product.totalQuantity || 0}
+                        </span>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {product.soldQuantity || 0}
+                        </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center justify-center">
+                        <StarRating rating={product?.averageRating || 0} />
+                        <span className="ml-2 text-xs text-gray-500">
+                            ({product?.averageRating?.toFixed(1) || '0.0'})
+                          </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm whitespace-nowrap text-gray-500">
+                      {convertDate(product.createdAt)}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                      <div
+                        className="flex justify-center"
+                        onClick={(e) => e.stopPropagation()} // Prevent row click when clicking menu
                       >
-                        <td className="px-4 py-3 text-sm">{index + 1}</td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center">
-                            <img
-                              src={product?.thumbnail || DEFAULT_AVATAR_URL}
-                              alt="avatar"
-                              className="h-8 w-8 rounded-full mr-2"
-                            />
-                            <div className="font-medium text-sm">{product.title}</div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-center">{0}</td>
-                        <td className="px-4 py-3 text-sm text-center">{product.soldQuantity || 0}</td>
-                        <td className="px-4 py-3 text-sm flex items-center justify-center"><StarRating rating={product?.averageRating || 0} /></td>
-                        <td className="px-4 py-3 text-sm ">{convertDate(product.createdAt)}</td>
-                        <td className="px-4 py-3 text-sm text-center">
-                          <div className="flex justify-center">
-                            <ContextMenu icon={<BsThreeDots size={24} />}>
-                              <ContextMenuItem
-                                label={"Details"}
-                                onClick={() => {
-                                  console.log("View details", product.id);
-                                }}
-                              />
-                              <ContextMenuItem
-                                label={"Delete"}
-                                onClick={() => {
-                                  console.log("Delete product", product.id);
-                                }}
-                              />
-                            </ContextMenu>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                        <ContextMenu icon={<BsThreeDots size={16} />}>
+                          <ContextMenuItem
+                            label={"Details"}
+                            onClick={() => {
+                              console.log("View details", product.id);
+                              navigate(`${ROUTE_ADMIN_PRODUCTS}/${product.id}`);
+                            }}
+                          />
+                          <ContextMenuItem
+                            label={"Edit"}
+                            onClick={() => {
+                              console.log("Edit product", product.id);
+                              navigate(`${ROUTE_ADMIN_PRODUCTS}/${product.id}/edit`);
+                            }}
+                          />
+                          <ContextMenuItem
+                            label={"Delete"}
+                            onClick={() => {
+                              console.log("Delete product", product.id);
+                              if (confirm(`Are you sure you want to delete "${product.title}"?`)) {
+                                // Add delete logic here
+                              }
+                            }}
+                          />
+                        </ContextMenu>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {products.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                      <div className="flex flex-col items-center">
+                        <div className="text-lg font-medium mb-2">No products found</div>
+                        <div className="text-sm">Try adjusting your search or filter criteria</div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-        {/* Footer */}
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-          <div>1–{Math.min(products.length, params.perPage)} of {total}</div>
+      {/* Footer */}
+      <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+        <div>
+          Showing { params?.page * params?.perPage + 1} - {Math.min(params?.page * params?.perPage + params?.perPage, total)}
+          {" "}of{" "}
+          {total} results
+        </div>
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            Rows per page:
+            <span>Rows per page:</span>
             <select
-              className="rounded border px-2 py-1 text-sm"
-              value={params.perPage}
-              onChange={(e) => {}}
+              className="rounded border border-gray-300 bg-white px-2 text-sm"
+              value={params?.perPage}
+              onChange={(e) => handlePerPageChange(Number(e.target.value))}
             >
               <option value={10}>10</option>
               <option value={25}>25</option>
+              <option value={50}>50</option>
             </select>
-            <span>{page}</span>
-            <button
-              className="px-2 disabled:opacity-50"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
-              ‹
-            </button>
-            <button
-              className="px-2 disabled:opacity-50"
-              onClick={() => setPage(page + 1)}
-              disabled={products.length < 10}
-            >
-              ›
-            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Page {page+1}</span>
+            <div className="flex gap-1">
+              <button
+                className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 0}
+              >
+                Previous
+              </button>
+              <button
+                className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={() => setPage(page + 1)}
+                disabled={
+                  Math.round(
+                    total / params?.perPage,
+                  ) <=
+                  params?.page +1
+                }
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
+      </div>
     </AdminContentLayout>
   );
 };
