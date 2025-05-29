@@ -42,3 +42,6 @@ export const REQUEST_UPLOAD_FILE = "/storage/upload/image";
 export const REQUEST_ADMIN_PRODUCTS = "/eco/admin/products";
 export const REQUEST_CREATE_PRODUCT = "/eco/products";
 
+export const REQUEST_ADMIN_CREATE_DISCOUNTS = "/eco/discounts";
+export const REQUEST_ADMIN_DISCOUNTS = "/eco/discounts";
+export const REQUEST_ADMIN_DISCOUNT_DETAIL = "/eco/discounts";

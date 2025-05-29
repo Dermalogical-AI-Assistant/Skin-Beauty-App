@@ -31,5 +31,6 @@ export const ROUTE_MY_ORDER = '/my-orders'
 //shop
 //admin
 export const ROUTE_ADMIN_PRODUCTS = '/admin/products'
+export const ROUTE_ADMIN_DISCOUNTS = '/admin/discounts'
 
 

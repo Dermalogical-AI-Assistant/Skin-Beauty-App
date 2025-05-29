@@ -13,6 +13,9 @@ import ProductManagement from "../pages/AdminPage/Product";
 import { Outlet } from "react-router-dom";
 import CreateProduct from "../pages/AdminPage/Product/AddProduct.tsx";
 import ProductDetails from "../pages/AdminPage/Product/ProductDetails.tsx";
+import CreateDiscount from "../pages/AdminPage/Discount/CreateDiscount.tsx";
+import Discount from "../pages/AdminPage/Discount";
+import DiscountDetails from "../pages/AdminPage/Discount/DiscountDetails.tsx";
 
 /**
  * Routes that require authentication
@@ -53,6 +56,27 @@ export const routesForAuthenticated = [
                 path: ":productId",
                 element: <ProductDetails/>,
               },
+            ]
+          },
+          {
+            path: "discounts",
+            element: <Outlet/>,
+            children: [
+              {
+                path: "",
+                element: <Discount/>,
+              },
+              {
+                path: "new",
+                element: <CreateDiscount/>,
+              },
+              {
+                path: ":discountId",
+                element: <DiscountDetails/>,
+              },
+              {
+                CreateDiscount
+              }
             ]
           }
         ]
