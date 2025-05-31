@@ -5,27 +5,42 @@ import Tab from "../../components/Tab";
 import useOrder from "../../hooks/useOrder.ts";
 import OrderPageItems from "./OrderPageItems.tsx";
 import { OrderStatus } from "../../types/Order.ts";
+import { useSearchParams } from "react-router-dom";
 
 const OrdersPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get('tab');
+
   const [activeTab, setActiveTab] = useState(0);
   const [orderStatus, setOrderStatus] = useState<OrderStatus>();
 
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(10);
 
-  const {getOrders} = useOrder();
-  const {data: orders, isLoading, refetch:refreshOrder} = getOrders({
+  const {getMyOrders} = useOrder();
+  const {data: orders, isLoading, refetch:refreshOrder} = getMyOrders({
     page: page,
     perPage: perPage,
     status: orderStatus
   });
 
-
-  const handleTabChange = (index: number, value?: OrderStatus) => {
+  const handleTabChange = (value?: OrderStatus) => {
     setOrderStatus(value);
     setPage(0);
-    refreshOrder();
-    setActiveTab(index);
+
+    // Update URL params
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value) {
+      newSearchParams.set('tab', value);
+    } else {
+      newSearchParams.delete('tab'); // Remove tab param for "All"
+    }
+    setSearchParams(newSearchParams);
+
+    // Refresh orders after state update
+    setTimeout(() => {
+      refreshOrder();
+    }, 0);
   };
 
   useEffect(() => {
@@ -37,22 +52,22 @@ const OrdersPage: React.FC = () => {
   const tabs = [
     {
       label: "All",
-      value: null,
+      value: undefined,
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
     },
     {
       label: "Draft Orders",
-      value: "DRAF",
+      value: "DRAFT",
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
@@ -63,7 +78,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
@@ -74,7 +89,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
@@ -85,7 +100,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
@@ -96,18 +111,7 @@ const OrdersPage: React.FC = () => {
       content: (
         <TabContent>
           <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
-          </div>
-        </TabContent>
-      )
-    },
-    {
-      label: "Completed",
-      value: "DELIVERED",
-      content: (
-        <TabContent>
-          <div className="space-y-4">
-            <OrderPageItems orderData={orders} refreshOrder={refreshOrder}/>
+            <OrderPageItems orderData={orders} refreshOrder={refreshOrder} loadMore={() => {}} />
           </div>
         </TabContent>
       )
@@ -131,7 +135,7 @@ const OrdersPage: React.FC = () => {
         <div className="relative bg-white/50 text-primary-dark rounded-lg shadow-sm border border-gray-200">
           <Tab
             tabs={tabs}
-            activeTab={activeTab}
+            activeTab={currentTab}
             onTabChange={handleTabChange}
             className="w-full"
           />

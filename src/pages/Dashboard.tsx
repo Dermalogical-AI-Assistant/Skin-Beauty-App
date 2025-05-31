@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { TrendingUp, ShoppingCart, Eye, Filter, Database } from 'lucide-react';
-import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
-import StartCard from "./StartCard.tsx";
-import { getCurrencySymbol } from "../../../utils/currency.ts";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('1W');
@@ -159,13 +156,39 @@ const Dashboard = () => {
   const smoothPath = createSmoothPath(chartPoints);
 
   return (
-    <AdminContentLayout>
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold">TS</span>
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Welcome Back</p>
+              <h1 className="text-xl font-semibold text-gray-900">Tommy Style</h1>
+            </div>
+          </div>
+        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StartCard title={`Monthly Sales`} value={`${getCurrencySymbol("GBP")} 1000`} icon={<TrendingUp />}/>
+          {statsData.map((stat, index) => (
+            <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <stat.icon className="w-5 h-5 text-gray-600" />
+                </div>
+                <span className={`text-sm font-medium ${
+                  stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stat.change}
+                </span>
+              </div>
+              <h3 className="text-gray-500 text-sm mb-1">{stat.title}</h3>
+              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+            </div>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -450,7 +473,6 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-    </AdminContentLayout>
   );
 };
 

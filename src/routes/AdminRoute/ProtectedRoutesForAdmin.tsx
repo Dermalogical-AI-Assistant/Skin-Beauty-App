@@ -1,21 +1,22 @@
-import {ProtectedRoutesWrapper} from "./ProtectedRoutesWrapper.tsx";
-import Dashboard from "../pages/AdminPage/Dashboard";
-import ChatBot from "../pages/ChatBot";
-import WelcomePage from "../pages/ChatBot/WelcomePage.tsx";
-import ChatArea from "../pages/ChatBot/ChatMessage/ChatArea.tsx";
-import UserBaseLayout from "../layouts/BaseLayout/UserBaseLayout.tsx";
-import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../constants/routes.ts";
-import CheckoutPage from "../pages/CheckoutPage";
-import OrdersPage from "../pages/OrderPage";
-import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
-import UserManagement from "../pages/AdminPage/User";
-import ProductManagement from "../pages/AdminPage/Product";
+import Dashboard from "../../pages/AdminPage/Dashboard";
+import ChatBot from "../../pages/ChatBot";
+import WelcomePage from "../../pages/ChatBot/WelcomePage.tsx";
+import ChatArea from "../../pages/ChatBot/ChatMessage/ChatArea.tsx";
+import UserBaseLayout from "../../layouts/BaseLayout/UserBaseLayout.tsx";
+import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../../constants/routes.ts";
+import CheckoutPage from "../../pages/CheckoutPage";
+import OrdersPage from "../../pages/OrderPage";
+import AdminLayout from "../../layouts/Admin/AdminLayout.tsx";
+import UserManagement from "../../pages/AdminPage/User";
+import ProductManagement from "../../pages/AdminPage/Product";
 import { Outlet } from "react-router-dom";
-import CreateProduct from "../pages/AdminPage/Product/AddProduct.tsx";
-import ProductDetails from "../pages/AdminPage/Product/ProductDetails.tsx";
-import CreateDiscount from "../pages/AdminPage/Discount/CreateDiscount.tsx";
-import Discount from "../pages/AdminPage/Discount";
-import DiscountDetails from "../pages/AdminPage/Discount/DiscountDetails.tsx";
+import CreateProduct from "../../pages/AdminPage/Product/AddProduct.tsx";
+import ProductDetails from "../../pages/AdminPage/Product/ProductDetails.tsx";
+import CreateDiscount from "../../pages/AdminPage/Discount/CreateDiscount.tsx";
+import Discount from "../../pages/AdminPage/Discount";
+import DiscountDetails from "../../pages/AdminPage/Discount/DiscountDetails.tsx";
+import OrderManagement from "../../pages/AdminPage/Order";
+import { AdminProtectedRoutesWrapper } from "./ProtectedRoutesWrapper.tsx";
 
 /**
  * Routes that require authentication
@@ -23,10 +24,10 @@ import DiscountDetails from "../pages/AdminPage/Discount/DiscountDetails.tsx";
  * which verifies that the user is authenticated before allowing access
  * @type {Array<Object>}
  */
-export const routesForAuthenticated = [
+export const routesForAdminAuthenticated = [
   {
     path: "/",
-    element: <ProtectedRoutesWrapper />,
+    element: <AdminProtectedRoutesWrapper />,
     children: [
       {
         path: "/admin",
@@ -77,6 +78,16 @@ export const routesForAuthenticated = [
               {
                 CreateDiscount
               }
+            ]
+          },
+          {
+            path: "orders",
+            element: <Outlet/>,
+            children: [
+              {
+                path: "",
+                element: <OrderManagement/>,
+              },
             ]
           }
         ]

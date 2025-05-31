@@ -20,7 +20,7 @@ const CreateShippingAddress: React.FC<CreateAddressProps> = (props) => {
       city: "",
       country: "",
       postalCode: "",
-      isDefault: false,
+      isDefault: true,
     }
   );
 
@@ -104,16 +104,6 @@ const CreateShippingAddress: React.FC<CreateAddressProps> = (props) => {
                 onChange={onChangeAddress}
                 className="w-full rounded-lg border border-gray-300 p-3 focus:border-gray-300 focus:ring-3 outline-none focus:ring-primary-dark"
               />
-              <div className={`flex items-center justify-center`}>
-                <label className="text-gray-700 text-base">Default</label>
-                <input
-                  type="checkbox"
-                  name="isDefault"
-                  onChange={onChangeAddress}
-                  className="rounded-lg border border-gray-300 p-1 m-3 focus:border-gray-300 focus:ring-0 outline-none focus:ring-primary-dark"
-                />
-              </div>
-
             </div>
             <div className="mt-4 flex justify-end space-x-3">
               <button

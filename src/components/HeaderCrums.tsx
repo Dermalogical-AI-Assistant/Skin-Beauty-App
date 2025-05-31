@@ -21,12 +21,12 @@ const HeaderCrums: React.FC = () => {
       {breadcrumbs.map((b, index) =>
         index !== breadcrumbs.length - 1 ? (
           <Box key={b.title}>
-            <Link color='inherit' to={b.link}>
+            <Link  className={`text-primary-dark/70 hover:text-primary-dark`} to={b.link}>
               {b.title}
             </Link>
           </Box>
         ) : (
-          <Typography key={b.title} color='text.primary'>
+          <Typography key={b.title} className={`text-primary-dark/90 font-bold`}>
             {b.title}
           </Typography>
         )

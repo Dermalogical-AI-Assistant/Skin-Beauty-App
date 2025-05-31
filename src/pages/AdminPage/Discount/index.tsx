@@ -1,6 +1,6 @@
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { MultiSelect } from "@mantine/core";
-import { Product, ProductStatus } from "../../../types/Products.ts";
+import { Product, E_ProductStatus } from "../../../types/Products.ts";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties.ts";
@@ -17,7 +17,7 @@ import { ROUTE_ADMIN_DISCOUNTS, ROUTE_ADMIN_PRODUCTS } from "../../../constants/
 const DiscountPage: React.FC = () => {
   const navigate = useNavigate();
   const [search, setSearch] = React.useState("");
-  const [selectedStatus, setSelectedStatus] = React.useState<ProductStatus[]>([]);
+  const [selectedStatus, setSelectedStatus] = React.useState<E_ProductStatus[]>([]);
   const [perPage, setPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
 
@@ -63,12 +63,12 @@ const DiscountPage: React.FC = () => {
 
           <MultiSelect
             data={[
-              { value: ProductStatus.ACTIVE, label: "Active" },
-              { value: ProductStatus.DRAF, label: "Draf" },
-              { value: ProductStatus.ACHIVE, label: "Achive" },
+              { value: E_ProductStatus.ACTIVE, label: "Active" },
+              { value: E_ProductStatus.DRAFT, label: "Draft" },
+              { value: E_ProductStatus.ACHIVE, label: "Achive" },
             ]}
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value as ProductStatus[])}
+            onChange={(value) => setSelectedStatus(value as E_ProductStatus[])}
             placeholder="Select Status(s)"
             className="min-w-[160px]"
             size="xs"

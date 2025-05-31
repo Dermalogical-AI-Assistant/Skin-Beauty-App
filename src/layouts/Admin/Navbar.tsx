@@ -6,7 +6,7 @@ import AcountMenu from "./AccountMenu.tsx";
 const Navbar: React.FC = () => {
 
     return (
-        <header className="h-16 w-full flex items-center justify-between px-4">
+        <header className="w-full flex items-center justify-between px-4 py-4 backdrop-blur-lg  rounded-tl-2xl rounded-tr-2xl">
             <HeaderCrums/>
             <AcountMenu/>
         </header>

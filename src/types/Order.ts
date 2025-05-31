@@ -1,15 +1,22 @@
 import { ShippingAddress } from "./ShippingAddress.ts";
 import { Product } from "./Products.ts";
 
-export type OrderStatus = "DRAF" | "PENDING" | "CONFIRMED" | "SHIPPING" | "DELIVERED" | "CANCELED";
+export type OrderStatus = "DRAFT" | "PENDING" | "CONFIRMED" | "SHIPPING" | "DELIVERED" | "CANCELED";
 
 export enum E_OrderStatus {
-  DRAF = "DRAF",
+  DRAFT = "DRAFT",
   PENDING = "PENDING",
   CONFIRMED = "CONFIRMED",
   SHIPPING = "SHIPPING",
   DELIVERED = "DELIVERED",
   CANCELED = "CANCELED",
+}
+
+export enum E_OrderOrderBy {
+  CREATED_AT = "createdAt",
+  TOTAL_AMOUNT = "totalAmount",
+  TOTAL_DISCOUNT = "totalDiscount",
+  FINAL_AMOUNT = "finalAmount",
 }
 
 export type OrderItem = {
@@ -45,17 +52,18 @@ export type ResOrder = {
     totalDiscount: number;
     shippingFee: number;
     finalAmount: number;
-    status: OrderStatus;
+    status: E_OrderStatus;
     paymentMethod: string;
     paymentStatus: string;
   };
   orderItems: OrderItem[];
 };
 
-export type GetMyOrdersRequestParam = {
+export type GetOrdersRequestParam = {
     page: number;
     perPage: number;
-    status?: OrderStatus;
+    order?: string;
+    status?: E_OrderStatus;
 }
 
 export type ResGetOrderById = Order

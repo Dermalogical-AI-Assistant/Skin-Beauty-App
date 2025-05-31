@@ -1,6 +1,5 @@
 import LoginPage from "../pages/LoginPage";
 import AdminLayout from "../layouts/Admin/AdminLayout.tsx";
-import Dashboard from "../pages/AdminPage/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import UserManagement from "../pages/AdminPage/User";
 import HomePage from "../pages/HomePage/HomePage.tsx";
@@ -15,6 +14,7 @@ import ProductDetails from "../pages/Products/ProductDetails.tsx";
 import ShoppingBasket from "../pages/ShoppingBasket";
 import { ROUTE_BASKET } from "../constants/routes.ts";
 import ProductManagement from "../pages/AdminPage/Product";
+import TestPage from "../pages/Dashboard.tsx";
 
 export const routesForPublic = [
 
@@ -25,6 +25,10 @@ export const routesForPublic = [
         {
           path: "",
           element: <HomePage />,
+        },
+        {
+          path: "test",
+          element: <TestPage />,
         },
         {
           path: ROUTE_BASKET,

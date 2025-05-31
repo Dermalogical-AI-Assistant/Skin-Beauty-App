@@ -29,8 +29,8 @@ export class GetProductRequestParam {
 }
 
 
-export enum ProductStatus {
-  DRAF = "DRAF",
+export enum E_ProductStatus {
+  DRAFT = "DRAFT",
   ACTIVE = "ACTIVE",
   ACHIVE = "ARCHIVE",
 }
@@ -38,7 +38,7 @@ export enum ProductStatus {
 export class GetProductsRequestParam {
   search?: string;
   categories?: string[];
-  status?: ProductStatus[];
+  status?: E_ProductStatus;
   page?: number = 1;
   perPage?: number = 10;
   order?: string;
