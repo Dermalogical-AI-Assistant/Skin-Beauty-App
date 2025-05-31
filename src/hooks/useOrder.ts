@@ -2,12 +2,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   REQUEST_CREATE_ORDER,
   REQUEST_MY_ORDERS,
-  REQUEST_ORDER_DETAIL,
+  REQUEST_ORDER_DETAIL, REQUEST_ORDERS,
   REQUEST_UPDATE_ORDER
 } from "../constants/apis";
 import axios from "../settings/axios";
 import { useState } from "react";
-import { GetMyOrdersRequestParam, Order, ResGetOrderById, ResOrder } from "../types/Order.ts";
+import { GetOrdersRequestParam, Order, ResGetOrderById, ResOrder } from "../types/Order.ts";
 import qs from "qs";
 import { GenericResponseType } from "../types/common.ts";
 
@@ -113,11 +113,11 @@ function useOrders (){
     });
   };
 
-  const getOrders = (params: GetMyOrdersRequestParam) => {
+  const getMyOrders = (params: GetOrdersRequestParam) => {
     return useQuery<GenericResponseType<Order>>({
       queryKey: ["product", params],
       queryFn: async ({ queryKey }) => {
-        const [, params] = queryKey as [string, GetMyOrdersRequestParam];
+        const [, params] = queryKey as [string, GetOrdersRequestParam];
 
         //drop status when status is undefined
         if (params.status === undefined || params.status === null || params.status === "") {
@@ -136,11 +136,35 @@ function useOrders (){
     });
   };
 
+  const getOrders = (params: GetOrdersRequestParam) => {
+    return useQuery<GenericResponseType<Order>>({
+      queryKey: ["get-order", params],
+      queryFn: async ({ queryKey }) => {
+        const [, params] = queryKey as [string, GetOrdersRequestParam];
+
+        //drop status when status is undefined
+        if (params.status === undefined || params.status === null || params.status === "") {
+          delete params.status;
+        }
+
+        const res = await axios.get<GenericResponseType<Order>>(REQUEST_ORDERS, {
+          params,
+          paramsSerializer: {
+            serialize: (params) =>
+              qs.stringify(params, { arrayFormat: 'repeat' }) // skincareConcerns=DRY_SKIN&skincareConcerns=ACNE
+          },});
+        return res.data;
+      },
+      refetchOnWindowFocus: false,
+    });
+  };
+
   return {
     isLoading,
     onRequestOrder,
     onRequestUpdateOrder,
     getOrderById,
+    getMyOrders,
     getOrders
   };
 };

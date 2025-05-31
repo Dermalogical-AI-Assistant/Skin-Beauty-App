@@ -1,7 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {routesForPublic} from "./PublicRoutes.tsx";
-import {routesForAuthenticated} from "./ProtectedRoutes.tsx";
+import {routesForAuthenticated} from "./UserProtectedRoute/ProtectedRoutes.tsx";
 import RootLayout from "../layouts/RootLayout.tsx";
+import { routesForAdminAuthenticated } from "./AdminRoute/ProtectedRoutesForAdmin.tsx";
 
 /**
  * Routes component that sets up the application's routing structure
@@ -19,6 +20,7 @@ const Routes = () => {
         children: [
           ...routesForPublic,
           ...routesForAuthenticated,
+          ...routesForAdminAuthenticated
         ],
       },
     ]);

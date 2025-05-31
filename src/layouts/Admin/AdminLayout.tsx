@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from "./Navbar.tsx";
 import AcountMenu from "./AccountMenu.tsx";
+import { E_PageRoleType } from "../../types/SystemType.ts";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -10,6 +11,8 @@ interface LayoutProps {
 
 const AdminLayout: React.FC<LayoutProps> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    localStorage.setItem("pageRole", E_PageRoleType.ADMIN);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -23,11 +26,13 @@ const AdminLayout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         {/* Main Content */}
         <div className={"h-full p-5 flex flex-1 overflow-hidden"}>
-          <div className="h-full flex flex-col flex-1 bg-white rounded-2xl shadow-lg py-6">
+          <div className="h-full flex flex-col flex-1 bg-white/60 rounded-2xl shadow-lg ">
             <Navbar/>
-            <main className="h-full overflow-hidden">
+            <main className="relative h-full overflow-hidden">
               <div className="h-full">
-              {children || <Outlet />}
+                {/*<div className="sticky top-0 h-6 !bg-gradient-to-b !from-white border !to-white/0 z-10 pointer-events-none"></div>*/}
+                {children || <Outlet />}
+                <div className="sticky bottom-0 h-6 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none rounded-bl-2xl rounded-br-2xl"></div>
               </div>
             </main>
           </div>

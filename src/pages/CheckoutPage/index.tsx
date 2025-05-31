@@ -63,7 +63,7 @@ const CheckoutPage = () => {
 
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
-      case 'DRAF':
+      case 'DRAFT':
         return 'bg-yellow-100 text-yellow-800';
       case 'PENDING':
         return 'bg-blue-100 text-blue-800';
@@ -195,7 +195,7 @@ const CheckoutPage = () => {
             Your Shopping Basket
           </h1>
           {
-            order.status !== "DRAF" &&
+            order.status !== "DRAFT" &&
             (
               <>|<span className={`text-xs p-2 rounded-full  ${getStatusColor(order.status)}`}>{order.status}</span></>
             )
@@ -243,7 +243,7 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                 </div>
-                {order.status === "DRAF" && (
+                {order.status === "DRAFT" && (
                   <button
                     className={`text-pink-light hover cursor-pointer pl-4 hover:drop-shadow-lg`}
                     onClick={() => setShowAddressForm(true)}
@@ -315,7 +315,7 @@ const CheckoutPage = () => {
               </h2>
 
               <div className="space-y-3">
-                {order.status !== "DRAF" ? (
+                {order.status !== "DRAFT" ? (
                   <div className="bg-primary rounded-lg p-4">
                     <div className="flex items-center">
                       <span className="text-primary-dark ml-3 font-medium">
@@ -401,7 +401,7 @@ const CheckoutPage = () => {
               </div>
 
               {/* Checkout Button */}
-              {order.status === "DRAF" && (
+              {order.status === "DRAFT" && (
                 <>
                   <button
                     className="from-pink-light mt-6 w-full transform rounded-lg bg-gradient-to-r to-purple-300 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-700 hover:to-purple-700"

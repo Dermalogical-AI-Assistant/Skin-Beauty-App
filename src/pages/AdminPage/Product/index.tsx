@@ -6,7 +6,7 @@ import useUsers from "../../../hooks/useUsers";
 import Loading from "../../../components/Loading";
 import { toast } from "react-toastify";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
-import { GetProductsRequestParam, Product, ProductStatus } from "../../../types/Products.ts";
+import { GetProductsRequestParam, Product, E_ProductStatus } from "../../../types/Products.ts";
 import useAdminProduct from "../../../hooks/useAdminProduct.tsx";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
 import ContextMenu from "../../../components/ContextMenu";
@@ -21,7 +21,7 @@ const ProductManagement: React.FC = () => {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [search, setSearch] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<ProductStatus[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<E_ProductStatus[]>([]);
   const {getProducts} = useAdminProduct();
   const navigate = useNavigate();
 
@@ -64,12 +64,12 @@ const ProductManagement: React.FC = () => {
 
           <MultiSelect
             data={[
-              { value: ProductStatus.ACTIVE, label: "Active" },
-              { value: ProductStatus.DRAF, label: "Draf" },
-              { value: ProductStatus.ACHIVE, label: "Achive" },
+              { value: E_ProductStatus.ACTIVE, label: "Active" },
+              { value: E_ProductStatus.DRAFT, label: "Draft" },
+              { value: E_ProductStatus.ACHIVE, label: "Achive" },
             ]}
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value as ProductStatus[])}
+            onChange={(value) => setSelectedStatus(value as E_ProductStatus[])}
             placeholder="Select Status(s)"
             className="min-w-[160px]"
             size="xs"

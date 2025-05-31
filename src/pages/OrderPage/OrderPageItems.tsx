@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { Store, ShoppingBag, Package, Clock, Truck, CheckCircle, XCircle, RefreshCw} from "lucide-react";
 import { E_OrderStatus, Order, OrderStatus } from "../../types/Order.ts";
 import { GenericResponseType } from "../../types/common.ts";
 import { Link } from "react-router-dom";
-import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../../constants/routes.ts";
+import { ROUTE_CHECKOUT, ROUTE_ORDER_DETAILS } from "../../constants/routes.ts";
 import useOrders, { ReqModifyOrder } from "../../hooks/useOrder.ts";
+import { E_PageRoleType } from "../../types/SystemType.ts";
+import { toast } from "react-toastify";
 
 interface OrderPageProps {
   orderData?: GenericResponseType<Order>;
@@ -15,6 +17,11 @@ interface OrderPageProps {
 const OrderPage:React.FC<OrderPageProps> = (props) => {
 
   const {isLoading, onRequestUpdateOrder } = useOrders();
+
+  const pageRole = localStorage.getItem("pageRole")
+  useEffect(() => {
+    console.log("page role ", pageRole);
+  }, [pageRole]);
 
   const handleCancelOrder = (orderId:string) => {
     const modifyData = {
@@ -36,6 +43,51 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
     )
   }
 
+  const handleUpdateOrderStatus = (orderId:string, orderStatus: E_OrderStatus) => {
+    const modifyData = {
+      orderId: orderId,
+      modifyData:{
+        status:orderStatus,
+      }
+    } as ReqModifyOrder;
+
+    onRequestUpdateOrder(
+      modifyData,
+      ()=>{
+        console.log("Address updated successfully");
+        toast.success("Address updated successfully");
+        props.refreshOrder();
+      },
+      (error) => {
+        toast.error("Error updating address, Please! Try again.");
+        console.error("Error updating address:", error);
+      }
+    )
+  }
+
+
+  const handleConfirmOrder = (orderId:string) => {
+    const modifyData = {
+      orderId: orderId,
+      modifyData:{
+        status:E_OrderStatus.CONFIRMED,
+      }
+    } as ReqModifyOrder;
+
+    onRequestUpdateOrder(
+      modifyData,
+      ()=>{
+        console.log("Address updated successfully");
+        toast.success("Address updated successfully");
+        props.refreshOrder();
+      },
+      (error) => {
+        toast.error("Error updating address, Please! Try again.");
+        console.error("Error updating address:", error);
+      }
+    )
+  }
+
   const isCanLoadMore = () => {
     const page = props?.orderData?.meta?.page || 1;
     const totalPage = Math.ceil(props?.orderData?.meta?.total / props?.orderData?.meta?.perPage);
@@ -46,7 +98,7 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'DRAF':
+      case 'DRAFT':
         return <Clock className="w-4 h-4 text-yellow-500" />;
       case 'PROCESSING':
         return <Package className="w-4 h-4 text-blue-500" />;
@@ -65,8 +117,8 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
 
   const getStatusText = (status: OrderStatus) => {
     switch (status) {
-      case 'DRAF':
-        return 'Draf';
+      case 'DRAFT':
+        return 'DRAFT';
       case 'PENDING':
         return 'Processing';
       case 'SHIPPING':
@@ -82,7 +134,7 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
 
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
-      case 'DRAF':
+      case 'DRAFT':
         return 'bg-yellow-100 text-yellow-800';
       case 'PENDING':
         return 'bg-blue-100 text-blue-800';
@@ -218,16 +270,42 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
                     <div className="flex items-center justify-end gap-3 rounded-lg bg-white/80">
                       {/* Action Buttons */}
                       <div className="space-x-3">
-                        {(order.status === "DELIVERED" ||
-                          order.status === "CANCELED") && (
+                        {(
+                          pageRole === E_PageRoleType.USER &&
+                          (order.status === "DELIVERED" ||
+                          order.status === "CANCELED")) && (
                           <button className="from-pink-light rounded-lg bg-gradient-to-r to-purple-300 p-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-pink-600 hover:to-purple-400">
                             Buy Again
                           </button>
                         )}
 
+                        {
+                          pageRole === E_PageRoleType.ADMIN &&
+                          order.status === "PENDING" && (
+                          <button
+                            className="from-pink-light rounded-lg bg-gradient-to-r to-purple-300 p-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-pink-600 hover:to-purple-400"
+                            onClick={()=>handleConfirmOrder(order.id)}
+                          >
+                            Confirm Order
+                          </button>
+                        )}
+                        {
+                          pageRole === E_PageRoleType.ADMIN &&
+                          order.status === "CONFIRMED" && (
+                            <button
+                              className="from-pink-light rounded-lg bg-gradient-to-r to-purple-300 p-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-pink-600 hover:to-purple-400"
+                              onClick={()=>handleUpdateOrderStatus(order.id, E_OrderStatus.SHIPPING)}
+                            >
+                              Order Shipping
+                            </button>
+                        )}
+
                         {order.status === "SHIPPING" && (
-                          <button className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 p-3 text-sm font-semibold text-white transition-all hover:from-blue-600 hover:to-blue-700">
-                            Complete Order
+                          <button
+                            className="rounded-lg bg-gradient-to-r from-purple-400 to-blue-400 p-3 text-sm font-semibold text-white transition-all hover:from-purple-600 hover:to-blue-700"
+                            onClick={()=>handleUpdateOrderStatus(order.id, E_OrderStatus.DELIVERED)}
+                          >
+                            Order Delivered
                           </button>
                         )}
 
@@ -240,7 +318,7 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
                           </button>
                         )}
 
-                        {order.status !== "DRAF" && (
+                        {order.status !== "DRAFT" && (
                           <Link
                             className="border-primary-dark/10 text-primary-dark hover:bg-primary-dark/10 rounded-lg border p-3 text-sm font-medium transition-colors"
                             to={`${ROUTE_ORDER_DETAILS}/${order.id}`}
@@ -249,7 +327,7 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
                           </Link>
                         )}
 
-                        {order.status === "DRAF" && (
+                        {order.status === "DRAFT" && (
                           <Link
                             className="border-primary-dark/10 text-primary-dark hover:bg-primary-dark/10 rounded-lg border p-3 text-sm font-medium transition-colors"
                             to={`${ROUTE_CHECKOUT}/${order.id}`}
