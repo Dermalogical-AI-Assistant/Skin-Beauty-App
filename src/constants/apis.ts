@@ -1,12 +1,14 @@
 // AUTH
-export const REQUEST_lOGIN = "/login";
-export const REQUEST_REFRESH = "/refresh";
-export const REQUEST_GET_MY_PROFILE = "/self/my-profile"
-export const REQUEST_REGISTER_ACCOUNT = "/local/sign-up";
-export const REQUEST_USERS_MODULE = "/users"
+export const REQUEST_lOGIN = "/auth/login";
+export const REQUEST_REFRESH = "/auth/refresh";
+export const REQUEST_GET_MY_PROFILE = "/auth/self/my-profile"
+export const REQUEST_REGISTER_ACCOUNT = "/auth/local/sign-up";
+export const REQUEST_USERS_MODULE = "/auth/users"
+
+// SKIN ANALYSIS
 export const REQUEST_SKIN_ANALYSIS_PREDICT = "/skin-analysis/predict"
 export const REQUEST_FILES_MODULE = "/files"
-export const REQUEST_LOGOUT = ""
+export const REQUEST_LOGOUT = "/auth/logout";
 
 // CHATBOT
 // SESSIONS
@@ -46,3 +48,10 @@ export const REQUEST_CREATE_PRODUCT = "/eco/products";
 export const REQUEST_ADMIN_CREATE_DISCOUNTS = "/eco/discounts";
 export const REQUEST_ADMIN_DISCOUNTS = "/eco/discounts";
 export const REQUEST_ADMIN_DISCOUNT_DETAIL = "/eco/discounts";
+
+//Dashboard
+export const REQUEST_MONTHLY_SALES = "/eco/sales-monthly";
+export const REQUEST_MONTHLY_ORDERS = "/eco/orders-monthly";
+export const REQUEST_NEW_CUSTOMER_COUNT = "/auth/new-customers-count";
+export const REQUEST_ORDER_COUNT = "/eco/orders-count";
+export const REQUEST_PERIODICAL_REVENUES = "/eco/periodical-revenues";
