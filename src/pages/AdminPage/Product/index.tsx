@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { MultiSelect } from "@mantine/core";
 import { BsThreeDots } from "react-icons/bs";
 import "@mantine/core/styles.css";
-import useUsers from "../../../hooks/useUsers";
 import Loading from "../../../components/Loading";
-import { toast } from "react-toastify";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
 import { GetProductsRequestParam, Product, E_ProductStatus } from "../../../types/Products.ts";
 import useAdminProduct from "../../../hooks/useAdminProduct.tsx";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
 import ContextMenu from "../../../components/ContextMenu";
-import { E_SkincareConcern, SkincareConcern } from "../../../types/SkincareConcern.ts";
 import StarRating from "../../../components/StarRating";
 import { Link, useNavigate } from "react-router-dom";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
@@ -135,7 +132,7 @@ const ProductManagement: React.FC = () => {
                     onClick={() => handleRowClick(product.id)}
                   >
                     <td className="px-4 py-3 text-sm whitespace-nowrap">
-                      {params?.page * params?.perPage + index + 1}
+                      { ( (params?.page ?? 0) * (params?.perPage ?? 1) ) + index + 1 }
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center">
@@ -222,7 +219,7 @@ const ProductManagement: React.FC = () => {
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
         <div>
-          Showing { params?.page * params?.perPage + 1} - {Math.min(params?.page * params?.perPage + params?.perPage, total)}
+          Showing { (params?.page ?? 0) * (params?.perPage ?? 1) + 1 } - { Math.min((params?.page ?? 0) * (params?.perPage ?? 1) + (params?.perPage ?? 1), total) }
           {" "}of{" "}
           {total} results
         </div>
@@ -253,10 +250,7 @@ const ProductManagement: React.FC = () => {
                 className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={() => setPage(page + 1)}
                 disabled={
-                  Math.round(
-                    total / params?.perPage,
-                  ) <=
-                  params?.page +1
+                  Math.round(total / (params?.perPage ?? 1)) <= ((params?.page ?? 0) + 1)
                 }
               >
                 Next

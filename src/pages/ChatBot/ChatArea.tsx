@@ -48,9 +48,9 @@
       // Thêm tin nhắn người dùng vào danh sách
       const userMessage: Message = {
         id: `user-${Date.now()}`,
-        content: inputValue,
-        isUser: true,
-        timestamp: new Date()
+        message: inputValue,
+        sender: "USER",
+        createdAt: new Date()
       };
 
       setMessages([...messages, userMessage]);
@@ -59,7 +59,7 @@
 
       try {
         // Gọi API để gửi tin nhắn và nhận phản hồi
-        const botResponse = await sendMessage(sessionId, userMessage.content);
+        const botResponse = await sendMessage(sessionId, userMessage.message);
         setMessages(prevMessages => [...prevMessages, botResponse]);
       } catch (error) {
         console.error('Failed to send message:', error);

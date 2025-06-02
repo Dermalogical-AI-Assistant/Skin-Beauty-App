@@ -4,45 +4,45 @@ import TabContent from "../../components/Tab/TabContent.tsx";
 import Tab from "../../components/Tab";
 import useOrder from "../../hooks/useOrder.ts";
 import OrderPageItems from "./OrderPageItems.tsx";
-import { OrderStatus } from "../../types/Order.ts";
+import { E_OrderStatus } from "../../types/Order.ts";
 import { useSearchParams } from "react-router-dom";
 
 const OrdersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get('tab');
 
-  const [activeTab, setActiveTab] = useState(0);
-  const [orderStatus, setOrderStatus] = useState<OrderStatus>();
+  const [orderStatus, setOrderStatus] = useState<E_OrderStatus>();
 
   const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage] = useState(10);
 
-  const {getMyOrders} = useOrder();
-  const {data: orders, isLoading, refetch:refreshOrder} = getMyOrders({
+  const {useMyOrders} = useOrder();
+  const {data: orders, refetch:refreshOrder} = useMyOrders({
     page: page,
     perPage: perPage,
     status: orderStatus
   });
 
-  const handleTabChange = (value?: OrderStatus) => {
-    setOrderStatus(value);
+  const handleTabChange = (value?: string) => {
+    // Nếu bạn chắc value sẽ là OrderStatus, ép kiểu ở đây
+    const status = value as E_OrderStatus | undefined;
+
+    setOrderStatus(status);
     setPage(0);
 
     // Update URL params
     const newSearchParams = new URLSearchParams(searchParams);
-    if (value) {
-      newSearchParams.set('tab', value);
+    if (status) {
+      newSearchParams.set('tab', status);
     } else {
-      newSearchParams.delete('tab'); // Remove tab param for "All"
+      newSearchParams.delete('tab');
     }
     setSearchParams(newSearchParams);
 
-    // Refresh orders after state update
     setTimeout(() => {
       refreshOrder();
     }, 0);
   };
-
   useEffect(() => {
     if (orders) {
       console.log("Orders fetched:", orders);

@@ -1,10 +1,8 @@
-import hero_section_image from "../../assets/hero_image_homepage.png";
 import React from "react";
 import { Link } from "react-router-dom";
 import ProductSection from "./Sections/ProductSection.tsx";
 import { GetProductRequestParam, Product } from "../../types/Products.ts";
 import useProducts from "../../hooks/useProducts.ts";
-import useSkinConcern from "../../hooks/useSkinConcern.ts";
 import { ROUTE_CHATBOT, ROUTE_PRODUCTS, ROUTE_SKIN_ANALYSIS } from "../../constants/routes.ts";
 import { SkincareConcern } from "../../types/SkincareConcern.ts";
 
@@ -73,7 +71,7 @@ const HomePage: React.FC = () => {
             {/* Cột phải */}
             <div className="flex w-full items-center justify-center">
               <img
-                src={hero_section_image}
+                src={`https://res.cloudinary.com/dk6ivhi6t/image/upload/v1748838836/uploads/TDCosmetic/oblulewejqhqebkvepoz.png`}
                 alt="logo"
                 className="w-full object-contain"
               />

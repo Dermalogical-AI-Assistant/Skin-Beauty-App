@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth.ts';
 import { Link } from "react-router-dom";
-import avatar from "../../assets/—Pngtree—world beauty day face skincare_4041122.png";
 import Input from "../../components/Input";
 import BackgroundWrapper from "../../components/BackgroundWrapper";
 import BrandLogo from "../../components/BrandLogo";
@@ -39,7 +38,7 @@ const LoginPage: React.FC = () => {
                     <div className={`relative w-full mb-5 select-none`}>
                         <div className={``}>
                                 <img
-                                    src={avatar}
+                                    src={`https://res.cloudinary.com/dk6ivhi6t/image/upload/v1748838573/uploads/TDCosmetic/vpbrcohil2otzqaeyoir.png`}
                                     alt="logo"
                                     className={`w-50 h-50 mx-auto`}
                                 />

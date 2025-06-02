@@ -23,7 +23,7 @@ const CreateDiscount: React.FC = () => {
     publishDate: ""
   });
 
-  const [isCreatingDiscount, setIsCreatingDiscount] = useState(false);
+  const [isCreatingDiscount, ] = useState(false);
 
   // Updated function to handle skincare concern selection with auto-add
   const handleSkincareConcernChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,7 +47,7 @@ const CreateDiscount: React.FC = () => {
     }));
   };
 
-  const {isLoading, onRequestCreateDiscount} = useDiscount();
+  const { onRequestCreateDiscount } = useDiscount();
   const handleSubmit = async () => {
     onRequestCreateDiscount(
       discountData,
@@ -103,7 +103,7 @@ const CreateDiscount: React.FC = () => {
               </label>
               <select
                 value={discountData.discountType}
-                onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as "PERCENT" | "FIXED" }))}
+                onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as E_DisscountType }))}
                 className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >

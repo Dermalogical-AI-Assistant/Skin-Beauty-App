@@ -4,16 +4,7 @@ import useAuthStore from "../../../stores/AuthStore.ts";
 import { IoCloseOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { ROUTE_BASKET } from "../../../constants/routes.ts";
-
-interface BasketItem {
-  id: string;
-  title: string;
-  image: string;
-  quantity: number;
-  price: number;
-  currency?: string;
-  addedAt?: string;
-}
+import { BasketItem } from "../../../types/Cart.ts";
 
 interface BasketListProps {
   icon?: React.ReactNode;
@@ -22,7 +13,6 @@ interface BasketListProps {
 const BasketList: React.FC<BasketListProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { user, logout, isLogin } = useAuthStore();
   const [cartItems, setCartItems] = useState<BasketItem[]>([]);
 
   // Function to get cart items from localStorage

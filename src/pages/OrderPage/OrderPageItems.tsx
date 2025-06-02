@@ -90,13 +90,15 @@ const OrderPage:React.FC<OrderPageProps> = (props) => {
 
   const isCanLoadMore = () => {
     const page = props?.orderData?.meta?.page || 1;
-    const totalPage = Math.ceil(props?.orderData?.meta?.total / props?.orderData?.meta?.perPage);
+    const totalPage = Math.ceil(
+      (props.orderData?.meta?.total ?? 0) / (props.orderData?.meta?.perPage ?? 1)
+    );
     console.log("page",page);
     console.log("totalPage",totalPage);
     return page < totalPage;
   }
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'DRAFT':
         return <Clock className="w-4 h-4 text-yellow-500" />;

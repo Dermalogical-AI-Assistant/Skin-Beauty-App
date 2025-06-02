@@ -3,10 +3,10 @@ import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { X, Edit, Save } from "lucide-react";
 import { E_SkincareConcern, SkincareConcern } from "../../../types/SkincareConcern";
 import { useParams } from "react-router-dom";
-import { ROUTE_ADMIN_DISCOUNTS } from "../../../constants/routes.ts";
 import useDiscount from "../../../hooks/useDisscount.ts";
 import { E_DisscountType, ReqCreateDiscount } from "../../../types/Discount.ts";
 import { toast } from "react-toastify";
+import { E_Currency } from "../../../types/Currency.ts";
 
 const DiscountDetails: React.FC = () => {
   const { discountId } = useParams();
@@ -27,7 +27,7 @@ const DiscountDetails: React.FC = () => {
 
   const {
     isLoading,
-    getDiscountDetails,
+    useFetchDiscountDetails,
     onRequestUpdateDiscount
   } = useDiscount();
 
@@ -35,7 +35,7 @@ const DiscountDetails: React.FC = () => {
     data: discountDetails,
     refetch: refreshDiscountDetails,
     isLoading: isDiscountDetailsLoading
-  } = getDiscountDetails(discountId || "");
+  } = useFetchDiscountDetails(discountId || "");
 
   // Load discount details when data is available
   useEffect(() => {
@@ -89,7 +89,7 @@ const DiscountDetails: React.FC = () => {
         id: discountId,
         data: discountData
       },
-      (response) => {
+      () => {
         console.log("Discount updated successfully");
         toast.success("Discount updated successfully!");
         setIsEditMode(false);
@@ -212,7 +212,7 @@ const DiscountDetails: React.FC = () => {
               {isEditMode ? (
                 <select
                   value={discountData.discountType}
-                  onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as "PERCENT" | "FIXED_AMOUNT" }))}
+                  onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as E_DisscountType }))}
                   className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >
@@ -303,7 +303,7 @@ const DiscountDetails: React.FC = () => {
               {isEditMode ? (
                 <select
                   value={discountData.currency}
-                  onChange={(e) => setDiscountData(prev => ({ ...prev, currency: e.target.value as "DOLLAR" | "POUND" }))}
+                  onChange={(e) => setDiscountData(prev => ({ ...prev, currency: e.target.value as E_Currency }))}
                   className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >

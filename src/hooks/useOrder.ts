@@ -100,7 +100,7 @@ function useOrders (){
     });
   };
 
-  const getOrderById = (id:string) => {
+  const useOrderById = (id:string) => {
     return useQuery<ResGetOrderById>({
       queryKey: ["order", id],
       queryFn: async ({ queryKey }) => {
@@ -113,14 +113,14 @@ function useOrders (){
     });
   };
 
-  const getMyOrders = (params: GetOrdersRequestParam) => {
+  const useMyOrders = (params: GetOrdersRequestParam) => {
     return useQuery<GenericResponseType<Order>>({
       queryKey: ["product", params],
       queryFn: async ({ queryKey }) => {
         const [, params] = queryKey as [string, GetOrdersRequestParam];
 
         //drop status when status is undefined
-        if (params.status === undefined || params.status === null || params.status === "") {
+        if (params.status === undefined || params.status === null) {
           delete params.status;
         }
 
@@ -136,14 +136,14 @@ function useOrders (){
     });
   };
 
-  const getOrders = (params: GetOrdersRequestParam) => {
+  const useOrders = (params: GetOrdersRequestParam) => {
     return useQuery<GenericResponseType<Order>>({
       queryKey: ["get-order", params],
       queryFn: async ({ queryKey }) => {
         const [, params] = queryKey as [string, GetOrdersRequestParam];
 
         //drop status when status is undefined
-        if (params.status === undefined || params.status === null || params.status === "") {
+        if (params.status === undefined || params.status === null) {
           delete params.status;
         }
 
@@ -163,9 +163,9 @@ function useOrders (){
     isLoading,
     onRequestOrder,
     onRequestUpdateOrder,
-    getOrderById,
-    getMyOrders,
-    getOrders
+    useOrderById,
+    useMyOrders,
+    useOrders
   };
 };
 
