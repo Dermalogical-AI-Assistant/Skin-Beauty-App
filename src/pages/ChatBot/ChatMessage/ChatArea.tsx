@@ -3,8 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from 'react-router-dom';
 import ChatMessage from './ChatMessage.tsx';
 import LoadingIndicator from '../LoadingIndicator.tsx';
-import { sendMessage } from '../../../hooks/useChatBot.ts';
-import { Message, NewMessage } from "../../../types/ChatBot.ts";
+import { Message } from "../../../types/ChatBot.ts";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import WelcomePage from "../WelcomePage.tsx";
 import useChatBotMessages from "../../../hooks/useChatBotMessages.ts";
@@ -13,7 +12,7 @@ interface ChatAreaProps {
   sessionId?: string;
 }
 
-const ChatArea: React.FC<ChatAreaProps> = (props) => {
+const ChatArea: React.FC<ChatAreaProps> = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -25,8 +24,7 @@ const ChatArea: React.FC<ChatAreaProps> = (props) => {
   const lastScrollTop = useRef<number>(0);
   const initialDataLoaded = useRef<boolean>(false);
   const previousPagesCount = useRef<number>(0);
-  const [isSendingMessage, setIsSendingMessage] = useState(true);
-
+  const [, setIsSendingMessage] = useState(true);
 
   const {
     onSentMessage,
@@ -37,7 +35,7 @@ const ChatArea: React.FC<ChatAreaProps> = (props) => {
       isFetching,
       isSuccess
     }
-  } = useChatBotMessages(10, sessionId);
+  } = useChatBotMessages(10, sessionId || '');
 
 
   useEffect(() => {
@@ -157,7 +155,7 @@ const ChatArea: React.FC<ChatAreaProps> = (props) => {
           const errorMessage: Message = {
             id: `error-${Date.now()}`,
             message: "❌ Gửi tin nhắn thất bại. Vui lòng thử lại.",
-            sender: "SYSTEM",
+            sender: "ADMIN",
             createdAt: new Date()
           };
           setMessages(prevMessages => [...prevMessages, errorMessage]);

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProductItem from "./ProductItem.tsx";
 import { Link, useSearchParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from '@mui/material/MenuItem';
 import { Chip, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
@@ -12,7 +12,7 @@ import { SkincareConcern } from "../../types/SkincareConcern.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import { GetProductRequestParam } from "../../types/Products.ts";
 import Loading from "../../components/Loading";
-
+import { UrlParams } from "../../types/common.ts";
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,11 +27,11 @@ const ProductsPage: React.FC = () => {
   const selectedSkincareConcerns = skincareConcernsParam ? skincareConcernsParam.split(',') : [];
 
   // State for the search input field with debounce
-  const [inputValue, setInputValue] = React.useState(search);
-  const [timer, setTimer] = React.useState(null);
+  const [inputValue, setInputValue] = useState(search);
+  const [timer, setTimer] = useState<number | undefined>();
 
   // Update URL when any parameter changes
-  const updateUrlParams = (newParams) => {
+  const updateUrlParams = (newParams:UrlParams) => {
     const updatedParams = new URLSearchParams(searchParams);
 
     Object.entries(newParams).forEach(([key, value]) => {
@@ -40,14 +40,14 @@ const ProductsPage: React.FC = () => {
       } else if (Array.isArray(value)) {
         updatedParams.set(key, value.join(','));
       } else {
-        updatedParams.set(key, value.toString());
+        updatedParams.set(key, value?.toString() || "");
       }
     });
 
     setSearchParams(updatedParams);
   };
 
-  const inputChanged = (e) => {
+  const inputChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
 
@@ -60,20 +60,23 @@ const ProductsPage: React.FC = () => {
     setTimer(newTimer);
   };
 
-  const handleFilterChange = (event) => {
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     updateUrlParams({ filter: event.target.value });
   };
-
-  const handleSkincareConcernsChange = (event) => {
-    const newConcerns = event.target.value as string[];
-    updateUrlParams({ skincareConcerns: newConcerns });
+  const handleSkincareConcernsChange = (event: SelectChangeEvent<typeof selectedSkincareConcerns>) => {
+    const {
+      target: { value },
+    } = event;
+    // value có thể là string hoặc string[], tùy mode multiple, nên ép kiểu nếu cần
+    const newValues = typeof value === 'string' ? value.split(',') : value;
+    updateUrlParams({ skincareConcerns: newValues });
   };
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     if (newPage < 0 || (data && newPage > (Math.ceil((data.meta?.total || 0) / pageSize))-1)) {
       return;
     }
-    updateUrlParams({ page: newPage });
+    updateUrlParams({ page: newPage.toString()  });
   };
 
   const { getProducts } = useProducts();
@@ -88,7 +91,6 @@ const ProductsPage: React.FC = () => {
 
   const { data, isLoading } = getProducts(productParams);
 
-  // Initialize the input value from URL on first load
   useEffect(() => {
     setInputValue(search);
   }, []);

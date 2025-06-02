@@ -5,17 +5,11 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import StartCard from "./StartCard.tsx";
 import { getCurrencySymbol } from "../../../utils/currency.ts";
 import useDashboard from "../../../hooks/useDashboard.ts";
+import { CustomTooltip } from "../../../components/Chart/CustomTooltip.tsx";
+import { E_OrderStatus } from "../../../types/Order.ts";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('1W');
   const [crawlActiveTab, setCrawlActiveTab] = useState('Monthly');
-
-  const recentOrders = [
-    { name: 'iPhone 14 pro', price: '$999', image: '📱' },
-    { name: 'iPhone 12 pro', price: '$999', image: '📱' },
-    { name: 'Apple Watch SE', price: '$249', image: '⌚' },
-    { name: 'iPad mini', price: '$357', image: '📱' }
-  ];
 
   const popularProducts = [
     {
@@ -78,7 +72,7 @@ const Dashboard = () => {
   const maxCrawlValue = Math.max(...currentCrawlData.map(d => d.value));
 
   // Tạo đường cong mềm với Cubic Bezier
-  const createSmoothPath = (points) => {
+  const createSmoothPath = (points:{x:number, y:number}[]) => {
     if (points.length < 2) return '';
 
     let path = `M ${points[0].x} ${points[0].y}`;
@@ -115,6 +109,8 @@ const Dashboard = () => {
     return path;
   };
 
+  const periodTypes = ['MONTHLY', 'ANNUALLY'] as const;
+
   // useFetch data
   const {useFetchMonthlySales, useFetchMonthlyOrders, useFetchNewCustommerCount, useFetchOrderStatusCount, useFetchPeriodicalRevenues} = useDashboard();
   const {data: monthlySales, isLoading:isuseFetchMonthlySalesLoading} = useFetchMonthlySales;
@@ -125,16 +121,7 @@ const Dashboard = () => {
   const [periodicalRevenuesType, setPeriodicalRevenuesType] = useState<'ANNUALLY' | 'MONTHLY'>('MONTHLY');
   const {data: periodicalRevenues, isLoading:isuseFetchPeriodicalRevenuesLoading} = useFetchPeriodicalRevenues(periodicalRevenuesType);
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-gray-800 text-white p-2 rounded-lg shadow-lg">
-          <p className="text-sm">{`${label}: £${payload[0].value.toLocaleString()}`}</p>
-        </div>
-      );
-    }
-    return null;
-  };
+
   // Xử lý dữ liệu periodicalRevenues để tạo chartData
   const processChartData = () => {
     if (!periodicalRevenues || periodicalRevenues.length === 0) {
@@ -142,7 +129,7 @@ const Dashboard = () => {
     }
 
     // Tạo tên tháng từ số
-    const getMonthName = (monthNum) => {
+    const getMonthName = (monthNum: number) => {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       return months[monthNum - 1] || monthNum.toString();
@@ -150,7 +137,7 @@ const Dashboard = () => {
 
     // Chuyển đổi dữ liệu
     const chartData = periodicalRevenues.map(item => ({
-      time: periodicalRevenuesType === 'MONTHLY' ? getMonthName(item.time) : item.time.toString(),
+      time: periodicalRevenuesType === 'MONTHLY' ? getMonthName(Number(item.time)) : item.time.toString(),
       value: item.amount,
       originalTime: item.time
     }));
@@ -182,7 +169,7 @@ const Dashboard = () => {
     return { chartData, chartPoints, smoothPath, totalRevenue, revenueChange };
   };
 
-  const { chartData, chartPoints, smoothPath, totalRevenue, revenueChange } = processChartData();
+  const { chartData, totalRevenue, revenueChange } = processChartData();
 
   useEffect(() => {
     if (orderStatusCount) {
@@ -207,9 +194,9 @@ const Dashboard = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <StartCard title={`Monthly Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${monthlySales?.newSales||0}`} change={`${monthlySales?.incrementalRate}%`} changeType={`${monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
-            <StartCard title={`Monthly Order`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate}%`} changeType={`${monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
-            <StartCard title={`New customer`} isLoading={isuseFetchNewCustomerLoading} value={`${newCustomerCount?.newCustomersCount||0} Users`} change={`${newCustomerCount?.incrementalRate}%`} changeType={`${newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
+            <StartCard title={`Monthly Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${monthlySales?.newSales||0}`} change={`${monthlySales?.incrementalRate}%`} changeType={`${monthlySales?.incrementalRate && monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
+            <StartCard title={`Monthly Order`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate}%`} changeType={`${monthlyOrders?.incrementalRate && monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
+            <StartCard title={`New customer`} isLoading={isuseFetchNewCustomerLoading} value={`${newCustomerCount?.newCustomersCount||0} Users`} change={`${newCustomerCount?.incrementalRate}%`} changeType={`${newCustomerCount?.incrementalRate && newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -228,16 +215,18 @@ const Dashboard = () => {
                       <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
                         {(() => {
                           // Màu sắc cho từng trạng thái
-                          const colors = {
-                            'DELIVERED': '#10B981',
-                            'CANCELED': '#EF4444',
-                            'DRAFT': '#F59E0B',
-                            'CONFIRMED': '#3B82F6'
+                          const colors: Record<E_OrderStatus, string>  = {
+                            [E_OrderStatus.DELIVERED]: '#10B981',
+                            [E_OrderStatus.CANCELED]: '#EF4444',
+                            [E_OrderStatus.DRAFT]: '#F59E0B',
+                            [E_OrderStatus.CONFIRMED]: '#3B82F6',
+                            [E_OrderStatus.PENDING]: '#6B7280',
+                            [E_OrderStatus.SHIPPING]: '#F97316'
                           };
 
                           let currentOffset = 0;
 
-                          return orderStatusCount.map((item, index) => {
+                          return orderStatusCount.map((item) => {
                             const percentage = totalOrderStatusCount > 0 ? (item.count / totalOrderStatusCount) * 100 : 0;
                             const strokeDasharray = `${percentage}, ${100 - percentage}`;
                             const strokeDashoffset = -currentOffset;
@@ -278,7 +267,9 @@ const Dashboard = () => {
                         'DELIVERED': { color: '#10B981', label: 'Delivered', bgColor: 'bg-green-500' },
                         'CANCELED': { color: '#EF4444', label: 'Canceled', bgColor: 'bg-red-500' },
                         'DRAFT': { color: '#F59E0B', label: 'Draft', bgColor: 'bg-yellow-500' },
-                        'CONFIRMED': { color: '#3B82F6', label: 'Confirmed', bgColor: 'bg-blue-500' }
+                        'CONFIRMED': { color: '#3B82F6', label: 'Confirmed', bgColor: 'bg-blue-500' },
+                        'PENDING': { color: '#6B7280', label: 'Pending', bgColor: 'bg-gray-500' },
+                        'SHIPPING': { color: '#F97316', label: 'Shipping', bgColor: 'bg-orange-500' }
                       };
 
                       const config = statusConfig[item.status] || {
@@ -317,7 +308,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Revenue Report</h3>
                 <div className="flex items-center gap-2">
-                  {['MONTHLY', 'ANNUALLY'].map((tab) => (
+                  {periodTypes.map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setPeriodicalRevenuesType(tab)}

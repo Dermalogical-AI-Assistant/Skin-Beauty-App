@@ -15,8 +15,8 @@ const CommentsSection: React.FC<CommentProps> = (props) => {
   const navigate = useNavigate();
   const { isLogin } = useAuthStore();
 
-  const {isLoading: isUseCommentLoading, onRequestCreateComment, getCommentByProductId} = useComment();
-  const { data: commentData, refetch: refreshComments } = getCommentByProductId({ productId: props.productId || "", page: 0, perPage: 1000000000 });
+  const {isLoading: isUseCommentLoading, onRequestCreateComment, useFetchCommentByProductId} = useComment();
+  const { data: commentData, refetch: refreshComments } = useFetchCommentByProductId({ productId: props.productId || "", page: 0, perPage: 1000000000 });
 
   const [comments, setComments] = useState( commentData?.data || []);
   const [newComment, setNewComment] = useState('');

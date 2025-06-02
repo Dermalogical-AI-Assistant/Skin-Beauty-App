@@ -1,5 +1,5 @@
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 interface StarRatingProps {
   rating?: number;
@@ -7,10 +7,10 @@ interface StarRatingProps {
 
 const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
 
-  const [starts, setStarts] = useState([]);
+  const [starts, setStarts] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    const stars = [];
+    const stars: JSX.Element[] = [];
     for (let i = 1; i <= 5; i++) {
       if (typeof rating === 'number') {
         if (rating >= i) {

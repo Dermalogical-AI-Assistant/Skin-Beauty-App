@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "@mantine/core/styles.css";
-import useAdminProduct from "../../../hooks/useAdminProduct.tsx";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import useOrder from "../../../hooks/useOrder.ts";
-import { E_OrderOrderBy, E_OrderStatus, OrderStatus } from "../../../types/Order.ts";
+import { E_OrderOrderBy, E_OrderStatus } from "../../../types/Order.ts";
 import TabContent from "../../../components/Tab/TabContent.tsx";
 import OrderPageItems from "../../OrderPage/OrderPageItems.tsx";
 import Tab from "../../../components/Tab";
@@ -12,24 +11,21 @@ import Tab from "../../../components/Tab";
 const OrderManagement: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(10);
-  const [search, setSearch] = useState("");
-  const [direction, setDirection] = useState<"asc" | "desc">("desc");
-  const [orderBy, setOrderBy] = useState<E_OrderOrderBy>(E_OrderOrderBy.CREATED_AT);
+  const [perPage, ] = useState(10);
+  // const [search, setSearch] = useState("");
+  const [direction, ] = useState<"asc" | "desc">("desc");
+  const [orderBy, ] = useState<E_OrderOrderBy>(E_OrderOrderBy.CREATED_AT);
   const [status, setStatus] = useState<E_OrderStatus>();
-  const {getProducts} = useAdminProduct();
-  const navigate = useNavigate();
+  // const {getProducts} = useAdminProduct();
 
-  const {getOrders} = useOrder();
+  const {useOrders} = useOrder();
 
   // Get current tab from URL params
   const currentTab = searchParams.get('tab');
 
   const {
     data: pendingData,
-    isLoading: isPendingLoading,
-    refetch: refreshPendingOrders,
-  } = getOrders({
+  } = useOrders({
     page: 0,
     perPage: 1,
     status: E_OrderStatus.PENDING
@@ -54,29 +50,27 @@ const OrderManagement: React.FC = () => {
 
   const {
     data: orders,
-    isLoading,
     refetch: refreshOrders,
-  } = getOrders({
+  } = useOrders({
     page: page,
     perPage: perPage,
     order: `${orderBy}:${direction}`,
     status
   });
 
-  const handleTabChange = (value?: OrderStatus) => {
-    setStatus(value);
+  const handleTabChange = (value?: string) => {
+    // Nếu value là undefined thì để undefined, nếu không thì ép về E_OrderStatus
+    setStatus(value as E_OrderStatus | undefined);
     setPage(0);
 
-    // Update URL params
     const newSearchParams = new URLSearchParams(searchParams);
     if (value) {
       newSearchParams.set('tab', value);
     } else {
-      newSearchParams.delete('tab'); // Remove tab param for "All"
+      newSearchParams.delete('tab');
     }
     setSearchParams(newSearchParams);
 
-    // Refresh orders after state update
     setTimeout(() => {
       refreshOrders();
     }, 0);

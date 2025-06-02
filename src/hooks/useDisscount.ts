@@ -1,8 +1,6 @@
 import {
   REQUEST_ADMIN_CREATE_DISCOUNTS, REQUEST_ADMIN_DISCOUNT_DETAIL,
-  REQUEST_ADMIN_DISCOUNTS,
-  REQUEST_DISCOUNTS,
-  REQUEST_PRODUCTS
+  REQUEST_ADMIN_DISCOUNTS, REQUEST_CREATE_PRODUCT
 } from "../constants/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios";
@@ -19,7 +17,7 @@ import { useState } from "react";
 function useDiscount() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const getDiscounts = (params: GetDiscountRequestParam) => {
+  const useFetchDiscounts = (params: GetDiscountRequestParam) => {
     return useQuery<GetDiscountsResponse>({
       queryKey: ["discount", params],
       queryFn: async ({ queryKey }) => {
@@ -36,7 +34,7 @@ function useDiscount() {
     });
   };
 
-  const getDiscountDetails = (id:string) => {
+  const useFetchDiscountDetails = (id:string) => {
     return useQuery<Discount>({
       queryKey: ["discount", id],
       queryFn: async ({ queryKey }) => {
@@ -113,8 +111,8 @@ function useDiscount() {
 
   return {
     isLoading,
-    getDiscounts,
-    getDiscountDetails,
+    useFetchDiscounts,
+    useFetchDiscountDetails,
     onRequestCreateDiscount,
     onRequestUpdateDiscount
   };

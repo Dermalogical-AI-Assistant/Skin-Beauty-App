@@ -49,7 +49,9 @@ const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
             </button>
           </div>
           <span className={`text-primary-dark/25`}>|</span>
-          {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {message?.createdAt
+            ? new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : ''}
         </div>
       </div>
     </div>

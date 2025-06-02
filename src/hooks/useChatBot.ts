@@ -6,20 +6,20 @@ export const fetchChatMessages = async (sessionId: string): Promise<Message[]> =
     setTimeout(() => {
       if (sessionId === 'a27bc9b5-bb6a-4117-b11b-c9c8cddf76d0') {
         resolve([
-          { id: '101', content: 'Xin chào! Tôi có thể giúp gì cho bạn?', isUser: false, timestamp: new Date('2023-10-01T10:01:00') },
-          { id: '102', content: 'Tôi muốn học JavaScript, bắt đầu từ đâu là tốt nhất?', isUser: true, timestamp: new Date('2023-10-01T10:00:00') },
-          { id: '103', content: 'Bạn có thể bắt đầu với các khóa học cơ bản trên Codecademy hoặc freeCodeCamp.', isUser: false, timestamp: new Date('2023-10-01T10:02:00') }
+          { id: '101', message: 'Xin chào! Tôi có thể giúp gì cho bạn?', sender:"ADMIN", createdAt: new Date('2023-10-01T10:01:00') },
+          { id: '102', message: 'Tôi muốn học JavaScript, bắt đầu từ đâu là tốt nhất?', sender:"USER", createdAt: new Date('2023-10-01T10:00:00') },
+          { id: '103', message: 'Bạn có thể bắt đầu với các khóa học cơ bản trên Codecademy hoặc freeCodeCamp.', sender:"ADMIN", createdAt: new Date('2023-10-01T10:02:00') }
         ]);
       } else if (sessionId === 'b38cd0e6-cc7b-5228-c22c-d0d9dee87bf1') {
         resolve([
-          { id: '201', content: 'Chào bạn! Tôi có thể giúp gì hôm nay?', isUser: false, timestamp: new Date('2023-10-02T14:30:00') },
-          { id: '202', content: 'React hooks hoạt động như thế nào?', isUser: true, timestamp: new Date('2023-10-02T14:31:00') },
-          { id: '203', content: 'React hooks cho phép bạn sử dụng state và các tính năng khác của React mà không cần viết class.', isUser: false, timestamp: new Date('2023-10-02T14:32:00') }
+          { id: '201', message: 'Chào bạn! Tôi có thể giúp gì hôm nay?', sender:"ADMIN", createdAt: new Date('2023-10-02T14:30:00') },
+          { id: '202', message: 'React hooks hoạt động như thế nào?', sender:"USER", createdAt: new Date('2023-10-02T14:31:00') },
+          { id: '203', message: 'React hooks cho phép bạn sử dụng state và các tính năng khác của React mà không cần viết class.', sender:"ADMIN", createdAt: new Date('2023-10-02T14:32:00') }
         ]);
       } else {
           resolve([
-            { id: '102', content: 'What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?', isUser: true, timestamp: new Date('2023-10-01T10:00:00') },
-            { id: '103', content: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
+            { id: '102', message: 'What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?What does niacinamide serum do for the skin?', sender:"USER", createdAt: new Date('2023-10-01T10:00:00') },
+            { id: '103', message: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
                 '\n' +
                 '<ol>\n' +
                 '  <li><strong>Regulates oil production:</strong> If you have oily or acne-prone skin, niacinamide can help balance the amount of sebum your skin produces. This means less shine and potentially fewer breakouts.</li>\n' +
@@ -31,9 +31,9 @@ export const fetchChatMessages = async (sessionId: string): Promise<Message[]> =
                 '</ol>\n' +
                 '\n' +
                 '<p><strong>In summary, niacinamide is a gentle yet powerful ingredient that supports healthy, balanced, and glowing skin.</strong><br>\n' +
-                'Want me to recommend a routine or show products with niacinamide in them?\n', isUser: false, timestamp: new Date('2023-10-01T10:02:00') },
-            { id: '102', content: 'What does niacinamide serum do for the skin?', isUser: true, timestamp: new Date('2023-10-01T10:00:00') },
-            { id: '103', content: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
+                'Want me to recommend a routine or show products with niacinamide in them?\n', sender:"ADMIN", createdAt: new Date('2023-10-01T10:02:00') },
+            { id: '102', message: 'What does niacinamide serum do for the skin?', sender:"USER", createdAt: new Date('2023-10-01T10:00:00') },
+            { id: '103', message: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
                 '\n' +
                 '<ol>\n' +
                 '  <li><strong>Regulates oil production:</strong> If you have oily or acne-prone skin, niacinamide can help balance the amount of sebum your skin produces. This means less shine and potentially fewer breakouts.</li>\n' +
@@ -45,9 +45,9 @@ export const fetchChatMessages = async (sessionId: string): Promise<Message[]> =
                 '</ol>\n' +
                 '\n' +
                 '<p><strong>In summary, niacinamide is a gentle yet powerful ingredient that supports healthy, balanced, and glowing skin.</strong><br>\n' +
-                'Want me to recommend a routine or show products with niacinamide in them?\n', isUser: false, timestamp: new Date('2023-10-01T10:02:00') },
-            { id: '102', content: 'What does niacinamide serum do for the skin?', isUser: true, timestamp: new Date('2023-10-01T10:00:00') },
-            { id: '103', content: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
+                'Want me to recommend a routine or show products with niacinamide in them?\n', sender:"ADMIN", createdAt: new Date('2023-10-01T10:02:00') },
+            { id: '102', message: 'What does niacinamide serum do for the skin?', sender:"USER", createdAt: new Date('2023-10-01T10:00:00') },
+            { id: '103', message: '<strong>Niacinamide serum</strong> is a multi-functional skincare ingredient that provides a variety of benefits for different skin types. It’s especially loved because it’s both <strong>effective</strong> and <strong>gentle</strong>, making it suitable for even sensitive skin. Here’s what niacinamide can do for your skin:</p>\n' +
                 '\n' +
                 '<ol>\n' +
                 '  <li><strong>Regulates oil production:</strong> If you have oily or acne-prone skin, niacinamide can help balance the amount of sebum your skin produces. This means less shine and potentially fewer breakouts.</li>\n' +
@@ -59,7 +59,7 @@ export const fetchChatMessages = async (sessionId: string): Promise<Message[]> =
                 '</ol>\n' +
                 '\n' +
                 '<p><strong>In summary, niacinamide is a gentle yet powerful ingredient that supports healthy, balanced, and glowing skin.</strong><br>\n' +
-                'Want me to recommend a routine or show products with niacinamide in them?\n', isUser: false, timestamp: new Date('2023-10-01T10:02:00') }
+                'Want me to recommend a routine or show products with niacinamide in them?\n', sender:"ADMIN", createdAt: new Date('2023-10-01T10:02:00') }
           ]);
       }
     }, 800);
@@ -88,9 +88,9 @@ export const sendMessage = async (sessionId: string, content: string): Promise<M
     setTimeout(() => {
       resolve({
         id: Date.now().toString(),
-        content: `Đây là phản hồi từ chatbot đối với tin nhắn: "${content}"`,
-        isUser: false,
-        timestamp: new Date()
+        message: `Đây là phản hồi từ chatbot đối với tin nhắn: "${content}"`,
+        sender:"ADMIN",
+        createdAt: new Date()
       });
     }, 1000);
   });

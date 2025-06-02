@@ -15,13 +15,13 @@ const CheckoutPage = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const hasRequestedOrder = useRef(false);
 
-  const {getOrderById, isLoading, onRequestUpdateOrder } = useOrders();
+  const {useOrderById, isLoading, onRequestUpdateOrder } = useOrders();
   const [order, setOrder] = useState<ResGetOrderById | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRequestingOrder, setIsRequestingOrder] = useState(false);
   const navigate = useNavigate();
 
-  const {data, refetch: refreshOrder} = getOrderById(orderId||"");
+  const {data, refetch: refreshOrder} = useOrderById(orderId||"");
 
   useEffect(() => {
     if (data) {

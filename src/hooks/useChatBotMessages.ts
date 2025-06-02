@@ -47,7 +47,7 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
       }
     });
 
-  const onSentMessage = (data: NewMessage, onSuccess: (newSession: Message) => void, onError: () => void) => {
+  const onSentMessage = (data: NewMessage, onSuccess: (newSession: Message) => void, onError: (error: Error) => void) => {
     handleSentMessage.mutate(data, {
       onSuccess: (response) => {
         // Pass the new session data to the callback
@@ -55,7 +55,7 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
       },
       onError: (error) => {
         console.log(error);
-        onError();
+        onError(error);
       }
     });
   };

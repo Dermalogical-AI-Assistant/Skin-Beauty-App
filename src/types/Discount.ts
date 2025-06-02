@@ -1,20 +1,16 @@
 import { E_SkincareConcern } from "./SkincareConcern.ts";
 import { GenericResponseType } from "./common.ts";
-
-export type GetDiscountRequestParam={
-
-};
-
+import { E_Currency } from "./Currency.ts";
 
 export type Discount = {
   id: string;
   title: string;
   description: string;
-  discountType: "FIXED_AMOUNT" | "PERCENT";
+  discountType: E_DisscountType;
   discountValue: number;
   startTime: string;
   endTime: string;
-  status: "UPCOMING" | "ACTIVE" | "EXPIRED";
+  status: E_DisscountStatus;
   skincareConcerns: E_SkincareConcern[];
   minPrice: number;
   currency: "POUND";
@@ -38,7 +34,7 @@ export type ReqCreateDiscount = {
   endTime: string;
   skincareConcerns: E_SkincareConcern[];
   minPrice: number;
-  currency: "POUND";
+  currency: E_Currency;
   publishDate: string;
 };
 
@@ -57,9 +53,10 @@ export enum E_DisscountStatus {
 }
 
 export type GetDiscountRequestParam = {
+    search?: string;
     status?: E_DisscountStatus[];
-    skincareConcerns: E_SkincareConcern[];
-    discountTypes: E_DisscountType;
+    skincareConcerns?: E_SkincareConcern[];
+    discountTypes?: E_DisscountType;
     page?: number;
     perPage?: number;
     order?: number;

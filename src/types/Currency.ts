@@ -7,7 +7,7 @@ export type Option<T extends string> = {
 export type E_Currency =
   | "DOLLAR"
   | "VND"
-// data.ts
+  | "POUND"
 
 const options: Option<E_Currency>[] = [
   { label: "DOLLAR", symbol: "$" },

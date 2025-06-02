@@ -6,3 +6,7 @@ export type GenericResponseType<T> = {
         perPage: number;
     };
 }
+
+export type UrlParams = {
+  [key: string]: string | string[] | null | undefined;
+};

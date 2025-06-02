@@ -1,28 +1,26 @@
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { MultiSelect } from "@mantine/core";
-import { Product, E_ProductStatus } from "../../../types/Products.ts";
+import { E_ProductStatus } from "../../../types/Products.ts";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { DEFAULT_AVATAR_URL } from "../../../constants/properties.ts";
-import StarRating from "../../../components/StarRating";
 import { convertDate } from "../../../utils/date.ts";
 import ContextMenu from "../../../components/ContextMenu";
 import { BsThreeDots } from "react-icons/bs";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
 import React, { useEffect } from "react";
 import useDiscount from "../../../hooks/useDisscount.ts";
-import { Discount } from "../../../types/Discount.ts";
-import { ROUTE_ADMIN_DISCOUNTS, ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
+import { Discount, E_DisscountStatus } from "../../../types/Discount.ts";
+import { ROUTE_ADMIN_DISCOUNTS } from "../../../constants/routes.ts";
 
 const DiscountPage: React.FC = () => {
   const navigate = useNavigate();
   const [search, setSearch] = React.useState("");
-  const [selectedStatus, setSelectedStatus] = React.useState<E_ProductStatus[]>([]);
+  const [selectedStatus, setSelectedStatus] = React.useState<E_DisscountStatus[]>([]);
   const [perPage, setPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
 
-  const {getDiscounts} = useDiscount();
-  const {data: discounts, isLoading: isDiscountsLoading, refetch: refreshDiscounts} = getDiscounts({
+  const {useFetchDiscounts} = useDiscount();
+  const {data: discounts, isLoading: isDiscountsLoading, refetch: refreshDiscounts} = useFetchDiscounts({
     search,
     status: selectedStatus,
     page,
@@ -68,7 +66,7 @@ const DiscountPage: React.FC = () => {
               { value: E_ProductStatus.ACHIVE, label: "Achive" },
             ]}
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value as E_ProductStatus[])}
+            onChange={(value) => setSelectedStatus(value as E_DisscountStatus[])}
             placeholder="Select Status(s)"
             className="min-w-[160px]"
             size="xs"
@@ -147,7 +145,7 @@ const DiscountPage: React.FC = () => {
                           className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                             discount.status === "ACTIVE"
                               ? "bg-green-100 text-green-800"
-                              : discount.status === "DRAFT"
+                              : discount.status === "UPCOMING"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : "bg-gray-100 text-gray-800"
                           }`}
@@ -196,7 +194,14 @@ const DiscountPage: React.FC = () => {
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
         <div>
-          Showing { discounts?.meta?.page * discounts?.meta?.perPage + 1} - {Math.min(discounts?.meta?.page * discounts?.meta?.perPage + discounts?.meta?.perPage, discounts?.meta?.total)}
+          Showing {
+            (discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0) + 1
+          } - {
+            Math.min(
+              ((discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0)) + (discounts?.meta?.perPage ?? 0),
+              discounts?.meta?.total ?? 0
+            )
+          }
           {" "}of{" "}
           {discounts?.meta?.total} results
         </div>
@@ -228,9 +233,8 @@ const DiscountPage: React.FC = () => {
                 onClick={() => setPage(page + 1)}
                 disabled={
                   Math.round(
-                    discounts?.meta?.total / discounts?.meta?.perPage,
-                  ) <=
-                  discounts?.meta?.page +1
+                    (discounts?.meta?.total ?? 0) / (discounts?.meta?.perPage ?? 1)
+                  ) <= ((discounts?.meta?.page ?? 0) + 1)
                 }
               >
                 Next

@@ -11,3 +11,13 @@ export type CartItem = {
     quantity: number;
     product: Product[]
 }
+
+export interface BasketItem {
+  id: string;
+  title: string;
+  image: string;
+  quantity: number;
+  price: number;
+  currency?: string;
+  addedAt?: string;
+}

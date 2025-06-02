@@ -38,7 +38,7 @@ export enum E_ProductStatus {
 export class GetProductsRequestParam {
   search?: string;
   categories?: string[];
-  status?: E_ProductStatus;
+  status?: E_ProductStatus[];
   page?: number = 1;
   perPage?: number = 10;
   order?: string;

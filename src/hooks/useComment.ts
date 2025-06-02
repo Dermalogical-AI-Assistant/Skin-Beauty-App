@@ -13,7 +13,7 @@ function useComment() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const getCommentByProductId = (params: GetCommentsRequestParam) => {
+  const useFetchCommentByProductId = (params: GetCommentsRequestParam) => {
     return useQuery<GenericResponseType<Comment>>({
       queryKey: ["product", params],
       queryFn: async ({ queryKey }) => {
@@ -23,7 +23,7 @@ function useComment() {
         const res = await axios.get<GenericResponseType<Comment>>(
           `${REQUEST_COMMENTS}/${productId}`,
           {
-            reqParams,
+            params: reqParams,
             paramsSerializer: {
               serialize: (reqParams) =>
                 qs.stringify(reqParams, { arrayFormat: "repeat" }), // skincareConcerns=DRY_SKIN&skincareConcerns=ACNE
@@ -69,7 +69,7 @@ function useComment() {
 
 
   return {
-    getCommentByProductId,
+    useFetchCommentByProductId,
     onRequestCreateComment,
     isLoading
   };

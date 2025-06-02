@@ -23,7 +23,7 @@ export const CommentItem: React.FC<CommentProps> = (props) => {
   const formatDate = (dateString:string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diff = Math.floor((now - date) / 1000);
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     if (diff < 60) return 'just now';
     if (diff < 3600) return `${Math.floor(diff / 60)} minute(s) ago`;

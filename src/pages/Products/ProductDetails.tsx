@@ -6,7 +6,7 @@ import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import CommentsSection from "../../components/Comment";
-import { getCurrencySymbol } from "../../utils/currency.ts";
+import { BasketItem } from "../../types/Cart.ts";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
@@ -44,7 +44,7 @@ const ProductDetails: React.FC = () => {
   };
 
   // Function to select image by index
-  const selectImage = (index) => {
+  const selectImage = (index:number) => {
     setCurrentImageIndex(index);
   };
 
@@ -71,9 +71,8 @@ const ProductDetails: React.FC = () => {
       addedAt: new Date().toISOString()
     };
 
-    // Get existing cart from localStorage
-    const existingCart = localStorage.getItem('cart');
-    let cart = existingCart ? JSON.parse(existingCart) : [];
+    const existingCartString = localStorage.getItem('cart');
+    const cart: BasketItem[] = existingCartString ? JSON.parse(existingCartString) : [];
 
     // Check if product already exists in cart
     const existingItemIndex = cart.findIndex(item => item.id === product.id);
