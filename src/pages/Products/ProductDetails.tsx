@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Minus, Plus } from "
 import StarRating from "../../components/StarRating";
 import CommentsSection from "../../components/Comment";
 import { BasketItem } from "../../types/Cart.ts";
+import { toast } from "react-toastify";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
@@ -87,10 +88,9 @@ const ProductDetails: React.FC = () => {
 
     // Save updated cart to localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-
-    // Optional: Show success message or feedback
+    toast.success("Product has been added to basket");
+    setQuantity(1);
   };
-
   // Toggle expandable sections
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({
@@ -122,7 +122,7 @@ const ProductDetails: React.FC = () => {
           {/* Top section - Images and Product info */}
           <div className="flex flex-col md:flex-row gap-8">
             {/* Left side - Images */}
-            <div className="md:w-1/2">
+            <div className="md:w-1/2 h-screen">
               {/* Main image with navigation buttons */}
               <div className="relative h-2/3 overflow-hidden rounded-lg mb-4">
                 {/* Only show navigation buttons if there are multiple images */}
@@ -239,79 +239,80 @@ const ProductDetails: React.FC = () => {
                 className="w-full bg-primary-dark text-white py-3 px-6 rounded-lg hover:bg-primary-dark/90 transition-colors font-medium">
                 Add to Cart
               </button>
+              {/* Bottom section - Expandable Sections (Full Width) */}
+              <div className="w-full mt-8">
+                <div className="space-y-4">
+                  {/* How to Use */}
+                  <div className="border-b border-primary-dark/10">
+                    <button
+                      onClick={() => toggleSection('howToUse')}
+                      className="flex justify-between items-center w-full py-3 text-left"
+                    >
+                      <span className="font-bold text-lg text-primary-dark/90">How to Use</span>
+                      {expandedSections.howToUse ? (
+                        <ChevronUp className="h-5 w-5 text-primary-dark/60" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-primary-dark/60" />
+                      )}
+                    </button>
+                    {expandedSections.howToUse && (
+                      <div className="pb-4">
+                        <p className="text-primary-dark/70 leading-relaxed">
+                          {product?.howToUse || "None"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Full Ingredients List */}
+                  <div className="border-b border-primary-dark/10">
+                    <button
+                      onClick={() => toggleSection('fullIngredientsList')}
+                      className="flex justify-between items-center w-full py-3 text-left"
+                    >
+                      <span className="font-bold text-lg text-primary-dark/90">Full Ingredients List</span>
+                      {expandedSections.fullIngredientsList ? (
+                        <ChevronUp className="h-5 w-5 text-primary-dark/60" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-primary-dark/60" />
+                      )}
+                    </button>
+                    {expandedSections.fullIngredientsList && (
+                      <div className="pb-4">
+                        <p className="text-primary-dark/70 leading-relaxed">
+                          {product?.fullIngredientsList || "None"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Ingredient Benefits */}
+                  <div className="border-b border-primary-dark/10">
+                    <button
+                      onClick={() => toggleSection('ingredientBenefits')}
+                      className="flex justify-between items-center w-full py-3 text-left"
+                    >
+                      <span className="font-bold text-lg text-primary-dark/90">Ingredient Benefits</span>
+                      {expandedSections.ingredientBenefits ? (
+                        <ChevronUp className="h-5 w-5 text-primary-dark/60" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-primary-dark/60" />
+                      )}
+                    </button>
+                    {expandedSections.ingredientBenefits && (
+                      <div className="pb-4">
+                        <p className="text-primary-dark/70 leading-relaxed">
+                          {product?.ingredientBenefits || "None"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
 
-          {/* Bottom section - Expandable Sections (Full Width) */}
-          <div className="w-full mt-8">
-            <div className="space-y-4">
-              {/* How to Use */}
-              <div className="border-b border-primary-dark/10">
-                <button
-                  onClick={() => toggleSection('howToUse')}
-                  className="flex justify-between items-center w-full py-3 text-left"
-                >
-                  <span className="font-medium text-primary-dark/90">How to Use</span>
-                  {expandedSections.howToUse ? (
-                    <ChevronUp className="h-5 w-5 text-primary-dark/60" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-primary-dark/60" />
-                  )}
-                </button>
-                {expandedSections.howToUse && (
-                  <div className="pb-4">
-                    <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.howToUse || "None"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Full Ingredients List */}
-              <div className="border-b border-primary-dark/10">
-                <button
-                  onClick={() => toggleSection('fullIngredientsList')}
-                  className="flex justify-between items-center w-full py-3 text-left"
-                >
-                  <span className="font-medium text-primary-dark/90">Full Ingredients List</span>
-                  {expandedSections.fullIngredientsList ? (
-                    <ChevronUp className="h-5 w-5 text-primary-dark/60" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-primary-dark/60" />
-                  )}
-                </button>
-                {expandedSections.fullIngredientsList && (
-                  <div className="pb-4">
-                    <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.fullIngredientsList || "None"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Ingredient Benefits */}
-              <div className="border-b border-primary-dark/10">
-                <button
-                  onClick={() => toggleSection('ingredientBenefits')}
-                  className="flex justify-between items-center w-full py-3 text-left"
-                >
-                  <span className="font-medium text-primary-dark/90">Ingredient Benefits</span>
-                  {expandedSections.ingredientBenefits ? (
-                    <ChevronUp className="h-5 w-5 text-primary-dark/60" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-primary-dark/60" />
-                  )}
-                </button>
-                {expandedSections.ingredientBenefits && (
-                  <div className="pb-4">
-                    <p className="text-primary-dark/70 leading-relaxed">
-                      {product?.ingredientBenefits || "None"}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
           <div>
             <CommentsSection productId={id||''}/>
           </div>

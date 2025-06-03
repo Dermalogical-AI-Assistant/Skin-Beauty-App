@@ -13,6 +13,7 @@ import useProducts from "../../hooks/useProducts.ts";
 import { GetProductRequestParam } from "../../types/Products.ts";
 import Loading from "../../components/Loading";
 import { UrlParams } from "../../types/common.ts";
+import AddProductToBasket from "./AddProductToBasket.tsx";
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -132,7 +133,7 @@ const ProductsPage: React.FC = () => {
 
         {/*Filter*/}
         <div
-          className={`sticky top-20 z-100 my-5 px-40 flex flex-col items-end justify-between bg-white/10 p-3 drop-shadow backdrop-blur-xs `}
+          className={`sticky top-20 z-5 my-5 px-40 flex flex-col items-end justify-between bg-white/10 p-3 drop-shadow backdrop-blur-xs `}
         >
           <div className={`flex items-center justify-end`}>
             <span className={`text-primary-dark underline pr-3`}> {data?.meta.total} Items</span>
@@ -241,13 +242,16 @@ const ProductsPage: React.FC = () => {
                 <div className="flex items-center justify-center px-32">
                   <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
                     {data?.data.map((item, index) => (
-                      <Link
-                        to={`${ROUTE_PRODUCTS}/${item.id}`}
-                        key={index}
-                        className="flex-shrink-0 my-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
-                      >
-                        <ProductItem item={item} />
-                      </Link>
+                      <>
+
+                        <Link
+                          to={`${ROUTE_PRODUCTS}/${item.id}`}
+                          key={index}
+                          className="flex-shrink-0 my-3 transition-transform duration-300 cursor-pointer"
+                        >
+                          <ProductItem item={item} />
+                        </Link>
+                      </>
                     ))}
                   </div>
                 </div>
