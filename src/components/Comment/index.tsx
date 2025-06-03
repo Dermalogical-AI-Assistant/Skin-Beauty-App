@@ -133,7 +133,7 @@ const CommentsSection: React.FC<CommentProps> = ({ productId }) => {
                   value={newComment}
                   onChange={handleCommentChange}
                   onKeyDown={handleKeyDown}
-                  placeholder="Write a comment...... (Enter to submit, Ctrl+Enter for new line)"
+                  placeholder="Write a comment..."
                   className="w-full p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/50 focus:border-transparent"
                   rows={4}
                 />

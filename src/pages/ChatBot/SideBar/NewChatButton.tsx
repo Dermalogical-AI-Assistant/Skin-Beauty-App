@@ -13,7 +13,8 @@ const NewChatButton: React.FC<NewChatButtonProps> = ({ onClick, loading = false,
 
   return (
     <button
-      className={`${isIconOnly ? 'w-11' : 'w-full'} h-11 bg-pink-light hover:bg-pink-light rounded-full text-white py-2 px-4 flex items-center justify-center transition duration-200 ease-in-out`}
+      className={`${isIconOnly ? 'w-11' : 'w-full'} h-11 bg-gradient-to-br from-pink-light to-pink-light/50 hover:from-pink-light/90 hover:to-pink-light/90
+        rounded-full text-white py-2 px-4 flex items-center justify-center transition duration-200 ease-in-out`}
       onClick={onClick}
       disabled={loading}
     >
