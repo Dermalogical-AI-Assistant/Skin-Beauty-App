@@ -7,7 +7,7 @@ const UserBaseLayout: React.FC = () => {
   return (
     <div className={`bg-primary relative flex flex-col min-h-screen `}>
      <div className={`min-h-screen`}>
-       <div className={`sticky top-0 z-10 w-full`}>
+       <div className={`sticky top-0 z-50 w-full`}>
          <UserHeader />
        </div>
        <Outlet/>
