@@ -58,7 +58,7 @@ const AcountMenu: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-200 z-50">
+        <div className="absolute z-50 right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-200">
           <ul className="py-1">
             <li>
               <a

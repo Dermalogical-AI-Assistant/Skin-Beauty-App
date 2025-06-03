@@ -13,7 +13,7 @@ const AdminContentLayout: React.FC<AdminContentLayoutProps> = (props) => {
        {/* Header */}
        {
          (props?.title) && (
-           <div className="sticky top-0 z-30 backdrop-blur-lg py-6 px-6">
+           <div className="sticky top-0 z-10 backdrop-blur-lg py-6 px-6">
              <h1 className="text-2xl font-bold">{props.title}</h1>
              {
                 props.subtitle && (
