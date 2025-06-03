@@ -10,15 +10,16 @@ import { Comment, GetCommentsRequestParam, ReqCreateComment } from "../types/Com
 import { useState } from "react";
 
 function useComment() {
-
   const [isLoading, setIsLoading] = useState(false);
 
   const useFetchCommentByProductId = (params: GetCommentsRequestParam) => {
+    // Only enable query if productId exists
+    const enabled = Boolean(params.productId);
+
     return useQuery<GenericResponseType<Comment>>({
-      queryKey: ["product", params],
-      queryFn: async ({ queryKey }) => {
-        const [, params] = queryKey as [string, GetCommentsRequestParam];
-        const {productId, ...reqParams} = params;
+      queryKey: ["comments", params.productId, params.parentId, params.page, params.perPage],
+      queryFn: async () => {
+        const { productId, ...reqParams } = params;
 
         const res = await axios.get<GenericResponseType<Comment>>(
           `${REQUEST_COMMENTS}/${productId}`,
@@ -26,13 +27,15 @@ function useComment() {
             params: reqParams,
             paramsSerializer: {
               serialize: (reqParams) =>
-                qs.stringify(reqParams, { arrayFormat: "repeat" }), // skincareConcerns=DRY_SKIN&skincareConcerns=ACNE
+                qs.stringify(reqParams, { arrayFormat: "repeat" }),
             },
           },
         );
         return res.data as GenericResponseType<Comment>;
       },
+      enabled,
       refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // Cache for 5 minutes
     });
   };
 
@@ -49,8 +52,8 @@ function useComment() {
 
   const onRequestCreateComment = (
     data: ReqCreateComment,
-    onSuccess: () => void,
-    onError: (error:Error) => void
+    onSuccess?: () => void,
+    onError?: (error: Error) => void
   ) => {
     setIsLoading(true);
     handleCreateComment.mutate(data, {
@@ -60,18 +63,17 @@ function useComment() {
       },
       onError: (error) => {
         setIsLoading(false);
-        console.log(error);
-        onError(error);
+        console.error('Error creating comment:', error);
+        onError?.(error);
       }
     });
   };
 
-
-
   return {
     useFetchCommentByProductId,
     onRequestCreateComment,
-    isLoading
+    isLoading,
+    isCreating: handleCreateComment.isPending,
   };
 }
 
