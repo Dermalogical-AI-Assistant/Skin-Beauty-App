@@ -19,7 +19,7 @@ const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get all params from URL with defaults
-  const title = searchParams.get("pageTitle") || "";
+  const title = searchParams.get("pageTitle") || "All Products";
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "createdAt:desc";
   const page = parseInt(searchParams.get("page") || "0");
@@ -112,7 +112,7 @@ const ProductsPage: React.FC = () => {
         <section className={`flex flex-col items-center justify-center`}>
           <div className={`border-primary-dark/20 w-1/2 border`}></div>
           <div className={`my-3 flex flex-col items-center justify-center`}>
-            <h2 className={`text-primary-dark/70 p-4 text-2xl font-bold`}>
+            <h2 className={`text-primary-dark drop-shadow-2xl drop-shadow-pink-light p-4 text-2xl font-bold`}>
               All Skincare Concerns
             </h2>
             <div className="flex h-full w-full flex-wrap justify-center py-2">
@@ -121,7 +121,7 @@ const ProductsPage: React.FC = () => {
                   <Link
                     to={`${ROUTE_PRODUCTS}?pageTitle=${item.label}&skincareConcerns=${item.value}`}
                     key={index}
-                    className="bg-pink-light/70 mx-2 my-1 rounded-full p-3 font-bold text-nowrap text-white"
+                    className=" mx-2 my-1 rounded-full p-3 font-bold text-nowrap text-primary-dark/80 hover:scale-110 hover:text-primary-dark hover:bg-white/50 hover:shadow-primary  transition-colors duration-300"
                   >
                     {item.label}
                   </Link>
