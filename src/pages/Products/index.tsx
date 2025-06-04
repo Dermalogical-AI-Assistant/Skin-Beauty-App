@@ -13,12 +13,13 @@ import useProducts from "../../hooks/useProducts.ts";
 import { GetProductRequestParam } from "../../types/Products.ts";
 import Loading from "../../components/Loading";
 import { UrlParams } from "../../types/common.ts";
+import AddProductToBasket from "./AddProductToBasket.tsx";
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get all params from URL with defaults
-  const title = searchParams.get("pageTitle") || "";
+  const title = searchParams.get("pageTitle") || "All Products";
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "createdAt:desc";
   const page = parseInt(searchParams.get("page") || "0");
@@ -111,7 +112,7 @@ const ProductsPage: React.FC = () => {
         <section className={`flex flex-col items-center justify-center`}>
           <div className={`border-primary-dark/20 w-1/2 border`}></div>
           <div className={`my-3 flex flex-col items-center justify-center`}>
-            <h2 className={`text-primary-dark/70 p-4 text-2xl font-bold`}>
+            <h2 className={`text-primary-dark drop-shadow-2xl drop-shadow-pink-light p-4 text-2xl font-bold`}>
               All Skincare Concerns
             </h2>
             <div className="flex h-full w-full flex-wrap justify-center py-2">
@@ -120,7 +121,7 @@ const ProductsPage: React.FC = () => {
                   <Link
                     to={`${ROUTE_PRODUCTS}?pageTitle=${item.label}&skincareConcerns=${item.value}`}
                     key={index}
-                    className="bg-pink-light/70 mx-2 my-1 rounded-full p-3 font-bold text-nowrap text-white"
+                    className=" mx-2 my-1 rounded-full p-3 font-bold text-nowrap text-primary-dark/80 hover:scale-110 hover:text-primary-dark hover:bg-white/50 hover:shadow-primary  transition-colors duration-300"
                   >
                     {item.label}
                   </Link>
@@ -132,7 +133,7 @@ const ProductsPage: React.FC = () => {
 
         {/*Filter*/}
         <div
-          className={`sticky top-20 z-100 my-5 px-40 flex flex-col items-end justify-between bg-white/10 p-3 drop-shadow backdrop-blur-xs `}
+          className={`sticky top-20 z-5 my-5 px-40 flex flex-col items-end justify-between bg-white/10 p-3 drop-shadow backdrop-blur-xs `}
         >
           <div className={`flex items-center justify-end`}>
             <span className={`text-primary-dark underline pr-3`}> {data?.meta.total} Items</span>
@@ -241,13 +242,16 @@ const ProductsPage: React.FC = () => {
                 <div className="flex items-center justify-center px-32">
                   <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
                     {data?.data.map((item, index) => (
-                      <Link
-                        to={`${ROUTE_PRODUCTS}/${item.id}`}
-                        key={index}
-                        className="flex-shrink-0 my-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
-                      >
-                        <ProductItem item={item} />
-                      </Link>
+                      <>
+
+                        <Link
+                          to={`${ROUTE_PRODUCTS}/${item.id}`}
+                          key={index}
+                          className="flex-shrink-0 my-3 transition-transform duration-300 cursor-pointer"
+                        >
+                          <ProductItem item={item} />
+                        </Link>
+                      </>
                     ))}
                   </div>
                 </div>

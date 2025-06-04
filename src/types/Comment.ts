@@ -1,24 +1,22 @@
-import { OrderStatus } from "./Order.ts";
-
 export type Comment = {
   id: string;
-  images: string[];
   content: string;
-  createdAt: string;
+  images: string[];
   parentId: string | null;
-  parent: Comment | null;
+  numberOfChildren: number;
   user: {
     id: string;
     name: string;
     avatar: string;
   };
-  children: Comment[];
+  createdAt: string;
 }
 
 export type GetCommentsRequestParam = {
   page: number;
   perPage: number;
   order?: string;
+  parentId?: string;
   productId?: string;
 }
 
