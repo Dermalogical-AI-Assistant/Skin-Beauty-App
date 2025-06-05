@@ -1,7 +1,7 @@
 import {
   REQUEST_lOGIN,
   REQUEST_LOGOUT,
-  REQUEST_GET_MY_PROFILE,
+  REQUEST_GET_MY_PROFILE, REQUEST_REGISTER_ACCOUNT
 } from "../constants/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios";
@@ -11,11 +11,23 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { HOME } from "../constants/routes";
 import { useState } from "react";
 import { User } from "../types/Users";
+import { toast } from "react-toastify";
 
 interface LoginData {
   email: string;
   password: string;
   deviceId: string;
+}
+
+interface RegisterData {
+  user:{
+    email: string,
+    password:string,
+    name: string,
+    gender: "MALE" | "FEMALE",
+    dob: string,
+  },
+  deviceId: string
 }
 
 function useAuth() {
@@ -45,6 +57,40 @@ function useAuth() {
       return res.data;
     },
   });
+
+  const handleRegister = useMutation({
+    mutationKey: ["register"],
+    mutationFn: (data: RegisterData) => {
+      return axios.post(REQUEST_REGISTER_ACCOUNT, data);
+    },
+  })
+
+  const onSubmitRegister = (
+    data: RegisterData,
+    onError: (error: any) => void,
+  ) => {
+    handleRegister.mutate(data, {
+      onSuccess: async (response) => {
+        login(response.data.access_token, response.data.refresh_token);
+        toast.success("Registration successful!");
+        try {
+          const { data: profile } = await handleGetProfile.refetch();
+
+          if (profile) {
+            updateUserProfile(profile);
+            navigate(redirectPath, { replace: true });
+          } else {
+            console.error("Profile response is missing data:", profile);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+        }
+      },
+
+      onError: (error) => onError(error),
+    });
+  };
+
 
   const onSubmitAccountForm = (
     data: LoginData,
@@ -84,6 +130,7 @@ function useAuth() {
     userProfile,
     isAuthenticated,
     onSubmitAccountForm,
+    onSubmitRegister,
     handleLoginPassword,
     logout: handleLogout,
     updateUserProfile,

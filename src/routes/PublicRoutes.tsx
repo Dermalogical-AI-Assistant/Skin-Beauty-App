@@ -15,6 +15,7 @@ import ShoppingBasket from "../pages/ShoppingBasket";
 import { ROUTE_BASKET } from "../constants/routes.ts";
 import ProductManagement from "../pages/AdminPage/Product";
 import TestPage from "../pages/Dashboard.tsx";
+import SignUpPage from "../pages/SignUpPage";
 
 export const routesForPublic = [
 
@@ -75,5 +76,9 @@ export const routesForPublic = [
     {
         path: "/login",
         element: <LoginPage/>,
+    },
+    {
+      path:"/register",
+      element:<SignUpPage/>
     }
 ];
