@@ -13,6 +13,8 @@ import { Link, useNavigate } from "react-router-dom";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
 import { convertDate } from "../../../utils/date.ts";
+import { Upload } from "lucide-react";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 const ProductManagement: React.FC = () => {
   const [page, setPage] = useState(0);
@@ -78,6 +80,15 @@ const ProductManagement: React.FC = () => {
 
           >
             + New Product
+          </Link>
+
+          <Link
+            className="inline-flex items-center rounded-md bg-purple-500 px-4 py-2 gap-2 text-xs font-semibold text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            to="/admin/products/import"
+
+          >
+            <AiOutlineCloudUpload size={24}/>
+            <span>Import file</span>
           </Link>
         </div>
       </div>

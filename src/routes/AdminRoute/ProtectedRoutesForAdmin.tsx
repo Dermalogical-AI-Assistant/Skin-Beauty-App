@@ -17,6 +17,7 @@ import Discount from "../../pages/AdminPage/Discount";
 import DiscountDetails from "../../pages/AdminPage/Discount/DiscountDetails.tsx";
 import OrderManagement from "../../pages/AdminPage/Order";
 import { AdminProtectedRoutesWrapper } from "./ProtectedRoutesWrapper.tsx";
+import ImportProductsBulk from "../../pages/AdminPage/Product/ImportProductBulk.tsx";
 
 /**
  * Routes that require authentication
@@ -57,6 +58,10 @@ export const routesForAdminAuthenticated = [
                 path: ":productId",
                 element: <ProductDetails/>,
               },
+              {
+                path:"import",
+                element: <ImportProductsBulk/>,
+              }
             ]
           },
           {
