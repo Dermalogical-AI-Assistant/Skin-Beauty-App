@@ -13,7 +13,7 @@ export interface Message {
   id: string;
   sessionId?: string;
   message: string;
-  sender: "USER" | "ADMIN";
+  sender: "USER" | "BOT";
   createdAt?: Date;
 }
 
@@ -25,6 +25,6 @@ export interface ChatHistory {
 
 export interface NewMessage {
   sessionId: string;
-  sender: "USER" | "ADMIN";
+  sender: "USER" | "BOT";
   message: string;
 }

@@ -2,12 +2,8 @@ import React from 'react';
 import { Home } from 'lucide-react';
 import BrandLogo from '../../components/BrandLogo';
 import { useLocation, Link } from 'react-router-dom';
-import { HiOutlineCollection } from "react-icons/hi";
-import { TbCategory2 } from "react-icons/tb";
 import { LuBoxes } from "react-icons/lu";
 import { BsShop } from "react-icons/bs";
-import { CgNotes } from "react-icons/cg";
-import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineDiscount } from "react-icons/md";
 
 
