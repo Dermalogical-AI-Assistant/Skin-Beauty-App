@@ -2,10 +2,12 @@ import { Message, NewMessage, PaginatedResponse } from "../types/ChatBot";
 import { REQUEST_CHATBOT_MESSAGES } from "../constants/apis";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from '../settings/axios';
+import { useState } from "react";
 
 function useChatBotMessages(perPage: number = 10, sessionId: string) {
   const queryClient = useQueryClient();
   const queryKey = ['get-list-messages', sessionId, perPage];
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   const fetchMessages = useInfiniteQuery<PaginatedResponse<Message>, Error>({
     queryKey,
@@ -18,6 +20,8 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
       const res = await axios.get<PaginatedResponse<Message>>(
         `${REQUEST_CHATBOT_MESSAGES}/${sessionId}?page=${pageParam}&perPage=${perPage}`
       );
+
+      console.log("fetch messages", res.data);
       return res.data;
     },
     initialPageParam: 1,
@@ -36,24 +40,27 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
   /**
    * SENT NEW MESSAGE
    */
-    const handleSentMessage = useMutation({
-      mutationKey: ["sent-message", sessionId],
-      mutationFn: (data: NewMessage) => {
-        return axios.post(`${REQUEST_CHATBOT_MESSAGES}`, data);
-      },
-      onSuccess: () => {
-        // Invalidate the query for this specific sessionId to trigger a refetch
-        queryClient.invalidateQueries({ queryKey });
-      }
-    });
+  const handleSentMessage = useMutation({
+    mutationKey: ["sent-message", sessionId],
+    mutationFn: (data: NewMessage) => {
+      return axios.post(`${REQUEST_CHATBOT_MESSAGES}`, data);
+    },
+    onSuccess: () => {
+      // Invalidate the query for this specific sessionId to trigger a refetch
+      queryClient.invalidateQueries({ queryKey });
+    }
+  });
 
   const onSentMessage = (data: NewMessage, onSuccess: (newSession: Message) => void, onError: (error: Error) => void) => {
+    setIsSendingMessage(true);
     handleSentMessage.mutate(data, {
       onSuccess: (response) => {
         // Pass the new session data to the callback
+        setIsSendingMessage(false);
         onSuccess?.(response.data);
       },
       onError: (error) => {
+        setIsSendingMessage(false);
         console.log(error);
         onError(error);
       }
@@ -62,7 +69,8 @@ function useChatBotMessages(perPage: number = 10, sessionId: string) {
 
   return {
     fetchMessages,
-    onSentMessage
+    onSentMessage,
+    isSendingMessage
   };
 }
 

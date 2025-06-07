@@ -12,13 +12,13 @@ export const REQUEST_LOGOUT = "/auth/logout";
 
 // CHATBOT
 // SESSIONS
-export const REQUEST_CHATBOT_SESSIONS = "/chat/my-sessions";
-export const REQUEST_RENAME_CHATBOT_SESSION = "/chat/sessions";
-export const REQUEST_DELETE_CHATBOT_SESSION = "/chat/sessions";
-export const REQUEST_DELETE_ALL_CHATBOT_SESSION = "/chat/my-sessions";
-export const REQUEST_NEW_CHATBOT_SESSION = "/chat/sessions";
+export const REQUEST_CHATBOT_SESSIONS = "/qa/my-sessions";
+export const REQUEST_RENAME_CHATBOT_SESSION = "/qachat/sessions";
+export const REQUEST_DELETE_CHATBOT_SESSION = "/qa/sessions";
+export const REQUEST_DELETE_ALL_CHATBOT_SESSION = "/qa/my-sessions";
+export const REQUEST_NEW_CHATBOT_SESSION = "/qa/sessions";
 // MESSAGES
-export const REQUEST_CHATBOT_MESSAGES = "/chat/messages";
+export const REQUEST_CHATBOT_MESSAGES = "/qa/messages";
 
 //SHOP
 export const REQUEST_PRODUCTS = "/eco/products";

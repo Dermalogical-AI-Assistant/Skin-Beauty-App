@@ -1,6 +1,6 @@
+//ChatBot/ChatMessage/UserMessage.tsx
 import React from 'react';
 import { Message } from '../../../types/ChatBot.ts';
-import { FiEdit } from "react-icons/fi";
 import { RxCopy } from "react-icons/rx";
 
 interface UserMessageProps {
@@ -8,45 +8,52 @@ interface UserMessageProps {
 }
 
 const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
+
   const handleCopyFromDiv = () => {
-    navigator.clipboard.writeText(message.message)
-      .then(() => {
-        console.log('Copied successfully!');
-      })
-      .catch(err => {
-        console.error('Failed to copy:', err);
-      });
+    const element = document.getElementById('copy');
+    if (element) {
+      const text = element.innerText;
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          console.log('Copied successfully!');
+        })
+        .catch(err => {
+          console.error('Failed to copy:', err);
+        });
+    }
   };
 
   return (
-    <div className="flex justify-end items-start space-x-3">
-      <div className="flex-1 flex flex-col items-end">
-        <div className="bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-2xl rounded-tr-md p-4 shadow-lg max-w-xs lg:max-w-md xl:max-w-lg">
-          <p className="text-sm leading-relaxed">{message.message}</p>
+    <div className="flex justify-end items-start space-x-3 mb-4">
+      {/* User Message Content */}
+      <div className="flex flex-col max-w-[70%]">
+        {/* Message Bubble */}
+        <div className="bg-gradient-to-r from-pink-light/10 to-pink-light/30 rounded-2xl rounded-tr-md p-4 shadow-lg">
+          <div className="flex items-start gap-2">
+            <p className="text-primary-dark/70 text-md font-medium flex-1" id="copy">{message.message}</p>
+            {/*<button className="text-white/70 hover:text-white flex-shrink-0">*/}
+            {/*  <FiEdit size={19}/>*/}
+            {/*</button>*/}
+          </div>
         </div>
-        <div className="flex items-center gap-2 mt-2 text-xs text-white/50">
-          <button
-            className="hover:text-white/70 transition-colors p-1 rounded"
-            onClick={handleCopyFromDiv}
-            title="Copy message"
-          >
-            <RxCopy size={14}/>
-          </button>
-          <button
-            className="hover:text-white/70 transition-colors p-1 rounded"
-            title="Edit message"
-          >
-            <FiEdit size={14}/>
-          </button>
-          <span className="text-white/30">|</span>
-          <span>
-            {message?.createdAt
-              ? new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-              : ''}
-          </span>
+
+        {/* Actions and Time */}
+        <div className="flex items-center justify-end gap-3 text-xs mt-1 text-primary-dark/25 px-2">
+          <div className="flex items-center gap-3">
+            <button className="hover:text-primary-dark/50"
+                    onClick={handleCopyFromDiv}>
+              <RxCopy size={17}/>
+            </button>
+          </div>
+          <span className="text-primary-dark/25">|</span>
+          {message?.createdAt
+            ? new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : ''}
         </div>
       </div>
-      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 shadow-lg">
+
+      {/* User Avatar */}
+      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
         <img
           src="https://miguelminambres.com/wp-content/uploads/2021/10/Social-04-810x1024.jpg"
           alt="User"
