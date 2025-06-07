@@ -2,12 +2,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import NewChatButton from './NewChatButton.tsx';
 import HistoryList from './HistoryList.tsx';
-import  { createNewChat } from '../../../hooks/useChatBot.ts';
 import { ChatHistory } from '../../../types/ChatBot.ts';
 import useChatBotSessions from "../../../hooks/useChatBotSessions.ts";
 import DeleteModal from "./DeleteModal.tsx";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CHATBOT } from "../../../constants/routes.ts";
+import BrandLogo from "../../../components/BrandLogo";
 
 const Sidebar: React.FC = () => {
   const [creatingChat, setCreatingChat] = useState(false);
@@ -89,6 +89,9 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="w-96 h-full bg-secondary flex flex-col overflow-hidden">
+      <div className="flex items-center justify-center px-6 py-4 border-b border-gray-200">
+        <BrandLogo />
+      </div>
       {/*DELETE ALL CHAT MODAL*/}
       <DeleteModal
         isOpen={isDeleteModalOpen}

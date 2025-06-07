@@ -21,7 +21,7 @@ export const routesForPublic = [
 
     {
       path: "/",
-      element: <UserBaseLayout/>,
+      element: <UserBaseLayout isHeaderShown={true} isFooterShown={true} />,
       children: [
         {
           path: "",

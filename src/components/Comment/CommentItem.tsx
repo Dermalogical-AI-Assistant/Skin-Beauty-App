@@ -276,7 +276,7 @@ export const CommentItem: React.FC<CommentProps> = ({ comment, depth, productId,
                   value={replyContent}
                   onChange={handleReplyChange}
                   onKeyDown={handleReplyKeyDown}
-                  placeholder="Write a reply... (Enter to submit, Ctrl+Enter for new line)"
+                  placeholder="Write a reply..."
                   className="w-full p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/50 focus:border-transparent"
                   rows={3}
                 />

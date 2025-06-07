@@ -7,16 +7,9 @@ import UserBaseLayout from "../../layouts/BaseLayout/UserBaseLayout.tsx";
 import { ROUTE_CHECKOUT, ROUTE_MY_ORDER, ROUTE_ORDER_DETAILS } from "../../constants/routes.ts";
 import CheckoutPage from "../../pages/CheckoutPage";
 import OrdersPage from "../../pages/OrderPage";
+import { AdminProtectedRoutesWrapper } from "../AdminRoute/ProtectedRoutesWrapper.tsx";
 import AdminLayout from "../../layouts/Admin/AdminLayout.tsx";
-import UserManagement from "../../pages/AdminPage/User";
-import ProductManagement from "../../pages/AdminPage/Product";
-import { Outlet } from "react-router-dom";
-import CreateProduct from "../../pages/AdminPage/Product/AddProduct.tsx";
-import ProductDetails from "../../pages/AdminPage/Product/ProductDetails.tsx";
-import CreateDiscount from "../../pages/AdminPage/Discount/CreateDiscount.tsx";
-import Discount from "../../pages/AdminPage/Discount";
-import DiscountDetails from "../../pages/AdminPage/Discount/DiscountDetails.tsx";
-import OrderManagement from "../../pages/AdminPage/Order";
+import ChatLayout from "../../layouts/BaseLayout/ChatLayout.tsx";
 
 /**
  * Routes that require authentication
@@ -31,7 +24,7 @@ export const routesForAuthenticated = [
     children: [
       {
         path: "",
-        element: <UserBaseLayout />,
+        element: <UserBaseLayout isFooterShown={true} isHeaderShown={true} />,
         children: [
           {
             path: "/dashboard",
@@ -52,7 +45,14 @@ export const routesForAuthenticated = [
           {
             path:ROUTE_MY_ORDER,
             element: <OrdersPage />,
-          },
+          }
+        ],
+      },
+      {
+        path: "",
+        element: <ChatLayout />,
+        children: [
+
           {
             path: "/cosmetic-assistant",
             element: <ChatBot />,

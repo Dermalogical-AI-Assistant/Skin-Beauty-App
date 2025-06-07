@@ -1,7 +1,6 @@
-// components/ChatMessage.tsx
+//ChatBot/ChatMessage/UserMessage.tsx
 import React from 'react';
 import { Message } from '../../../types/ChatBot.ts';
-import { FiEdit } from "react-icons/fi";
 import { RxCopy } from "react-icons/rx";
 
 interface UserMessageProps {
@@ -13,7 +12,7 @@ const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
   const handleCopyFromDiv = () => {
     const element = document.getElementById('copy');
     if (element) {
-      const text = element.innerText; // giữ lại format hiển thị, bỏ tag HTML
+      const text = element.innerText;
       navigator.clipboard.writeText(text)
         .then(() => {
           console.log('Copied successfully!');
@@ -25,37 +24,44 @@ const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
   };
 
   return (
-    <div className={`flex relative w-full my-2`}>
-      <div className={`absolute -left-12 top-0 w-10 h-10 rounded-full  overflow-hidden`}>
+    <div className="flex justify-end items-start space-x-3 mb-4">
+      {/* User Message Content */}
+      <div className="flex flex-col max-w-[70%]">
+        {/* Message Bubble */}
+        <div className="bg-gradient-to-r from-pink-light/10 to-pink-light/30 rounded-2xl rounded-tr-md p-4 shadow-lg">
+          <div className="flex items-start gap-2">
+            <p className="text-primary-dark/70 text-md font-medium flex-1" id="copy">{message.message}</p>
+            {/*<button className="text-white/70 hover:text-white flex-shrink-0">*/}
+            {/*  <FiEdit size={19}/>*/}
+            {/*</button>*/}
+          </div>
+        </div>
+
+        {/* Actions and Time */}
+        <div className="flex items-center justify-end gap-3 text-xs mt-1 text-primary-dark/25 px-2">
+          <div className="flex items-center gap-3">
+            <button className="hover:text-primary-dark/50"
+                    onClick={handleCopyFromDiv}>
+              <RxCopy size={17}/>
+            </button>
+          </div>
+          <span className="text-primary-dark/25">|</span>
+          {message?.createdAt
+            ? new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : ''}
+        </div>
+      </div>
+
+      {/* User Avatar */}
+      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
         <img
           src="https://miguelminambres.com/wp-content/uploads/2021/10/Social-04-810x1024.jpg"
           alt="User"
           className="w-full h-full object-cover"
         />
       </div>
-      <div className={`flex flex-col rounded-lg w-full`}>
-        <div className={`flex flex-row gap-2 items-start justify-between w-full`}>
-          <p className={`w-full`} id={`copy`}>{message.message}</p>
-          <button className={`text-primary-dark/50 hover:text-primary-dark/75`}>
-            <FiEdit size={19}/>
-          </button>
-        </div>
-        <div className={`flex items-center gap-3 text-xs mt-1 text-primary-dark/25`}>
-          <div className={`flex items-center gap-3`}>
-            <button className={` hover:text-primary-dark/50`}
-              onClick={handleCopyFromDiv}
-            >
-              <RxCopy size={17}/>
-            </button>
-          </div>
-          <span className={`text-primary-dark/25`}>|</span>
-          {message?.createdAt
-            ? new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : ''}
-        </div>
-      </div>
     </div>
   );
 };
 
-export default UserMessage;
+export { UserMessage };
