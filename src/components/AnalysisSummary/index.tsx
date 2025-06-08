@@ -70,6 +70,20 @@ export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
            </p>
          </div>
         </div>
+
+        {/*Skin Type*/}
+        <div>
+          <p className="text-lg font-semibold drop-shadow-lg">
+            <strong>Skin Type</strong>
+          </p>
+          <div className={`border-l-4 border-primary-dark/80 pl-3 ml-1`}>
+            <p className={`font-bold`}>
+              Type: <span className="font-medium">{skinAnalysis?.skinType?.predicts.name}</span>
+            </p>
+          </div>
+        </div>
+
+
       </div>
     </div>
   );

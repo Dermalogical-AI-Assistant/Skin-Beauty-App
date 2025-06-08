@@ -1,7 +1,6 @@
 import React from 'react';
 import HeaderCrums from "../../components/HeaderCrums.tsx";
 import AcountMenu from "./AccountMenu.tsx";
-import NavLink from "../BaseLayout/Header/NavLink/NavLink.tsx";
 
 interface NavbarProps {
   isHeaderShown?: boolean;
