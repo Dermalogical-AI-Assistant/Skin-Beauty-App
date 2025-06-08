@@ -68,7 +68,8 @@ const AddProductToBasket = ({
 
     // Save updated cart to localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-    toast.success("Products has been added to basket");
+    toast.success( "Products has been added to basket");
+    onClose();
   };
   return (
     <div
