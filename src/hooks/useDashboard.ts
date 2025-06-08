@@ -8,7 +8,6 @@ import {
   REQUEST_ORDER_COUNT, REQUEST_PERIODICAL_REVENUES
 } from "../constants/apis.ts";
 import {
-  DrawDataCountRes,
   MonthlyOrders,
   MonthlySales,
   NewCustomerCount,
@@ -27,10 +26,10 @@ const useDashboard = () => {
     refetchOnWindowFocus: true,
   });
 
-  const useFetchCrawlDataCount = useQuery<DrawDataCountRes>({
+  const useFetchCrawlDataCount = useQuery<MonthlySales>({
     queryKey: ["data-crawl-count"],
     queryFn: async () => {
-      const res = await axios.get<DrawDataCountRes>(`${REQUEST_MONTHLY_CRAWL_COUNT}`);
+      const res = await axios.get(`${REQUEST_MONTHLY_CRAWL_COUNT}`);
       return res.data;
     },
     refetchOnWindowFocus: true,
