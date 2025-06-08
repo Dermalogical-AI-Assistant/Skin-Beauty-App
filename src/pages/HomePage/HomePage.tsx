@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductSection from "./Sections/ProductSection.tsx";
-import { GetProductRequestParam, Product } from "../../types/Products.ts";
+import { GetProductRequestParam } from "../../types/Products.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import { ROUTE_CHATBOT, ROUTE_PRODUCTS, ROUTE_SKIN_ANALYSIS } from "../../constants/routes.ts";
 import { SkincareConcern } from "../../types/SkincareConcern.ts";
@@ -10,18 +10,20 @@ const HomePage: React.FC = () => {
 
   const {getProducts} = useProducts();
 
+  const navigate = useNavigate();
   const newestParams: GetProductRequestParam = {
-    page:1,
+    page:0,
     perPage: 10,
     order:"createdAt:desc"
   };
+
   const { data:newestData, isLoading:isNewestLoading, refetch:newestRefetch } = getProducts(newestParams);
   const newestProducts = newestData?.data ?? [];
 
   const bestSellerParams: GetProductRequestParam = {
-    page: 1,
+    page: 0,
     perPage: 10,
-    order: "sold:desc"
+    order: "bestSeller:desc"
   };
   const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
   const bestSellerProducts = bestSellerData?.data ?? [];
@@ -80,32 +82,36 @@ const HomePage: React.FC = () => {
         </section>
 
         {/*Skincare Concern*/}
-        <section className={`flex flex-col justify-center items-center`}>
-          <div className={`border w-1/2 border-primary-dark/20`}></div>
-          <div className={`flex flex-col justify-center items-center my-3`}>
-            <h2 className={`font-bold text-2xl p-4 text-primary-dark/70`}>Skincare Concerns</h2>
-            <div className="flex flex-wrap h-full w-full justify-center py-4">
-              {SkincareConcern.getAll().map((item, index) => (
-                <Link
-                  to={`${ROUTE_PRODUCTS}?pageTitle=${item.label}&&skincare_concern=${item.value}`}
-                  key={index}
-                  className="p-3 my-3 bg-pink-light mx-2  text-nowrap rounded-full text-white font-bold"
-                >
-                  {item.label}
-                </Link>
-              ))}
+        <section className={`flex flex-col items-center justify-center`}>
+          <div className={`border-primary-dark/20 w-1/2 border`}></div>
+          <div className={`my-3 flex flex-col items-center justify-center`}>
+            <h2 className={`text-primary-dark drop-shadow-2xl drop-shadow-pink-light p-4 text-2xl font-bold`}>
+              Skincare Concerns
+            </h2>
+            <div className="flex h-full w-full flex-wrap justify-center py-2">
+              {
+                SkincareConcern.getAll().map((item, index) => (
+                  <Link
+                    to={`${ROUTE_PRODUCTS}?pageTitle=${item.label}&skincareConcerns=${item.value}`}
+                    key={index}
+                    className=" mx-2 my-1 rounded-full p-3 font-bold text-nowrap text-primary-dark/80 hover:scale-110 hover:text-primary-dark hover:bg-white/50 hover:shadow-primary  transition-colors duration-300"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
             </div>
           </div>
-          <div className={`border w-1/2 border-primary-dark/20`}></div>
+          <div className={`border-primary-dark/20 w-1/2 border`}></div>
         </section>
+
         <section className={`my-10`}>
           <div className="flex h-full w-full justify-center px-32">
-            <ProductSection title={"Newest"} items={newestProducts} />
+            <ProductSection title={"Newest"} items={newestProducts} onViewAll={()=>{navigate(`${ROUTE_PRODUCTS}?pageTitleNew%20Products&filter=createdAt%3Aasc`)}} />
           </div>
         </section>
         <section className={``}>
           <div className="flex h-full w-full justify-center px-32">
-            <ProductSection title={"Best seller"} items={bestSellerProducts} />
+            <ProductSection title={"Best seller"} items={bestSellerProducts}  onViewAll={ ()=>{ navigate(`${ROUTE_PRODUCTS}?pageTitle=Best%20Seller&filter=bestSeller%3Aasc`)}}/>
           </div>
         </section>
       </div>

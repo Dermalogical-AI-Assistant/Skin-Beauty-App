@@ -15,12 +15,12 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
     const queryClient = new QueryClient();
     const contextClass = {
-      success: "bg-orange-50 text-orange-500",
-      error: "bg-orange-50 text-red-700",
-      info: "bg-orange-50 text-stone-500",
-      warning: "bg-orange-50 text-orange-500",
-      default: "bg-orange-50 text-orange-500",
-      dark: "bg-orange-50 text-orange-500",
+      success: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-primary-dark font-bold",
+      error: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-red-700",
+      info: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-stone-500",
+      warning: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-orange-500",
+      default: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-orange-500",
+      dark: "bg-gradient-to-br from-orange-50/60 to-orange-100 text-orange-500",
     };
     return (
         <MantineProvider>
