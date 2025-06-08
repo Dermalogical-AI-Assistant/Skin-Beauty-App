@@ -6,7 +6,7 @@ import { useState } from "react";
 
 type MetaData = {
   classes: Record<string, string>;
-  conf_threshold: number;
+  conf_threshold?: number;
 };
 
 export type AcneDetection = {
@@ -31,6 +31,10 @@ export type SkinAnalysisResult = {
   acneSeverity?: {
     meta: MetaData;
     predicts: AcneSeverity[];
+  };
+  skinType?: {
+    meta: MetaData;
+    predicts: { name: string; class_index: number; confidence: number, error?:string};
   };
   imageURL?: string;
 };
