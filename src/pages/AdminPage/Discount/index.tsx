@@ -49,7 +49,7 @@ const DiscountPage: React.FC = () => {
     >
       {/* Controls */}
       <div className="mb-4 flex items-center justify-between">
-        <div className="text-lg font-semibold">All products</div>
+        <div className="text-lg font-semibold">All Discounts</div>
         <div className="flex gap-2">
           <input
             type="text"
