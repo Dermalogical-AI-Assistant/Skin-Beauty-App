@@ -13,14 +13,14 @@ const SkinAnalysisResult: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const bestSellerParams: GetProductRequestParam = {
+  const createdParams: GetProductRequestParam = {
     page: 1,
     perPage: 10,
-    order: "sold:desc"
+    order: "createdAt:desc"
   };
   const {getProducts} = useProducts();
-  const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
-  const bestSellerProducts = bestSellerData?.data ?? [];
+  const { data:suggetData, isLoading:isSuggetLoadding, refetch:suggetRefetch } = getProducts(createdParams);
+  const suggetProducts = suggetData?.data ?? [];
 
   const location = useLocation();
   const { data:skinAnalysisData, url } = location.state || {};
@@ -60,20 +60,16 @@ const SkinAnalysisResult: React.FC = () => {
       <div className="w-1/2   px-4 ">
         <div className="w-3/4 bg-white/80 drop-shadow-lg px-10 py-5 rounded-2xl flex flex-col">
           {/* Analysis Summary at the top */}
-          <div className={`aspect-square `}>
+          <div className={``}>
             <AnalysisSummary
               acneDetection={skinAnalysisData?.acneDetection}
               acneSeverity={skinAnalysisData?.acneSeverity}
               imageURL={skinAnalysisData?.imageURL}
+              skinType={skinAnalysisData?.skinType}
             />
           </div>
-
-          {/*<div className="flex-1 flex items-center justify-center">*/}
-          {/*  <ProductSection   items={bestSellerProducts} />*/}
-          {/*</div>*/}
-
-          <div className="flex items-center justify-center">
-            <ProductCarousel />
+          <div className="w-full  overflow-hidden flex">
+            <ProductCarousel  products={suggetProducts} />
           </div>
         </div>
       </div>
