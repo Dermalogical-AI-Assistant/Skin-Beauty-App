@@ -17,6 +17,39 @@ const Dashboard = () => {
 
   const  navigate  = useNavigate();
 
+  const popularProducts = [
+    {
+      name: 'iPhone 15 Pro max',
+      publishDate: '02 Jan 2023',
+      category: 'Gadget',
+      brand: 'Apple',
+      price: '$1299',
+      status: 'In Stock',
+      statusType: 'success',
+      image: '📱'
+    },
+    {
+      name: 'MacBook Air M1',
+      publishDate: '01 Jan 2023',
+      category: 'Laptop',
+      brand: 'Apple',
+      price: '$0299',
+      status: 'Out of Stock',
+      statusType: 'danger',
+      image: '💻'
+    },
+    {
+      name: 'iPhone 15 Pro max',
+      publishDate: '02 Jan 2023',
+      category: 'Gadget',
+      brand: 'Apple',
+      price: '$1299',
+      status: 'In Stock',
+      statusType: 'success',
+      image: '📱'
+    }
+  ];
+
   // Data crawl theo tháng và năm
   const crawlDataMonthly = [
     { period: 'Jan', value: 1200 },
@@ -417,7 +450,7 @@ const Dashboard = () => {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
   <span className="text-2xl font-bold text-pink-light">
-    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
+    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + item.count, 0).toLocaleString()}
   </span>
                   <span className="text-sm text-gray-500">
     total records {crawlActiveTab.toLowerCase()}
@@ -431,7 +464,7 @@ const Dashboard = () => {
                   return (
                     <div key={index} className="flex flex-col items-center gap-2 flex-1 max-w-16">
                       <div className="text-xs font-medium text-gray-700 mb-1">
-                        {item?.count?.toLocaleString()}
+                        {item.count.toLocaleString()}
                       </div>
                       <div
                         className="w-full bg-gradient-to-br from-pink-light/50 to-pink-light rounded-t-full transition-all duration-700 hover:from-orange-600 hover:to-orange-500 shadow-sm relative group"
