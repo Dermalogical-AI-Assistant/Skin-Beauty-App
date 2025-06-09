@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, CreditCard, Box, ShoppingBag, ArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useOrders, { ReqModifyOrder } from "../../hooks/useOrder.ts";
 import { E_OrderStatus, OrderStatus, ResGetOrderById } from "../../types/Order.ts";
 import ShippingAddress from "../../components/Modal/ShippingAddress.tsx";
 import Modal from "../../components/Modal";
-import { ROUTE_MY_ORDER } from "../../constants/routes.ts";
+import { ROUTE_MY_ORDER, ROUTE_PRODUCTS } from "../../constants/routes.ts";
 import { E_PaymentMethod, PaymentMethodDescriptions } from "../../types/PaymentMethod.ts";
 
 const CheckoutPage = () => {
@@ -21,7 +21,7 @@ const CheckoutPage = () => {
   const [isRequestingOrder, setIsRequestingOrder] = useState(false);
   const navigate = useNavigate();
 
-  const {data, refetch: refreshOrder} = useOrderById(orderId||"");
+  const {data,isLoading:isGetOrderLoading, refetch: refreshOrder} = useOrderById(orderId||"");
 
   useEffect(() => {
     if (data) {
@@ -131,12 +131,12 @@ const CheckoutPage = () => {
   }
 
   // Show loading state while fetching order data
-  if (isLoading || isRequestingOrder) {
+  if (isLoading || isRequestingOrder ||isGetOrderLoading) {
     return (
       <div className="bg-primary min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Đang tải thông tin đơn hàng...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-dark/60 mx-auto"></div>
+          <p className="mt-4 text-2xl font-semibold text-primary-dark/60">Loading order details...</p>
         </div>
       </div>
     );
@@ -183,10 +183,12 @@ const CheckoutPage = () => {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <button className="text-primary-dark hover:text-primary-dark flex items-center">
-              <ArrowLeft className="mr-2 h-5 w-5" />
+            <Link
+              to={ROUTE_PRODUCTS}
+              className="flex items-center text-primary-dark p-3 rounded-lg hover:drop-shadow-lg cursor-pointer">
+              <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
-            </button>
+            </Link>
           </div>
           <div className="w-24"></div>
         </div>

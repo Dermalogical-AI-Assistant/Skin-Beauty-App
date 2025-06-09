@@ -170,7 +170,7 @@ const DiscountDetails: React.FC = () => {
     >
       <div className="space-y-8">
         {/* Discount Information */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-semibold text-primary-dark">Discount Information</h2>
             {!isEditMode && (
@@ -199,7 +199,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {discountData.title || "No title"}
                 </div>
               )}
@@ -220,7 +220,7 @@ const DiscountDetails: React.FC = () => {
                   <option value="FIXED_AMOUNT">Fixed Amount</option>
                 </select>
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {discountData.discountType === "PERCENT" ? "Percentage (%)" : "Fixed Amount"}
                 </div>
               )}
@@ -241,7 +241,7 @@ const DiscountDetails: React.FC = () => {
                 required
               />
             ) : (
-              <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md min-h-[100px]">
+              <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md min-h-[100px]">
                 {discountData.description || "No description"}
               </div>
             )}
@@ -249,7 +249,7 @@ const DiscountDetails: React.FC = () => {
         </div>
 
         {/* Discount Value & Currency */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Discount Value</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -268,7 +268,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {discountData.discountValue || 0}
                   {discountData.discountType === "PERCENT" ? "%" : ""}
                 </div>
@@ -290,7 +290,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {discountData.currency === "POUND" ? "£" : "$"}{discountData.minPrice || 0}
                 </div>
               )}
@@ -311,7 +311,7 @@ const DiscountDetails: React.FC = () => {
                   <option value="POUND">Pound (£)</option>
                 </select>
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {discountData.currency === "POUND" ? "Pound (£)" : "Dollar ($)"}
                 </div>
               )}
@@ -320,7 +320,7 @@ const DiscountDetails: React.FC = () => {
         </div>
 
         {/* Date Settings */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Date Settings</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -337,7 +337,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {formatDate(discountData.startTime)}
                 </div>
               )}
@@ -356,7 +356,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {formatDate(discountData.endTime)}
                 </div>
               )}
@@ -375,7 +375,7 @@ const DiscountDetails: React.FC = () => {
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 bg-white/70 border border-gray-200 rounded-md">
                   {formatDate(discountData.publishDate)}
                 </div>
               )}
@@ -384,7 +384,7 @@ const DiscountDetails: React.FC = () => {
         </div>
 
         {/* Skincare Concerns */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Target Skincare Concerns</h2>
 
           <div>
@@ -441,7 +441,7 @@ const DiscountDetails: React.FC = () => {
             <button
               type="button"
               onClick={handleCancel}
-              className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 bg-primary/70 border border-gray-300 text-gray-700 rounded-md hover:bg-white/70 transition-colors"
               disabled={isLoading}
             >
               Cancel

@@ -97,19 +97,39 @@ const CreateDiscount: React.FC = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                Discount Type *
-              </label>
-              <select
-                value={discountData.discountType}
-                onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as E_DisscountType }))}
-                className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              >
-                <option value="PERCENT">Percentage (%)</option>
-                <option value="FIXED_AMOUNT">Fixed Amount</option>
-              </select>
+
+            <div className={`flex gap-6`}>
+              {/*Discount value*/}
+              <div className={`w-full`}>
+                <label className="block text-sm font-medium text-primary-dark/70 mb-2">
+                  Discount Value *
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={discountData.discountValue}
+                  onChange={(e) => setDiscountData(prev => ({ ...prev, discountValue: parseFloat(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={discountData.discountType === "PERCENT" ? "0.00%" : "0.00"}
+                  required
+                />
+              </div>
+
+              {/*Discount type*/}
+              <div  className="w-full">
+                <label className="block text-sm font-medium text-primary-dark/70 mb-2">
+                  Discount Type *
+                </label>
+                <select
+                  value={discountData.discountType}
+                  onChange={(e) => setDiscountData(prev => ({ ...prev, discountType: e.target.value as E_DisscountType }))}
+                  className="w-full px-3 py-[5px] border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                >
+                  <option value="PERCENT">Percentage (%)</option>
+                  <option value="FIXED_AMOUNT">Fixed Amount</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -130,20 +150,18 @@ const CreateDiscount: React.FC = () => {
 
         {/* Discount Value & Currency */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Discount Value</h2>
+          <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Conditions</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                Discount Value *
+                Publish Date *
               </label>
               <input
-                type="number"
-                step="0.01"
-                value={discountData.discountValue}
-                onChange={(e) => setDiscountData(prev => ({ ...prev, discountValue: parseFloat(e.target.value) || 0 }))}
+                type="date"
+                value={discountData.publishDate}
+                onChange={(e) => setDiscountData(prev => ({ ...prev, publishDate: e.target.value }))}
                 className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder={discountData.discountType === "PERCENT" ? "0.00%" : "0.00"}
                 required
               />
             </div>
@@ -162,28 +180,53 @@ const CreateDiscount: React.FC = () => {
                 required
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                Currency *
-              </label>
-              <select
-                value={discountData.currency}
-                onChange={(e) => setDiscountData(prev => ({ ...prev, currency: e.target.value as "DOLLAR" | "POUND" }))}
-                className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              >
-                <option value="DOLLAR">Dollar ($)</option>
-                <option value="POUND">Pound (£)</option>
-              </select>
+              <div>
+                <label className="block text-sm font-medium text-primary-dark/70 mb-2">
+                  Skincare Concerns
+                </label>
+                <div className="mb-3">
+                  <select
+                    onChange={handleSkincareConcernChange}
+                    className="w-full px-3  py-[5px]  border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    disabled={availableSkincareConcerns.length === 0}
+                    defaultValue=""
+                  >
+                    <option value="">
+                      {availableSkincareConcerns.length === 0 ? "All concerns added" : "Select skincare concern to add"}
+                    </option>
+                    {availableSkincareConcerns.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {discountData.skincareConcerns.map((concern) => (
+                    <span
+                      key={concern}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                    >
+                  {SkincareConcern.getLabel(concern as E_SkincareConcern)}
+                      <button
+                        type="button"
+                        onClick={() => removeSkincareConcern(concern as E_SkincareConcern)}
+                        className="ml-2 text-blue-600 hover:text-blue-800"
+                      >
+                    <X size={14} />
+                  </button>
+                </span>
+                  ))}
+              </div>
             </div>
+
           </div>
+
         </div>
 
         {/* Date Settings */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Date Settings</h2>
-
+          <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Active Time</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-primary-dark/70 mb-2">
@@ -211,68 +254,14 @@ const CreateDiscount: React.FC = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-                Publish Date *
-              </label>
-              <input
-                type="date"
-                value={discountData.publishDate}
-                onChange={(e) => setDiscountData(prev => ({ ...prev, publishDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
+
           </div>
         </div>
 
         {/* Skincare Concerns */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Target Skincare Concerns</h2>
-
-          <div>
-            <label className="block text-sm font-medium text-primary-dark/70 mb-2">
-              Skincare Concerns
-            </label>
-            <div className="mb-3">
-              <select
-                onChange={handleSkincareConcernChange}
-                className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                disabled={availableSkincareConcerns.length === 0}
-                defaultValue=""
-              >
-                <option value="">
-                  {availableSkincareConcerns.length === 0 ? "All concerns added" : "Select skincare concern to add"}
-                </option>
-                {availableSkincareConcerns.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {discountData.skincareConcerns.map((concern) => (
-                <span
-                  key={concern}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
-                >
-                  {SkincareConcern.getLabel(concern as E_SkincareConcern)}
-                  <button
-                    type="button"
-                    onClick={() => removeSkincareConcern(concern as E_SkincareConcern)}
-                    className="ml-2 text-blue-600 hover:text-blue-800"
-                  >
-                    <X size={14} />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
 
         {/* Submit Button */}
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-center gap-4 pb-20">
           <button
             type="button"
             onClick={() => navigate(ROUTE_ADMIN_DISCOUNTS)}
