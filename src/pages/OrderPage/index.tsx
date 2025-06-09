@@ -5,7 +5,8 @@ import Tab from "../../components/Tab";
 import useOrder from "../../hooks/useOrder.ts";
 import OrderPageItems from "./OrderPageItems.tsx";
 import { E_OrderStatus } from "../../types/Order.ts";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { ROUTE_PRODUCTS } from "../../constants/routes.ts";
 
 const OrdersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -123,10 +124,12 @@ const OrdersPage: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <button className="flex items-center text-primary-dark p-3 rounded-lg hover:drop-shadow-lg cursor-pointer">
+            <Link
+              to={ROUTE_PRODUCTS}
+              className="flex items-center text-primary-dark p-3 rounded-lg hover:drop-shadow-lg cursor-pointer">
               <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
-            </button>
+            </Link>
             <span>|</span>
             <h1 className="text-xl font-bold text-primary-dark">My Order</h1>
 

@@ -102,7 +102,7 @@ const AcountMenu: React.FC<AccountMenuProps> = (props) => {
               user?.role === RoleType.ADMIN &&
               (<li>
                 <a
-                  href={`${ADMIN}`}
+                  href={`${ADMIN}/dashboard`}
                   className="flex items-center px-4 py-2 text-sm transition hover:bg-gray-100"
                 >
                   <MdSwapHoriz size={16} className="mr-2" /> Go to Admin Panel
