@@ -68,8 +68,8 @@ const SkinAnalysisResult: React.FC = () => {
               skinType={skinAnalysisData?.skinType}
             />
           </div>
-          <div className="w-full  overflow-hidden flex">
-            <ProductCarousel  products={suggetProducts} />
+          <div className="w-full mt-4">
+            <ProductCarousel products={suggetProducts} />
           </div>
         </div>
       </div>
