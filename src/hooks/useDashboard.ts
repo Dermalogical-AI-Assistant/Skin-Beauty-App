@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios.ts";
 import {
+  REQUEST_MONTHLY_CRAWL_COUNT,
   REQUEST_MONTHLY_ORDERS,
   REQUEST_MONTHLY_SALES,
   REQUEST_NEW_CUSTOMER_COUNT,
   REQUEST_ORDER_COUNT, REQUEST_PERIODICAL_REVENUES
 } from "../constants/apis.ts";
 import {
+  DrawDataCountRes,
   MonthlyOrders,
   MonthlySales,
   NewCustomerCount,
@@ -20,6 +22,15 @@ const useDashboard = () => {
     queryKey: ["monthly-sales"],
     queryFn: async () => {
       const res = await axios.get<MonthlySales>(`${REQUEST_MONTHLY_SALES}`);
+      return res.data;
+    },
+    refetchOnWindowFocus: true,
+  });
+
+  const useFetchCrawlDataCount = useQuery<DrawDataCountRes>({
+    queryKey: ["data-crawl-count"],
+    queryFn: async () => {
+      const res = await axios.get<DrawDataCountRes>(`${REQUEST_MONTHLY_CRAWL_COUNT}`);
       return res.data;
     },
     refetchOnWindowFocus: true,
@@ -74,7 +85,8 @@ const useDashboard = () => {
     useFetchMonthlyOrders,
     useFetchNewCustommerCount,
     useFetchOrderStatusCount,
-    useFetchPeriodicalRevenues
+    useFetchPeriodicalRevenues,
+    useFetchCrawlDataCount
   };
 
 };

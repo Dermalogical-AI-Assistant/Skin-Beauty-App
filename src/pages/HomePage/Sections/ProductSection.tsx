@@ -6,10 +6,12 @@ import { Product } from "../../../types/Products.ts";
 import { Link } from "react-router-dom";
 import { ROUTE_PRODUCTS } from "../../../constants/routes.ts";
 import { Currency } from "../../../types/Currency.ts";
+import AddProductToBasket from "../../Products/AddProductToBasket.tsx";
 
 interface HorizontalProductScrollProps {
   title?: string;
   items: Product[];
+  onViewAll?: () => void;
 }
 
 const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) => {
@@ -19,6 +21,11 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  // State for Add to Basket modal
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isShowAddToBasket, setShowAddToBasket] = useState(false);
+  const addToBasketRef = useRef<HTMLDivElement>(null);
 
   // Kiểm tra cần hiển thị mũi tên nào
   const checkArrows = () => {
@@ -35,7 +42,7 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', checkArrows);
-      // Kiểm tra ban đầu
+      // Kiểm tra ban đầu.
       checkArrows();
     }
 
@@ -59,6 +66,21 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
         behavior: 'smooth'
       });
     }
+  };
+
+  // Handle Add to Basket button click
+  const handleAddToBasket = (e: React.MouseEvent<HTMLButtonElement>, product: Product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedProduct(product);
+    setShowAddToBasket(true);
+    console.log(`Adding ${product.title} to basket`);
+  };
+
+  // Close modal
+  const handleCloseModal = () => {
+    setShowAddToBasket(false);
+    setSelectedProduct(null);
   };
 
   // Xử lý drag scroll
@@ -110,13 +132,29 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
 
   const handleViewAll = () => {
     console.log("Xem tất cả sản phẩm");
+    if (props.onViewAll) {
+      props.onViewAll();
+    }
     // Thêm navigation hoặc action khi click vào View All
   };
 
   return (
     <div className="relative w-full mx-auto">
+      {/* Add to Basket Modal */}
+      {isShowAddToBasket && selectedProduct && (
+        <div
+          ref={addToBasketRef}
+          className="fixed w-screen h-screen bg-white/10 backdrop-blur-lg flex items-center justify-center top-0 left-0 p-2 z-50"
+        >
+          <AddProductToBasket
+            product={selectedProduct}
+            onClose={handleCloseModal}
+          />
+        </div>
+      )}
+
       {
-        props.title&&(<h2 className="text-2xl font-semibold font-encode-sans text-primary-dark/70 mb-1 pl-4 ">{props.title}</h2>)
+        props.title && (<h2 className="text-2xl font-semibold font-encode-sans text-primary-dark/70 mb-1 pl-4 ">{props.title}</h2>)
       }
 
       {/* Navigation arrows */}
@@ -156,27 +194,29 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
       >
         {/* Product items */}
         {props.items.map((item, index) => (
-          <Link
-            to={`${ROUTE_PRODUCTS}/${item.id}`}
+          <div
             key={index}
             className="flex-shrink-0 w-64 mx-3 transition-transform hover:scale-105 duration-300 cursor-pointer"
           >
             <div className="p-4 bg-white rounded-3xl drop-shadow-md drop-shadow-pink-light/20 hover:drop-shadow-pink-light/40 overflow-hidden h-full flex flex-col">
-
               {/*item image*/}
-              <div className="relative h-48 overflow-hidden rounded-3xl drop-shadow-lg drop-shadow-pink-light/20 bg-white mb-2">
-                <img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
+              <Link to={`${ROUTE_PRODUCTS}/${item.id}`}>
+                <div className="relative h-48 overflow-hidden rounded-3xl drop-shadow-lg drop-shadow-pink-light/20 bg-white mb-2">
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+              </Link>
 
               <div className="flex flex-col flex-grow">
                 {/*Product title*/}
                 <div className="mb-2">
                   <div className={`flex justify-between font-medium text-gray-900 mb-1`}>
-                    <h3 className="font-semibold text-primary-dark/90 truncate">{item.title}</h3>
+                    <Link to={`${ROUTE_PRODUCTS}/${item.id}`}>
+                      <h3 className="font-semibold text-primary-dark/90 truncate hover:text-primary-dark">{item.title}</h3>
+                    </Link>
                     <span className={`text-primary-dark/60 whitespace-nowrap pl-2 flex-shrink-0`}>sold {item.soldQuantity}</span>
                   </div>
                   <StarRating rating={item.averageRating} />
@@ -188,16 +228,19 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
                 {/*Price*/}
                 <div className={`flex justify-between items-center mt-2`}>
                   <div className={`flex items-center`}>
-                    <span>{Currency.getSymbol(item.currency)}</span>
+                    <span className={"text-primary-dark text-lg font-semibold"}>{Currency.getSymbol(item.currency)|| '£'}</span>
                     <p className="text-primary-dark text-lg font-semibold">{item.price}</p>
                   </div>
-                  <button className="bg-pink-light text-white py-1 px-3 rounded-full text-sm transition-colors duration-300 w-10 h-10 flex items-center justify-center">
+                  <button
+                    className="bg-pink-light text-white py-1 px-3 rounded-full text-sm transition-colors duration-300 w-10 h-10 flex items-center justify-center hover:bg-pink-light/90"
+                    onClick={(e) => handleAddToBasket(e, item)}
+                  >
                     <BsBasket/>
                   </button>
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
 
         {/* View All item */}
@@ -209,8 +252,8 @@ const HorizontalProductScroll: React.FC<HorizontalProductScrollProps> = (props) 
             <div className="rounded-full bg-pink-light/10 p-3 mb-3">
               <ChevronRight size={24} className="text-pink-light/90" />
             </div>
-            <h3 className="font-semibold text-primary-dark/90">Xem tất cả</h3>
-            <p className="text-sm text-primary-dark/70">Tất cả sản phẩm</p>
+            <h3 className="font-semibold text-primary-dark/90">See All</h3>
+            <p className="text-sm text-primary-dark/70">View all products</p>
           </div>
         </div>
       </div>

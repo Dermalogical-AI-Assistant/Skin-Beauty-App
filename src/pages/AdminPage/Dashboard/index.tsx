@@ -7,42 +7,15 @@ import { getCurrencySymbol } from "../../../utils/currency.ts";
 import useDashboard from "../../../hooks/useDashboard.ts";
 import { CustomTooltip } from "../../../components/Chart/CustomTooltip.tsx";
 import { E_OrderStatus } from "../../../types/Order.ts";
+import { GetProductRequestParam } from "../../../types/Products.ts";
+import useProducts from "../../../hooks/useProducts.ts";
+import StarRating from "../../../components/StarRating";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [crawlActiveTab, setCrawlActiveTab] = useState('Monthly');
 
-  const popularProducts = [
-    {
-      name: 'iPhone 15 Pro max',
-      publishDate: '02 Jan 2023',
-      category: 'Gadget',
-      brand: 'Apple',
-      price: '$1299',
-      status: 'In Stock',
-      statusType: 'success',
-      image: '📱'
-    },
-    {
-      name: 'MacBook Air M1',
-      publishDate: '01 Jan 2023',
-      category: 'Laptop',
-      brand: 'Apple',
-      price: '$0299',
-      status: 'Out of Stock',
-      statusType: 'danger',
-      image: '💻'
-    },
-    {
-      name: 'iPhone 15 Pro max',
-      publishDate: '02 Jan 2023',
-      category: 'Gadget',
-      brand: 'Apple',
-      price: '$1299',
-      status: 'In Stock',
-      statusType: 'success',
-      image: '📱'
-    }
-  ];
+  const  navigate  = useNavigate();
 
   // Data crawl theo tháng và năm
   const crawlDataMonthly = [
@@ -112,7 +85,8 @@ const Dashboard = () => {
   const periodTypes = ['MONTHLY', 'ANNUALLY'] as const;
 
   // useFetch data
-  const {useFetchMonthlySales, useFetchMonthlyOrders, useFetchNewCustommerCount, useFetchOrderStatusCount, useFetchPeriodicalRevenues} = useDashboard();
+  const {useFetchMonthlySales, useFetchMonthlyOrders, useFetchNewCustommerCount, useFetchOrderStatusCount, useFetchPeriodicalRevenues, useFetchCrawlDataCount} = useDashboard();
+  const {data: monthlyCrawlCount, isLoading:isFetchCrawlDataCountLoading} = useFetchCrawlDataCount;
   const {data: monthlySales, isLoading:isuseFetchMonthlySalesLoading} = useFetchMonthlySales;
   const {data: monthlyOrders, isLoading:isuseFetchMonthlyOrdersLoading} = useFetchMonthlyOrders;
   const {data: newCustomerCount, isLoading:isuseFetchNewCustomerLoading} = useFetchNewCustommerCount;
@@ -120,6 +94,18 @@ const Dashboard = () => {
   const [totalOrderStatusCount, setTotalOrderStatusCount] = useState(0);
   const [periodicalRevenuesType, setPeriodicalRevenuesType] = useState<'ANNUALLY' | 'MONTHLY'>('MONTHLY');
   const {data: periodicalRevenues, isLoading:isuseFetchPeriodicalRevenuesLoading} = useFetchPeriodicalRevenues(periodicalRevenuesType);
+
+  useEffect(() => {
+   console.log("monthlyCrawlCount", monthlyCrawlCount);
+  }, [monthlyCrawlCount]);
+  const {getProducts} = useProducts();
+  const bestSellerParams: GetProductRequestParam = {
+    page: 0,
+    perPage: 10,
+    order: "bestSeller:desc"
+  };
+  const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
+  const bestSellerProducts = bestSellerData?.data ?? [];
 
 
   // Xử lý dữ liệu periodicalRevenues để tạo chartData
@@ -194,9 +180,9 @@ const Dashboard = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <StartCard title={`Monthly Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${monthlySales?.newSales||0}`} change={`${monthlySales?.incrementalRate}%`} changeType={`${monthlySales?.incrementalRate && monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
-            <StartCard title={`Monthly Order`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate}%`} changeType={`${monthlyOrders?.incrementalRate && monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
-            <StartCard title={`New customer`} isLoading={isuseFetchNewCustomerLoading} value={`${newCustomerCount?.newCustomersCount||0} Users`} change={`${newCustomerCount?.incrementalRate}%`} changeType={`${newCustomerCount?.incrementalRate && newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
+            <StartCard title={`Monthly Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${monthlySales?.newSales||0}`} change={`${(monthlySales?.incrementalRate === 100? monthlySales?.incrementalRate: (monthlySales?.incrementalRate ||0).toFixed(2))}%`} changeType={`${monthlySales?.incrementalRate && monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
+            <StartCard title={`Monthly Order`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate===100?monthlyOrders?.incrementalRate:(monthlyOrders?.incrementalRate||0).toFixed(2)}%`} changeType={`${monthlyOrders?.incrementalRate && monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
+            <StartCard title={`New customer`} isLoading={isuseFetchNewCustomerLoading} value={`${(newCustomerCount?.newCustomersCount||0)} Users`} change={`${newCustomerCount?.incrementalRate===100?newCustomerCount?.incrementalRate:(newCustomerCount?.incrementalRate||0).toFixed(2)}%`} changeType={`${newCustomerCount?.incrementalRate && newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -314,7 +300,7 @@ const Dashboard = () => {
                       onClick={() => setPeriodicalRevenuesType(tab)}
                       className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                         periodicalRevenuesType === tab
-                          ? 'bg-orange-500 text-white'
+                          ? 'bg-pink-light text-white'
                           : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
@@ -408,18 +394,18 @@ const Dashboard = () => {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-orange-50 rounded-lg">
-                    <Database className="w-5 h-5 text-orange-400" />
+                    <Database className="w-5 h-5 text-pink-light" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">Data Crawl Statistics</h3>
                 </div>
                 <div className="flex items-center gap-2">
-                  {['Monthly', 'Yearly'].map((tab) => (
+                  {['Monthly'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setCrawlActiveTab(tab)}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         crawlActiveTab === tab
-                          ? 'bg-orange-400 text-white'
+                          ? 'text-pink-light '
                           : 'text-gray-500 hover:text-gray-700 bg-gray-100'
                       }`}
                     >
@@ -428,11 +414,10 @@ const Dashboard = () => {
                   ))}
                 </div>
               </div>
-
               <div className="mb-4">
                 <div className="flex items-center gap-2">
-  <span className="text-2xl font-bold text-orange-400">
-    {currentCrawlData.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
+  <span className="text-2xl font-bold text-pink-light">
+    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
   </span>
                   <span className="text-sm text-gray-500">
     total records {crawlActiveTab.toLowerCase()}
@@ -441,22 +426,22 @@ const Dashboard = () => {
               </div>
 
               <div className="h-64 flex items-end justify-center gap-4 px-4">
-                {currentCrawlData.map((item, index) => {
-                  const height = (item.value / maxCrawlValue) * 200;
+                {monthlyCrawlCount?.data?.map((item, index) => {
+                  const height = (Number(item?.count||0) / maxCrawlValue) * 200;
                   return (
                     <div key={index} className="flex flex-col items-center gap-2 flex-1 max-w-16">
                       <div className="text-xs font-medium text-gray-700 mb-1">
-                        {item.value.toLocaleString()}
+                        {item?.count?.toLocaleString()}
                       </div>
                       <div
-                        className="w-full bg-gradient-to-t from-orange-600 to-orange-400 rounded-t-full transition-all duration-700 hover:from-orange-600 hover:to-orange-500 shadow-sm relative group"
+                        className="w-full bg-gradient-to-br from-pink-light/50 to-pink-light rounded-t-full transition-all duration-700 hover:from-orange-600 hover:to-orange-500 shadow-sm relative group"
                         style={{ height: `${height}px`, minHeight: '20px' }}
                       >
                         {/* Hiệu ứng shine */}
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 rounded-t-full transition-opacity duration-300"></div>
                       </div>
                       <div className="text-xs text-gray-500 font-medium mt-1">
-                        {item.period}
+                        {item.month}
                       </div>
                     </div>
                   );
@@ -478,33 +463,29 @@ const Dashboard = () => {
                   <thead>
                   <tr className="text-left text-sm text-gray-500">
                     <th className="pb-3">Name</th>
-                    <th className="pb-3">Category</th>
                     <th className="pb-3">Price</th>
-                    <th className="pb-3">Status</th>
+                    <th className="pb-3">Ratings</th>
+                    <th className="pb-3">Sold</th>
                   </tr>
                   </thead>
                   <tbody className="space-y-3">
-                  {popularProducts.map((product, index) => (
+                  {bestSellerProducts.map((product, index) => (
                     <tr key={index} className="border-t border-gray-100">
-                      <td className="py-3">
+                      <td className="py-3" onClick={()=>{navigate(`/products/${product.id}`)}}>
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <span className="text-sm">{product.image}</span>
+                                  <img
+                                    src={product.thumbnail || 'https://via.placeholder.com/32'}
+                                    alt={product.title}
+                                    className=" object-cover "
+                                  />
                           </div>
-                          <span className="font-medium text-gray-900 text-sm">{product.name}</span>
+                          <span className="font-medium text-gray-900 text-sm">{product.title}</span>
                         </div>
                       </td>
-                      <td className="py-3 text-sm text-gray-500">{product.category}</td>
-                      <td className="py-3 text-sm font-medium text-gray-900">{product.price}</td>
-                      <td className="py-3">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          product.statusType === 'success'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-700'
-                        }`}>
-                          {product.status}
-                        </span>
-                      </td>
+                      <td className="py-3 text-sm font-medium text-gray-900">£{product.price}</td>
+                      <td className="py-3 text-sm font-medium text-gray-900"><StarRating rating={product.averageRating || 0} /></td>
+                      <td className="py-3 text-sm font-medium text-gray-900">{product.soldQuantity}</td>
                     </tr>
                   ))}
                   </tbody>
