@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Check } from 'lucide-react';
 import useCart from "../../hooks/useCart.ts";
-import { ROUTE_CHECKOUT } from "../../constants/routes.ts";
-import { useNavigate } from "react-router-dom";
+import { ROUTE_CHECKOUT, ROUTE_PRODUCTS } from "../../constants/routes.ts";
+import { Link, useNavigate } from "react-router-dom";
 import useOrders from "../../hooks/useOrder.ts";
 import { Order } from "../../types/Order.ts";
 import Modal from "../../components/Modal";
@@ -276,10 +276,12 @@ const ShoppingBasket: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <button className="flex items-center text-primary-dark hover:text-primary-dark">
+            <Link
+              to={ROUTE_PRODUCTS}
+              className="flex items-center text-primary-dark p-3 rounded-lg hover:drop-shadow-lg cursor-pointer">
               <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
-            </button>
+            </Link>
           </div>
           <div className="w-24"></div>
         </div>

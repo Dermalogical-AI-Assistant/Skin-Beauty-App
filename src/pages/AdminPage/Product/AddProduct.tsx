@@ -348,7 +348,7 @@ const CreateProduct: React.FC = () => {
             </div>
 
             <div className="flex gap-4">
-              <div className="">
+              <div className="w-full">
                 <label className="block text-sm font-medium text-primary-dark/70 mb-2">
                   Quantity *
                 </label>
@@ -362,7 +362,7 @@ const CreateProduct: React.FC = () => {
                   required
                 />
               </div>
-              <div className="">
+              <div className="w-full">
                 <label className="block text-sm font-medium text-primary-dark/70 mb-2">
                   Price(£) *
                 </label>

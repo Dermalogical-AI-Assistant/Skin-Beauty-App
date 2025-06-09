@@ -1,46 +1,56 @@
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { MultiSelect } from "@mantine/core";
-import { E_ProductStatus } from "../../../types/Products.ts";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { convertDate } from "../../../utils/date.ts";
 import ContextMenu from "../../../components/ContextMenu";
 import { BsThreeDots } from "react-icons/bs";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useDiscount from "../../../hooks/useDisscount.ts";
 import { Discount, E_DisscountStatus } from "../../../types/Discount.ts";
 import { ROUTE_ADMIN_DISCOUNTS } from "../../../constants/routes.ts";
+import { E_SkincareConcern } from "../../../types/SkincareConcern.ts";
 
 const DiscountPage: React.FC = () => {
   const navigate = useNavigate();
   const [search, setSearch] = React.useState("");
-  const [selectedStatus, setSelectedStatus] = React.useState<E_DisscountStatus[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<E_DisscountStatus[]>([]);
   const [perPage, setPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
+  const [skincareConcerns, setSkincareConcerns] = useState<E_SkincareConcern[]>([]);
 
-  const {useFetchDiscounts} = useDiscount();
-  const {data: discounts, isLoading: isDiscountsLoading, refetch: refreshDiscounts} = useFetchDiscounts({
+  const { useFetchDiscounts } = useDiscount();
+  const {
+    data: discounts,
+    isLoading: isDiscountsLoading,
+    refetch: refreshDiscounts,
+  } = useFetchDiscounts({
     search,
-    status: selectedStatus,
+    statuses: selectedStatus,
+    skincareConcerns:skincareConcerns,
     page,
     perPage: perPage,
   });
 
   useEffect(() => {
+    refreshDiscounts();
+  }, [search, selectedStatus, page, perPage, refreshDiscounts]);
+
+  useEffect(() => {
     console.log("Discounts data:", discounts);
-  }, [discounts])
+  }, [discounts]);
 
   const handleRowClick = (discountId: string) => {
     console.log("Row clicked", discountId);
     navigate(`${ROUTE_ADMIN_DISCOUNTS}/${discountId}`);
-  }
+  };
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
-    setPage(0)
+    setPage(0);
     refreshDiscounts();
-  }
+  };
 
   return (
     <AdminContentLayout
@@ -61,28 +71,52 @@ const DiscountPage: React.FC = () => {
 
           <MultiSelect
             data={[
-              { value: E_ProductStatus.ACTIVE, label: "Active" },
-              { value: E_ProductStatus.DRAFT, label: "Draft" },
-              { value: E_ProductStatus.ACHIVE, label: "Achive" },
+              { value: E_DisscountStatus.ACTIVE, label: "Active" },
+              { value: E_DisscountStatus.UPCOMING, label: "Upcoming" },
+              { value: E_DisscountStatus.EXPIRED, label: "Expired" },
             ]}
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value as E_DisscountStatus[])}
+            onChange={(value) =>
+              setSelectedStatus(value as E_DisscountStatus[])
+            }
             placeholder="Select Status(s)"
+            className="min-w-[160px]"
+            size="xs"
+          />
+          <MultiSelect
+            data={[
+              { value: E_SkincareConcern.DARK_CIRCLES, label: "Dark Circles" },
+              { value: E_SkincareConcern.PIGMENTATION, label: "Pigmentation" },
+              { value: E_SkincareConcern.DRY_SKIN, label: "Dry Skin" },
+              { value: E_SkincareConcern.DULL_SKIN, label: "Dull Skin" },
+              { value: E_SkincareConcern.OILY_SKIN, label: "Oily Skin" },
+              { value: E_SkincareConcern.REDNESS, label: "Redness" },
+              { value: E_SkincareConcern.SENSITIVE_SKIN, label: "Sensitive Skin" },
+              { value: E_SkincareConcern.ACNE_BLEMISHES, label: "Acne & Blemishes" },
+              { value: E_SkincareConcern.ANTI_AGING, label: "Anti-Aging" },
+              { value: E_SkincareConcern.BLACKHEADS_PORES, label: "Blackheads & Pores" },
+              { value: E_SkincareConcern.COMBINATION_SKIN, label: "Combination Skin" },
+              { value: E_SkincareConcern.DAMAGED_SKIN_BARRIER, label: "Damaged Skin Barrier" }
+            ]}
+            value={skincareConcerns}
+            onChange={(value) =>
+              setSkincareConcerns(value as E_SkincareConcern[])
+            }
+            placeholder="Select skincare concerns"
             className="min-w-[160px]"
             size="xs"
           />
 
           <Link
-            className="inline-flex items-center rounded-md bg-pink-light px-4 py-2 text-xs font-semibold text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="bg-pink-light inline-flex items-center rounded-md px-4 py-2 text-xs font-semibold text-white hover:bg-purple-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             to="/admin/discounts/new"
-
           >
             + Create Discount
           </Link>
         </div>
       </div>
       {/* Table */}
-      <div className="overflow-hidden rounded-lg bg-white shadow">
+      <div className="overflow-hidden rounded-lg shadow">
         {isDiscountsLoading ? (
           <Loading entityName="Discounts"></Loading>
         ) : (
@@ -127,7 +161,7 @@ const DiscountPage: React.FC = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="divide-y divide-gray-200 bg-white/10">
                   {discounts?.data.map((discount: Discount, index) => (
                     <tr
                       key={discount.id}
@@ -135,7 +169,9 @@ const DiscountPage: React.FC = () => {
                       onClick={() => handleRowClick(discount.id)}
                     >
                       <td className="px-4 py-3 text-sm whitespace-nowrap">
-                        {discounts?.meta?.page * discounts?.meta?.perPage + index + 1}
+                        {discounts?.meta?.page * discounts?.meta?.perPage +
+                          index +
+                          1}
                       </td>
                       <td className="px-4 py-3 text-sm whitespace-nowrap">
                         {discount.title}
@@ -147,7 +183,9 @@ const DiscountPage: React.FC = () => {
                               ? "bg-green-100 text-green-800"
                               : discount.status === "UPCOMING"
                                 ? "bg-yellow-100 text-yellow-800"
-                                : "bg-gray-100 text-gray-800"
+                                : discount.status === "EXPIRED"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-gray-100 text-gray-800"
                           }`}
                         >
                           {discount.status}
@@ -194,16 +232,14 @@ const DiscountPage: React.FC = () => {
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
         <div>
-          Showing {
-            (discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0) + 1
-          } - {
-            Math.min(
-              ((discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0)) + (discounts?.meta?.perPage ?? 0),
-              discounts?.meta?.total ?? 0
-            )
-          }
-          {" "}of{" "}
-          {discounts?.meta?.total} results
+          Showing{" "}
+          {(discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0) + 1} -{" "}
+          {Math.min(
+            (discounts?.meta?.page ?? 0) * (discounts?.meta?.perPage ?? 0) +
+              (discounts?.meta?.perPage ?? 0),
+            discounts?.meta?.total ?? 0,
+          )}{" "}
+          of {discounts?.meta?.total} results
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -219,7 +255,7 @@ const DiscountPage: React.FC = () => {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <span>Page {page+1}</span>
+            <span>Page {page + 1}</span>
             <div className="flex gap-1">
               <button
                 className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
@@ -233,8 +269,10 @@ const DiscountPage: React.FC = () => {
                 onClick={() => setPage(page + 1)}
                 disabled={
                   Math.round(
-                    (discounts?.meta?.total ?? 0) / (discounts?.meta?.perPage ?? 1)
-                  ) <= ((discounts?.meta?.page ?? 0) + 1)
+                    (discounts?.meta?.total ?? 0) /
+                      (discounts?.meta?.perPage ?? 1),
+                  ) <=
+                  (discounts?.meta?.page ?? 0) + 1
                 }
               >
                 Next
@@ -245,6 +283,6 @@ const DiscountPage: React.FC = () => {
       </div>
     </AdminContentLayout>
   );
-}
+};
 
 export default DiscountPage;

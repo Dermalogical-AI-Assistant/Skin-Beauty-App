@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MultiSelect } from "@mantine/core";
 import "@mantine/core/styles.css";
@@ -17,10 +17,12 @@ import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
 import ConfirmDeleteDialog from "../../../components/ConfirmDeleteDialog";
+import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 
 const UserManagement: React.FC = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [perPage, setPerPage] = useState(10);
   const [selectedGenders, setSelectedGenders] = useState<Gender[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<RoleType[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -32,7 +34,7 @@ const UserManagement: React.FC = () => {
 
   const params: GetUsersRequestParam = {
     page,
-    perPage: 10,
+    perPage: perPage,
     search,
     roleTypes: selectedRoles,
     genders: selectedGenders,
@@ -70,6 +72,13 @@ const UserManagement: React.FC = () => {
     setOpenUserDetailDialog(true);
   };
 
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage);
+    setPage(1);
+    refetch();
+  };
+
   const handleCreateUser = () => {
     setOpenUserDetailDialog(true);
   };
@@ -89,7 +98,7 @@ const UserManagement: React.FC = () => {
       });
     } else {
       updateUser.mutate(userData, {
-        onSuccess: (_data) => {
+        onSuccess: (data) => {
           toast.success("Update user successfully!");
           refetch();
         },
@@ -102,14 +111,7 @@ const UserManagement: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">User management</h1>
-        <p className="text-sm text-gray-500">
-          Manage user accounts, roles, and access permissions efficiently.
-        </p>
-      </div>
+      <AdminContentLayout title={"User management"} subtitle="Manage user accounts, roles, and access permissions efficiently.">
 
       {/* Controls */}
       <div className="mb-4 flex items-center justify-between">
@@ -169,120 +171,155 @@ const UserManagement: React.FC = () => {
           </Button>
         </div>
       </div>
-
-      {/* Table */}
-      <div className="overflow-hidden rounded-lg bg-white shadow">
-        {isLoading ? (
-          <Loading entityName="users"></Loading>
-        ) : (
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left"></th>
-                <th className="px-4 py-3 text-left">User name</th>
-                <th className="px-4 py-3 text-left">Role</th>
-                <th className="px-4 py-3 text-left">Gender</th>
-                <th className="px-4 py-3">Location</th>
-                <th className="px-4 py-3">Created at</th>
-                <th className="px-4 py-3"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {users.map((user: User, index) => (
-                <tr
-                  key={user.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUpdateUser(user);
-                  }}
-                >
-                  <td className="px-4 py-3">{index + 1}</td>
-                  <td className="flex items-center gap-2 px-4 py-3">
-                    <img
-                      src={user?.avatar || DEFAULT_AVATAR_URL}
-                      alt="avatar"
-                      className="h-8 w-8 rounded-full"
-                    />
-                    <div>
-                      <div className="font-medium">{user.name}</div>
-                      <div className="text-xs text-gray-500">{user.email}</div>
-                    </div>
-                  </td>
-                  <td className="space-x-1 px-4 py-3">
-                    <span
-                      className={`inline-block rounded-full px-2 py-1 text-left text-xs font-semibold ${
-                        user.role === RoleType.ADMIN
-                          ? "bg-green-100 text-green-700"
-                          : user.role === RoleType.USER
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-purple-100 text-purple-700"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">{user.gender}</td>
-                  <td className="px-4 py-3 text-center">{user?.location}</td>
-                  <td className="px-4 py-3 text-center">
-                    {convertDate(user.createdAt)}
-                  </td>
-                  <td className="flex justify-start px-4 py-3 text-right">
-                    <button
-                      className="p-2 text-blue-400 hover:text-blue-200"
+        {/* Table */}
+        <div className="rounded-lg bg-white/10 shadow overflow-hidden">
+          {isLoading ? (
+            <Loading entityName="Products"></Loading>
+          ) : (
+            <div className="overflow-x-auto">
+              <div className="max-h-[calc(100vh-400px)] overflow-y-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <colgroup>
+                    <col className="w-[5%]" />
+                    <col className="w-[25%]" />
+                    <col className="w-[15%]" />
+                    <col className="w-[20%]" />
+                    <col className="w-[15%]" />
+                    <col className="w-[15%]" />
+                    <col className="w-[5%]" />
+                  </colgroup>
+                  <thead className="bg-gray-50 sticky top-0 z-10">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      #
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User name</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created at</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                  </tr>
+                  </thead>
+                  <tbody className="bg-white/20 divide-y divide-gray-200">
+                  {users.map((user: User, index) => (
+                    <tr
+                      key={user.id}
+                      className="hover:bg-gray-50 cursor-pointer text-sm "
                       onClick={(e) => {
                         e.stopPropagation();
                         handleUpdateUser(user);
                       }}
                     >
-                      <FaEdit className="text-lg" /> {/* Edit Icon */}
-                    </button>
-                    <button
-                      className="p-2 text-red-400 hover:text-red-200"
-                      onClick={(e) => handleDeleteUser(user.id, e)}
-                    >
-                      <FaTrash className="text-lg" /> {/* Trash Icon */}
-                    </button>
+                      <td className="px-4 py-3 text-sm whitespace-nowrap">
+                        { ((params?.page ?? 1) - 1) * (params?.perPage ?? 1) + index + 1 }
+                      </td>
+                      <td className="flex items-center gap-2 px-4 py-3">
+                          <div className="flex items-center">
+                            <img
+                              src={user?.avatar || DEFAULT_AVATAR_URL}
+                              alt="avatar"
+                              className="h-8 w-8 rounded-full mr-2"
+                            />
+                            <div>
+                              <div className="font-medium">{user.name}</div>
+                              <div className="text-xs text-gray-500">{user.email}</div>
+                            </div>
+                          </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                        <span
+                          className={`inline-block rounded-full px-2 py-1 text-left text-xs font-semibold ${
+                            user.role === RoleType.ADMIN
+                              ? "bg-green-100 text-green-700"
+                              : user.role === RoleType.USER
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-purple-100 text-purple-700"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">{user.gender}</td>
+                      <td className="px-4 py-3">{user?.location|| "N/A"}</td>
+                      <td className="px-4 py-3">
+                        {convertDate(user.createdAt)}
+                      </td>
+                      <td className="flex justify-start px-4 py-3 text-right">
+                        <button
+                          className="p-2 text-blue-400 hover:text-blue-200"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpdateUser(user);
+                          }}
+                        >
+                          <FaEdit className="text-lg" /> {/* Edit Icon */}
+                        </button>
+                        <button
+                          className="p-2 text-red-400 hover:text-red-200"
+                          onClick={(e) => handleDeleteUser(user.id, e)}
+                        >
+                          <FaTrash className="text-lg" /> {/* Trash Icon */}
+                        </button>
 
-                    <ConfirmDeleteDialog
-                      open={openConfirmDeleteUserDialog}
-                      onClose={() => setOpenConfirmDeleteUserDialog(false)}
-                      onConfirm={handleConfirmDelete}
-                      entityName="user"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-        <div>1–10 of {total}</div>
-        <div className="flex items-center gap-2">
-          Rows per page:
-          <select
-            className="rounded border px-2 py-1 text-sm"
-            value={params.perPage}
-            onChange={(e) => {}}
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-          </select>
-          <span>{page}</span>
-          <button onClick={() => setPage(page - 1)} disabled={page === 1}>
-            ‹
-          </button>
-          <button
-            onClick={() => setPage(page + 1)}
-            disabled={users.length < 10}
-          >
-            ›
-          </button>
+                        <ConfirmDeleteDialog
+                          open={openConfirmDeleteUserDialog}
+                          onClose={() => setOpenConfirmDeleteUserDialog(false)}
+                          onConfirm={handleConfirmDelete}
+                          entityName="user"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
 
+
+        {/* Footer */}
+        <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+          <div>
+            Showing { (params?.page && params?.page > 1 ? params?.page : 0) * (params?.perPage ?? 1)+1} - { Math.min((params?.page && params?.page > 1 ? params?.page : 0) * (params?.perPage ?? 1) + (params?.perPage ?? 1), total) }
+            {" "}of{" "}
+            {total} results
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span>Rows per page:</span>
+              <select
+                className="rounded border border-gray-300 bg-white px-2 text-sm"
+                value={params?.perPage}
+                onChange={(e) => handlePerPageChange(Number(e.target.value))}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>Page {page}</span>
+              <div className="flex gap-1">
+                <button
+                  className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={() => setPage(page-1)}
+                  disabled={page === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={() => setPage(page+1)}
+                  disabled={page >= Math.ceil(total / (params?.perPage||1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       {/* User Dialog */}
       <UserDialog
         open={openUserDetailDialog}
@@ -290,7 +327,7 @@ const UserManagement: React.FC = () => {
         user={selectedUser}
         onSave={handleSaveUser}
       />
-    </div>
+      </AdminContentLayout>
   );
 };
 
