@@ -35,3 +35,11 @@ export interface PeriodicalRevenues {
 export interface ResPeriodicalRevenues {
   data: PeriodicalRevenues[];
 };
+
+export interface DrawDataCountRes{
+  data: {
+    month?:string,
+    count?:number,
+    error?:string
+  }[];
+}
