@@ -38,21 +38,21 @@ export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
               <p className="">
                 <strong>Types of Acne:</strong>
               </p>
-              <ul className="ml-3 list-disc list-inside">
+              <ul className="ml-3 list-disc list-inside grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-2">
                 {Object.entries(counts).map(([name, { count, hex }]) => (
-                  <li
+                  <div
                     key={name}
                     className={`py-2`}
                   >
                   <span
                     style={{ color: hex }}
-                    className={`bg-gray-900/80   font-semibold p-2 rounded-full`}
+                    className={`drop-shadow-2xl bg-primary   font-semibold p-2 rounded-full`}
                   >{name}</span>
 
                     <span className={`ml-2 p-2 rounded-full drop-shadow-lg bg-white/60 font-semibold`}>
                   {count}
                   </span>
-                  </li>
+                  </div>
                 ))}
               </ul>
             </div>
