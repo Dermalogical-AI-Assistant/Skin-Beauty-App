@@ -9,7 +9,7 @@ import Search from "./Search.tsx";
 const UserHeader: React.FC = () => {
     return (
       <header className="h-20 w-full flex items-center px-14 bg-primary shadow-[0px_21px_42px_rgba(234,165,141,0.15)]">
-        <div className="flex items-center flex-1">
+        <div className="flex items-center flex-1 h-14">
           <BrandLogo />
         </div>
 
