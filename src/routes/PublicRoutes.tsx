@@ -50,24 +50,6 @@ export const routesForPublic = [
           ]
         },
         {
-          path: "/skin-analysis",
-          element: <SkinAnalysisLayout/>,
-          children: [
-            {
-              path: "",
-              element: <UploadSkinPhoto/>,
-            },
-            {
-              path: "skin-photo",
-              element: <SkinPhoto/>
-            },
-            {
-              path: "result",
-              element: <SkinAnalysisResult/>
-            }
-          ]
-        },
-        {
           path: "*",
           element: <NotFoundPage/>,
         }
