@@ -17,66 +17,6 @@ const Dashboard = () => {
 
   const  navigate  = useNavigate();
 
-  const popularProducts = [
-    {
-      name: 'iPhone 15 Pro max',
-      publishDate: '02 Jan 2023',
-      category: 'Gadget',
-      brand: 'Apple',
-      price: '$1299',
-      status: 'In Stock',
-      statusType: 'success',
-      image: '📱'
-    },
-    {
-      name: 'MacBook Air M1',
-      publishDate: '01 Jan 2023',
-      category: 'Laptop',
-      brand: 'Apple',
-      price: '$0299',
-      status: 'Out of Stock',
-      statusType: 'danger',
-      image: '💻'
-    },
-    {
-      name: 'iPhone 15 Pro max',
-      publishDate: '02 Jan 2023',
-      category: 'Gadget',
-      brand: 'Apple',
-      price: '$1299',
-      status: 'In Stock',
-      statusType: 'success',
-      image: '📱'
-    }
-  ];
-
-  // Data crawl theo tháng và năm
-  const crawlDataMonthly = [
-    { period: 'Jan', value: 1200 },
-    { period: 'Feb', value: 1800 },
-    { period: 'Mar', value: 2400 },
-    { period: 'Apr', value: 1900 },
-    { period: 'May', value: 2800 },
-    { period: 'Jun', value: 3200 },
-    { period: 'Jul', value: 2600 },
-    { period: 'Aug', value: 3400 },
-    { period: 'Sep', value: 2900 },
-    { period: 'Oct', value: 3800 },
-    { period: 'Nov', value: 3100 },
-    { period: 'Dec', value: 4200 }
-  ];
-
-  const crawlDataYearly = [
-    { period: '2020', value: 18000 },
-    { period: '2021', value: 24000 },
-    { period: '2022', value: 32000 },
-    { period: '2023', value: 28000 },
-    { period: '2024', value: 36000 }
-  ];
-
-  const currentCrawlData = crawlActiveTab === 'Monthly' ? crawlDataMonthly : crawlDataYearly;
-  const maxCrawlValue = Math.max(...currentCrawlData.map(d => d.value));
-
   // Tạo đường cong mềm với Cubic Bezier
   const createSmoothPath = (points:{x:number, y:number}[]) => {
     if (points.length < 2) return '';
@@ -127,6 +67,7 @@ const Dashboard = () => {
   const [totalOrderStatusCount, setTotalOrderStatusCount] = useState(0);
   const [periodicalRevenuesType, setPeriodicalRevenuesType] = useState<'ANNUALLY' | 'MONTHLY'>('MONTHLY');
   const {data: periodicalRevenues, isLoading:isuseFetchPeriodicalRevenuesLoading} = useFetchPeriodicalRevenues(periodicalRevenuesType);
+  const maxCrawlValue = Math.max(...(monthlyCrawlCount?.data||[]).map(d => d.count || 0));
 
   useEffect(() => {
    console.log("monthlyCrawlCount", monthlyCrawlCount);
@@ -196,15 +137,6 @@ const Dashboard = () => {
       setTotalOrderStatusCount(total);
     }
   }, [orderStatusCount]);
-
-  useEffect(
-    () => {
-      console.log("periodicalRevenues",periodicalRevenues);
-      // You can add any side effects here if needed
-      // For example, useFetching initial data or setting up subscriptions
-    },
-    [periodicalRevenues] // Empty dependency array means this effect runs once after the initial render
-  )
 
   return (
     <AdminContentLayout>
@@ -279,7 +211,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className=" grid grid-cols-2 gap-x-20 gap-y-4">
                     {orderStatusCount.map((item) => {
                       // Màu sắc và nhãn cho từng trạng thái
                       const statusConfig = {
@@ -423,7 +355,7 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Biểu đồ cột Data Crawl */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8 h-110">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-orange-50 rounded-lg">
@@ -449,12 +381,12 @@ const Dashboard = () => {
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
-  <span className="text-2xl font-bold text-pink-light">
-    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + item.count, 0).toLocaleString()}
-  </span>
-                  <span className="text-sm text-gray-500">
-    total records {crawlActiveTab.toLowerCase()}
-  </span>
+                  <span className="text-2xl font-bold text-pink-light">
+                    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
+                  </span>
+                                  <span className="text-sm text-gray-500">
+                    total records {crawlActiveTab.toLowerCase()}
+                  </span>
                 </div>
               </div>
 
@@ -464,7 +396,7 @@ const Dashboard = () => {
                   return (
                     <div key={index} className="flex flex-col items-center gap-2 flex-1 max-w-16">
                       <div className="text-xs font-medium text-gray-700 mb-1">
-                        {item.count.toLocaleString()}
+                        {item?.count?.toLocaleString()}
                       </div>
                       <div
                         className="w-full bg-gradient-to-br from-pink-light/50 to-pink-light rounded-t-full transition-all duration-700 hover:from-orange-600 hover:to-orange-500 shadow-sm relative group"
@@ -483,7 +415,7 @@ const Dashboard = () => {
             </div>
 
             {/* Popular Products */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-110 overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Popular Products</h3>
                 <button className="flex items-center gap-2 text-gray-500 hover:text-gray-700">
@@ -491,9 +423,9 @@ const Dashboard = () => {
                   <span className="text-sm">Filter</span>
                 </button>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-y-scroll h-full max-h-72">
                 <table className="w-full">
-                  <thead>
+                  <thead className={`sticky top-0 bg-white z-10`}>
                   <tr className="text-left text-sm text-gray-500">
                     <th className="pb-3">Name</th>
                     <th className="pb-3">Price</th>
