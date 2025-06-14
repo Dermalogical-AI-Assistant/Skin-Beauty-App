@@ -32,7 +32,7 @@ interface UseImportSocketReturn {
   clearLogs: () => void;
 }
 
-const SOCKET_URL = 'http://20.253.229.177:4005';
+const SOCKET_URL = import.meta.env.VITE_REACT_APP_SERVER_DOMAIN;
 
 export const useImportSocket = (): UseImportSocketReturn => {
   const [socket, setSocket] = useState<Socket | null>(null);
