@@ -156,15 +156,16 @@ const SignUpPage: React.FC = () => {
   return (
     <BackgroundWrapper>
       <div className={`flex flex-col items-center`}>
-        <BrandLogo/>
-
-        {/* Image */}
+        {/* image */}
+        <div className={`h-27`}>
+          <BrandLogo position={"center"}/>
+        </div>
         <div className={`relative w-full mb-5 select-none`}>
           <div className={``}>
             <img
-              src={`https://res.cloudinary.com/dk6ivhi6t/image/upload/v1748838573/uploads/TDCosmetic/vpbrcohil2otzqaeyoir.png`}
+              src={`https://res.cloudinary.com/dk6ivhi6t/image/upload/v1749755178/uploads/TDCosmetic/lcdkrp0noorujuiiajdv.png`}
               alt="logo"
-              className={`w-50 h-50 mx-auto`}
+              className={`h-50 mx-auto`}
             />
           </div>
         </div>
@@ -180,41 +181,43 @@ const SignUpPage: React.FC = () => {
         </div>
 
         {/* Signup Form */}
-        <div className={`w-96 px-5`}>
+        <div className={`px-5`}>
           <form
             onSubmit={handleSubmit}
             autoComplete="off"
             className={`flex flex-col items-center justify-center`}
           >
-            {/* Name */}
-            <Input
-              className={`w-full drop-shadow-md`}
-              label={`Full Name`}
-              name={`name`}
-              type={`text`}
-              placeholder={`Enter your full name`}
-              required
-              trim
-              value={name}
-              error={inputError.name}
-              onChange={(e) => setName(e.target.value)}
-              onBlur={() => handleFieldBlur('name', name)}
-            />
+            <div className={`flex gap-3`}>
+              {/* Name */}
+              <Input
+                className={`w-full drop-shadow-md`}
+                label={`Full Name`}
+                name={`name`}
+                type={`text`}
+                placeholder={`Enter your full name`}
+                required
+                trim
+                value={name}
+                error={inputError.name}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={() => handleFieldBlur('name', name)}
+              />
 
-            {/* Email */}
-            <Input
-              className={`w-full drop-shadow-md`}
-              label={`Email`}
-              name={`email`}
-              type={`email`}
-              placeholder={`Enter your email address`}
-              required
-              trim
-              value={email}
-              error={inputError.email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => handleFieldBlur('email', email)}
-            />
+              {/* Email */}
+              <Input
+                className={`w-full drop-shadow-md`}
+                label={`Email`}
+                name={`email`}
+                type={`email`}
+                placeholder={`Enter your email address`}
+                required
+                trim
+                value={email}
+                error={inputError.email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => handleFieldBlur('email', email)}
+              />
+            </div>
 
             {/* Password */}
             <Input
@@ -244,76 +247,78 @@ const SignUpPage: React.FC = () => {
               onBlur={() => handleFieldBlur('confirmPassword', confirmPassword)}
             />
 
-            {/* Date of Birth */}
-            <div className={`w-full drop-shadow-md mb-3`}>
-              <div className={`relative flex flex-col bg-white/50 backdrop-blur-sm px-3 py-3 rounded-2xl mt-1 
+            <div className={`flex gap-3 w-full`}>
+              {/* Date of Birth */}
+              <div className={`w-full drop-shadow-md mb-3`}>
+                <div className={`relative flex flex-col bg-white/50 backdrop-blur-sm px-3 py-3 rounded-2xl mt-1 
                 ${inputError.dob ? 'outline outline-2 outline-red-400' : 'outline-orange-100 focus-within:outline-4'}
               `}>
-                <label className={`text-xs text-orange-500 mb-2`}>
-                  Date of Birth<sup className={`text-red-500`}>*</sup>
-                </label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={dob}
-                  required
-                  onChange={(e) => setDob(e.target.value)}
-                  onBlur={() => handleFieldBlur('dob', dob)}
-                  className={`w-full py-2 bg-transparent focus:outline-none text-slate-700 
+                  <label className={`text-xs text-orange-500 mb-2`}>
+                    Date of Birth<sup className={`text-red-500`}>*</sup>
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={dob}
+                    required
+                    onChange={(e) => setDob(e.target.value)}
+                    onBlur={() => handleFieldBlur('dob', dob)}
+                    className={`w-full py-2 bg-transparent focus:outline-none text-slate-700 
                     ${inputError.dob ? 'text-red-600' : 'text-slate-700'}
                   `}
-                  max={new Date().toISOString().split('T')[0]} // Không cho chọn ngày tương lai
-                />
-              </div>
-              {inputError.dob && (
-                <div className="text-red-500 text-sm mb-2 px-2 flex items-center">
-                  <BiErrorCircle className="mr-1 text-base" />
-                  {inputError.dob}
+                    max={new Date().toISOString().split('T')[0]} // Không cho chọn ngày tương lai
+                  />
                 </div>
-              )}
-            </div>
+                {inputError.dob && (
+                  <div className="text-red-500 text-sm mb-2 px-2 flex items-center">
+                    <BiErrorCircle className="mr-1 text-base" />
+                    {inputError.dob}
+                  </div>
+                )}
+              </div>
 
-            {/* Gender */}
-            <div className={`w-full drop-shadow-md mb-3`}>
-              <div className={`relative flex flex-col bg-white/50 backdrop-blur-sm px-3 py-3 rounded-2xl mt-1 
+              {/* Gender */}
+              <div className={`w-full drop-shadow-md mb-3`}>
+                <div className={`relative flex flex-col h-full bg-white/50 backdrop-blur-sm px-3 py-3 rounded-2xl mt-1 
                 ${inputError.gender ? 'outline outline-2 outline-red-400' : 'outline-orange-100 focus-within:outline-4'}
               `}>
-                <label className={`text-xs text-orange-500 mb-2`}>
-                  Gender<sup className={`text-red-500`}>*</sup>
-                </label>
-                <div className={`flex gap-4`}>
-                  <label className={`flex items-center cursor-pointer`}>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="MALE"
-                      checked={gender === 'MALE'}
-                      onChange={(e) => setGender(e.target.value as 'MALE')}
-                      onBlur={() => handleFieldBlur('gender', gender)}
-                      className={`mr-2 text-orange-500`}
-                    />
-                    <span className={`text-slate-700`}>Male</span>
+                  <label className={`text-xs text-orange-500 mb-2`}>
+                    Gender<sup className={`text-red-500`}>*</sup>
                   </label>
-                  <label className={`flex items-center cursor-pointer`}>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="FEMALE"
-                      checked={gender === 'FEMALE'}
-                      onChange={(e) => setGender(e.target.value as 'FEMALE')}
-                      onBlur={() => handleFieldBlur('gender', gender)}
-                      className={`mr-2 text-orange-500`}
-                    />
-                    <span className={`text-slate-700`}>Female</span>
-                  </label>
+                  <div className={`flex gap-4`}>
+                    <label className={`flex items-center cursor-pointer`}>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="MALE"
+                        checked={gender === 'MALE'}
+                        onChange={(e) => setGender(e.target.value as 'MALE')}
+                        onBlur={() => handleFieldBlur('gender', gender)}
+                        className={`mr-2 text-orange-500`}
+                      />
+                      <span className={`text-slate-700`}>Male</span>
+                    </label>
+                    <label className={`flex items-center cursor-pointer`}>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="FEMALE"
+                        checked={gender === 'FEMALE'}
+                        onChange={(e) => setGender(e.target.value as 'FEMALE')}
+                        onBlur={() => handleFieldBlur('gender', gender)}
+                        className={`mr-2 text-orange-500`}
+                      />
+                      <span className={`text-slate-700`}>Female</span>
+                    </label>
+                  </div>
                 </div>
+                {inputError.gender && (
+                  <div className="text-red-500 text-sm mb-2 px-2 flex items-center">
+                    <BiErrorCircle className="mr-1 text-base" />
+                    {inputError.gender}
+                  </div>
+                )}
               </div>
-              {inputError.gender && (
-                <div className="text-red-500 text-sm mb-2 px-2 flex items-center">
-                  <BiErrorCircle className="mr-1 text-base" />
-                  {inputError.gender}
-                </div>
-              )}
             </div>
 
             {/* SUBMIT Form */}
@@ -340,19 +345,19 @@ const SignUpPage: React.FC = () => {
               </Link>
             </div>
 
-            <div className="grid grid-cols-3 items-center gap-4 select-none">
-              <div className="border-t border-slate-400 h-0"></div>
-              <span className="text-slate-500 whitespace-nowrap text-center">Or better yet...</span>
-              <div className="border-t border-slate-400 h-0"></div>
-            </div>
+            {/*<div className="grid grid-cols-3 items-center gap-4 select-none">*/}
+            {/*  <div className="border-t border-slate-400 h-0"></div>*/}
+            {/*  <span className="text-slate-500 whitespace-nowrap text-center">Or better yet...</span>*/}
+            {/*  <div className="border-t border-slate-400 h-0"></div>*/}
+            {/*</div>*/}
 
-            <Link
-              className={`cursor-pointer hover:drop-shadow-md bg-white w-full flex flex-row items-center justify-center px-3 py-4 rounded-2xl mt-3 select-none`}
-              to="/"
-            >
-              <div className={`text-2xl`}><FcGoogle/></div>
-              <p className={`mx-2 font-bold text-slate-600`}>Continue with Google</p>
-            </Link>
+            {/*<Link*/}
+            {/*  className={`cursor-pointer hover:drop-shadow-md bg-white w-full flex flex-row items-center justify-center px-3 py-4 rounded-2xl mt-3 select-none`}*/}
+            {/*  to="/"*/}
+            {/*>*/}
+            {/*  <div className={`text-2xl`}><FcGoogle/></div>*/}
+            {/*  <p className={`mx-2 font-bold text-slate-600`}>Continue with Google</p>*/}
+            {/*</Link>*/}
           </form>
         </div>
       </div>

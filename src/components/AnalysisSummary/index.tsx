@@ -22,7 +22,7 @@ export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
 
   return (
     <div>
-      <h2 className="m-5 text-3xl font-bold text-pink-light text-center">
+      <h2 className="from-pink-light to-pink-light/50 mb-4 bg-gradient-to-br bg-clip-text text-4xl font-bold text-transparent drop-shadow-2xl lg:text-4xl text-center">
         General Skin Overview
       </h2>
 
@@ -42,11 +42,11 @@ export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
                 {Object.entries(counts).map(([name, { count, hex }]) => (
                   <div
                     key={name}
-                    className={`py-2`}
+                    className={`py-2 text-stroke`}
                   >
                   <span
                     style={{ color: hex }}
-                    className={`drop-shadow-2xl bg-primary   font-semibold p-2 rounded-full`}
+                    className={`drop-shadow-2xl bg-sky-950 text-stroke   font-semibold p-2 rounded-full`}
                   >{name}</span>
 
                     <span className={`ml-2 p-2 rounded-full drop-shadow-lg bg-white/60 font-semibold`}>

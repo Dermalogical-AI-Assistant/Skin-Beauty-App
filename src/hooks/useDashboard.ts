@@ -22,6 +22,7 @@ const useDashboard = () => {
     queryKey: ["monthly-sales"],
     queryFn: async () => {
       const res = await axios.get<MonthlySales>(`${REQUEST_MONTHLY_SALES}`);
+      console.log("Monthly Sales Data:", res.data);
       return res.data;
     },
     refetchOnWindowFocus: true,
@@ -30,8 +31,9 @@ const useDashboard = () => {
   const useFetchCrawlDataCount = useQuery<DrawDataCountRes>({
     queryKey: ["data-crawl-count"],
     queryFn: async () => {
-      const res = await axios.get<DrawDataCountRes>(`${REQUEST_MONTHLY_CRAWL_COUNT}`);
-      return res.data;
+      const res = await axios.get(`${REQUEST_MONTHLY_CRAWL_COUNT}`);
+      console.log("Crawl Data Count hihi:", res.data);
+      return res?.data;
     },
     refetchOnWindowFocus: true,
   });

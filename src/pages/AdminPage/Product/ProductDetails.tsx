@@ -283,7 +283,7 @@ const ProductDetails: React.FC = () => {
   return (
     <AdminContentLayout title={`Product | ID: ${productId}`} subtitle={isEditMode ? "Edit Product Details" : "Product Details"}>
       <div className="space-y-8">
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-semibold text-primary-dark">Product Images</h2>
             {!isEditMode && (
@@ -440,7 +440,7 @@ const ProductDetails: React.FC = () => {
         </div>
 
         {/* Product Information */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Product Information</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -453,12 +453,12 @@ const ProductDetails: React.FC = () => {
                   type="text"
                   value={productData.title}
                   onChange={(e) => setProductData(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border  bg-white/70  border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter product title"
                   required
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                <div className="w-full px-3 py-2 border border-gray-200 rounded-md">
                   {productData.title || "No title"}
                 </div>
               )}
@@ -475,12 +475,12 @@ const ProductDetails: React.FC = () => {
                     step="0"
                     value={productData.totalQuantity}
                     onChange={(e) => setProductData(prev => ({ ...prev, totalQuantity: parseFloat(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border bg-white/70  border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="0"
                     required
                   />
                 ) : (
-                  <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                  <div className="w-full px-3 py-2 border border-gray-200 rounded-md">
                     {productData.totalQuantity || 0}
                   </div>
                 )}
@@ -496,12 +496,12 @@ const ProductDetails: React.FC = () => {
                     step="0.01"
                     value={productData.price}
                     onChange={(e) => setProductData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border bg-white/70 border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="0.00"
                     required
                   />
                 ) : (
-                  <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                  <div className="w-full px-3 py-2  border border-gray-200 rounded-md">
                     {productData.price || 0}
                   </div>
                 )}
@@ -518,12 +518,12 @@ const ProductDetails: React.FC = () => {
                 value={productData.description}
                 onChange={(e) => setProductData(prev => ({ ...prev, description: e.target.value }))}
                 rows={4}
-                className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white/70 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter product description"
                 required
               />
             ) : (
-              <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md min-h-[100px]">
+              <div className="w-full px-3 py-2  border border-gray-200 rounded-md min-h-[100px]">
                 {productData.description || "No description"}
               </div>
             )}
@@ -531,7 +531,7 @@ const ProductDetails: React.FC = () => {
         </div>
 
         {/* Product Details */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-primary/70 rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-primary-dark/90 mb-6">Product Details</h2>
 
           <div className="space-y-6">
@@ -544,11 +544,11 @@ const ProductDetails: React.FC = () => {
                   value={productData.howToUse}
                   onChange={(e) => setProductData(prev => ({ ...prev, howToUse: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border bg-white/70 border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter usage instructions"
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md min-h-[80px]">
+                <div className="w-full px-3 py-2  border border-gray-200 rounded-md min-h-[80px]">
                   {productData.howToUse || "No usage instructions"}
                 </div>
               )}
@@ -563,11 +563,11 @@ const ProductDetails: React.FC = () => {
                   value={productData.ingredientBenefits}
                   onChange={(e) => setProductData(prev => ({ ...prev, ingredientBenefits: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/70 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter ingredient benefits"
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md min-h-[80px]">
+                <div className="w-full px-3 py-2  border border-gray-200 rounded-md min-h-[80px]">
                   {productData.ingredientBenefits || "No ingredient benefits"}
                 </div>
               )}
@@ -582,11 +582,11 @@ const ProductDetails: React.FC = () => {
                   value={productData.fullIngredientsList}
                   onChange={(e) => setProductData(prev => ({ ...prev, fullIngredientsList: e.target.value }))}
                   rows={4}
-                  className="w-full px-3 py-2 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/70 border border-primary-dark/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter complete ingredients list"
                 />
               ) : (
-                <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md min-h-[100px]">
+                <div className="w-full px-3 py-2  border border-gray-200 rounded-md min-h-[100px]">
                   {productData.fullIngredientsList || "No ingredients list"}
                 </div>
               )}
@@ -643,11 +643,11 @@ const ProductDetails: React.FC = () => {
 
         {/* Action Buttons */}
         {isEditMode && (
-          <div className="sticky z-50 bottom-0  flex justify-center gap-4">
+          <div className="sticky z-50 bottom-0 py-4 flex justify-center gap-4">
             <button
               type="button"
               onClick={handleCancel}
-              className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 bg-primary border border-gray-300 text-gray-700 rounded-md hover:bg-white/70 transition-colors"
               disabled={isLoading}
             >
               Cancel
@@ -656,7 +656,7 @@ const ProductDetails: React.FC = () => {
               type="button"
               onClick={handleUpdate}
               disabled={!isFormValid || isLoading}
-              className="flex items-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center px-6 py-2 from-pink-light bg-gradient-to-br to-purple-400 text-white rounded-md cursor-pointer hover:scale-110 disabled:from-pink-light/50 disabled:bg-gradient-to-r disabled:to-purple-300 disabled:cursor-not-allowed transition-colors"
             >
               <Save className="w-4 h-4 mr-2" />
               {isUseProductLoading ? 'Updating...' : 'Update Product'}

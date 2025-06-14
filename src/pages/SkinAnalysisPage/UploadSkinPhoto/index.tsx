@@ -1,208 +1,347 @@
-import React, { useRef, useState, useEffect } from "react";
-import { FaUpload, FaCamera, FaTimes, FaCheck } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { Upload, Camera, History, ArrowDown } from "lucide-react";
+import { FaTimes, FaUpload } from "react-icons/fa";
+import useSkinAnalysis from "../../../hooks/useSkinAnalysis.ts";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
+import DotLoader from "../../../components/DotLoader";
+import CameraModal from "../CameraModal";
+import { ToggleButton } from "@mui/material";
+import { AiFillCaretDown } from "react-icons/ai";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
-const UploadSkinPhoto: React.FC = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const AnalyzeSkinApp: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const {useFetchAnalysisHistory, onSubmitAnalyzeSkin, isLoading} = useSkinAnalysis();
+  const [historyPage, setHistoryPage] = useState(1);
 
-  // Cleanup stream khi component unmount
+  const {data: analysisHistory, refetch: refetchHistory, isLoading: isHistoryLoading} = useFetchAnalysisHistory({
+    page: historyPage,
+    per_page: 10
+  });
+
   useEffect(() => {
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, [stream]);
+    console.log("Analysis History Data:", selectedImage);
+  }, [selectedImage]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      console.log(url);
-      navigate("skin-photo", {
-        state: { file, url },
-      });
+      setImageFile(file);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const openFileExplorer = () => {
-    fileInputRef.current?.click();
-  };
+  const handleUpload = async () => {
+    if (!imageFile) {
+      alert("No image file to upload.");
+      return;
+    }
 
-  const openCamera = async () => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'environment', // Sử dụng camera sau cho chụp ảnh da
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
+      onSubmitAnalyzeSkin(
+        formData,
+        // success
+        (response) => {
+          console.log("response", response);
+          toast.success("Upload successful!");
+          const imageURL = URL.createObjectURL(imageFile);
+          navigate('/skin-analysis/result', {
+            state: {
+              data: response,
+              url: imageURL,
+              fileName: imageFile.name
+            },
+          })
+        },
+        // error
+        (error) => {
+          alert("Upload failed: " + error.message);
         }
-      });
-
-      setStream(mediaStream);
-      setIsCameraOpen(true);
-
-      // Đợi một chút để đảm bảo video element đã được render
-      setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = mediaStream;
-          videoRef.current.play().catch(error => {
-            console.error("Lỗi khi phát video:", error);
-          });
-        }
-      }, 100);
+      );
     } catch (error) {
-      console.error("Lỗi khi mở camera:", error);
-      alert("Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập camera và thử lại.");
+      console.error("Upload error:", error);
+      alert("Upload failed");
     }
   };
 
-  const closeCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      setStream(null);
+  // Function to format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity.toLowerCase()) {
+      case 'none':
+        return 'bg-green-100 text-green-800';
+      case 'mild':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'moderate':
+        return 'bg-orange-100 text-orange-800';
+      case 'severe':
+        return 'bg-red-100 text-red-800';
+      case 'critical':
+        return 'bg-red-200 text-red-900';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  // Xử lý khi mở camera
+  const handleTakePhoto = () => {
+    setIsCameraOpen(true);
+  };
+
+  // Xử lý khi đóng camera
+  const handleCloseCamera = () => {
     setIsCameraOpen(false);
   };
 
-  const capturePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const video = videoRef.current;
-      const context = canvas.getContext('2d');
-
-      if (context) {
-        // Đặt kích thước canvas theo video
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        // Vẽ frame hiện tại từ video lên canvas
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Chuyển canvas thành blob
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const file = new File([blob], `skin-photo-${Date.now()}.jpg`, {
-              type: 'image/jpeg'
-            });
-            const url = URL.createObjectURL(file);
-
-            // Đóng camera
-            closeCamera();
-
-            // Navigate với ảnh đã chụp
-            navigate("skin-photo", {
-              state: { file, url },
-            });
-          }
-        }, 'image/jpeg', 0.9);
-      }
-    }
+  // Xử lý khi chụp ảnh từ camera
+  const handleCameraCapture = (file: File, url: string) => {
+    setImageFile(file);
+    setSelectedImage(url);
   };
 
-  // Camera Modal Component
-  const CameraModal = () => (
-    <div className="fixed inset-0 z-[9999] bg-white/10 backdrop-blur-md bg-opacity-90 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-2xl max-w-md w-full mx-4">
-        {/* Header */}
-        <div className="flex justify-between items-center p-4 bg-gradient-to-br from-pink-light/90 to-pink-light text-white">
-          <button
-            onClick={closeCamera}
-            className="p-2 rounded-full bg-gradient-to-br from-pink-light/70 to-pink-light hover:scale-110 transition-colors"
-          >
-            <FaTimes size={16} color="white" />
-          </button>
-          <h2 className="text-base font-semibold"> Take a Photo</h2>
-          <div className="w-8 h-8" /> {/* Spacer */}
-        </div>
+  const toggleHistory = () => {
+    setShowHistory(!showHistory);
+  };
 
-        {/* Video Container */}
-        <div className="relative bg-white/10 aspect-square">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-full object-cover"
-          />
-
-          {/* Overlay hướng dẫn */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-60 h-60 border-3 border-white rounded-full opacity-70 shadow-lg" />
-          </div>
-
-          <div className="absolute top-3 left-1/2 transform -translate-x-1/2 bg-primary-dark bg-opacity-70 text-white px-3 py-1 rounded-lg">
-            <p className="text-xs text-center font-medium">Move camera to circle area</p>
-          </div>
-        </div>
-
-        {/* Bottom Controls */}
-        <div className="bg-white p-4 flex justify-center items-center">
-          <button
-            onClick={capturePhoto}
-            className="bg-gradient-to-br from-pink-light/70 to-pink-light hover:scale-110 text-white p-4 rounded-full transition-all duration-200 shadow-lg transform hover:scale-105"
-          >
-            <FaCamera size={20} />
-          </button>
-        </div>
-
-        {/* Text hướng dẫn */}
-        <div className="bg-gray-50 px-4 py-2 text-center">
-          <p className="text-xs text-gray-600">Click the button to take a photo of your skin.</p>
-        </div>
-      </div>
-
-      {/* Canvas ẩn để capture ảnh */}
-      <canvas ref={canvasRef} className="hidden" />
-    </div>
-  );
-
-  if (isCameraOpen) {
-    return createPortal(<CameraModal />, document.body);
-  }
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    setImageFile(null);
+  };
 
   return (
-    <div className="flex-grow flex flex-col items-center justify-center text-center">
-      <div className={`flex justify-center items-center`}>
-        <h1 className="text-3xl font-semibold text-pink-light my-10">Analyze Skin</h1>
-      </div>
-      <div className="flex-grow flex w-full justify-around items-center px-6 pb-28">
-        <div
-          className="flex cursor-pointer flex-col items-center transition-transform hover:scale-105"
-          onClick={openFileExplorer}
-        >
-          <div className="mb-2 rounded-full bg-pink-light drop-shadow-pink-light drop-shadow-lg p-5 text-4xl text-white">
-            <FaUpload />
-          </div>
-          <span className="text-primary-dark/70 text-3xl font-bold py-3">Upload image</span>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            hidden
-          />
+    <div
+      className="from-orange-25 via-amber-25 to-yellow-25 min-h-screen bg-gradient-to-br p-4 lg:p-8"
+      style={{
+        background:
+          "linear-gradient(135deg, #fefcf9 0%, #fefbf7 50%, #fefaf5 100%)",
+      }}
+    >
+      <div className="mx-auto max-w-6xl">
+        {/* Header */}
+        <div className="mb-8 text-center lg:mb-12">
+          <h1 className="from-pink-light to-pink-light/50 mb-4 bg-gradient-to-br bg-clip-text text-4xl font-bold text-transparent drop-shadow-2xl lg:text-4xl">
+            Analyze Skin
+          </h1>
+          <p className="text-primary-dark/70 mx-auto max-w-xl text-lg lg:text-lg">
+            Upload or capture your skin image for comprehensive analysis using
+            advanced AI technology
+          </p>
         </div>
 
-        <div
-          className="flex cursor-pointer flex-col items-center transition-transform hover:scale-105"
-          onClick={openCamera}
-        >
-          <div className="mb-2 rounded-full bg-pink-light drop-shadow-pink-light drop-shadow-lg p-5 text-4xl text-white">
-            <FaCamera />
+        <div className="grid grid-cols-1 space-y-10">
+          {/* Left Column - Main Actions */}
+          <div className="space-y-6 lg:col-span-2">
+            {/* Image Preview Area - Only show when image is selected */}
+            {selectedImage && (
+              <div className="rounded-3xl border border-orange-50 bg-white/10 p-6 shadow-lg lg:p-8">
+                <h2 className="text-primary-dark mb-6 text-2xl font-semibold">
+                  Image Preview
+                </h2>
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="bg-pink-light/5 h-80 w-80 overflow-hidden rounded-2xl shadow-lg lg:h-96 lg:w-96">
+                      <div
+                        className={`${isLoading ? "" : "hidden"} absolute h-full w-full bg-white/20 backdrop-blur-xs`}
+                      >
+                        <div
+                          className={`absolute inset-0 flex items-center justify-center`}
+                        >
+                          <DotLoader />
+                        </div>
+                      </div>
+                      <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Analyze Button */}
+                <div className="mt-6 flex w-full justify-center gap-4">
+                  <button
+                    onClick={handleUpload}
+                    disabled={!imageFile || isLoading}
+                    className="bg-pink-light/70 hover:bg-pink-light/90 disabled:bg-pink-light/30 transform rounded-full p-4 text-xl text-white shadow-md transition-all duration-300 hover:scale-110 disabled:cursor-not-allowed"
+                  >
+                    <FaUpload />
+                  </button>
+                  <button
+                    onClick={handleClearImage}
+                    disabled={isLoading}
+                    className="bg-pink-light/70 disabled:bg-pink-light/30 transform rounded-full p-4 text-xl text-white shadow-md transition-all duration-300 hover:scale-110 disabled:cursor-not-allowed"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            {!selectedImage && (
+              <div className="rounded-3xl border border-orange-50 bg-white/40 p-6 shadow-lg lg:p-8">
+                <h2 className="text-primary-dark mb-6 text-2xl font-semibold">
+                  Choose Action
+                </h2>
+                <div className="flex flex-col gap-4 sm:flex-row lg:gap-6">
+                  {/* Upload Image Button */}
+                  <label className="flex-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    <div className="from-pink-light/60 to-pink-light/20 hover:from-pink-light/40 hover:to-pink-light/90 text-primary-dark/70 transform cursor-pointer rounded-2xl bg-gradient-to-br p-6 shadow-md transition-all duration-300 hover:scale-105 hover:text-white hover:shadow-lg lg:p-8">
+                      <div className="text-center">
+                        <Upload className="mx-auto mb-4 h-10 w-10 lg:h-12 lg:w-12" />
+                        <span className="block text-lg font-semibold lg:text-xl">
+                          Upload Image
+                        </span>
+                        <span className="mt-2 block text-sm opacity-90 lg:text-base">
+                          From your device
+                        </span>
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Take Photo Button */}
+                  <button
+                    onClick={handleTakePhoto}
+                    className="from-pink-light/60 to-pink-light/20 hover:from-pink-light/40 hover:to-pink-light/90 text-primary-dark/70 flex-1 transform rounded-2xl bg-gradient-to-br p-6 shadow-md transition-all duration-300 hover:scale-105 hover:text-white hover:shadow-lg lg:p-8"
+                  >
+                    <div className="text-center">
+                      <Camera className="mx-auto mb-4 h-10 w-10 lg:h-12 lg:w-12" />
+                      <span className="block text-lg font-semibold lg:text-xl">
+                        Take Photo
+                      </span>
+                      <span className="mt-2 block text-sm opacity-90 lg:text-base">
+                        Use camera
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-          <span className="text-primary-dark/70 text-3xl font-bold py-3">Take photo</span>
+
+          {/* Right Column - History */}
+          <div className="lg:col-span-1">
+            <div className="rounded-3xl border border-orange-50 bg-white/40 p-6 shadow-lg lg:p-8">
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="text-primary-dark text-2xl font-semibold">
+                  History
+                </h2>
+                <button
+                  onClick={toggleHistory}
+                  className="text-primary-dark transition-all duration-200 hover:scale-110 rounded-full  hover:shadow-lg lg:p-2"
+                >
+                  {showHistory ? <FiChevronDown size={30} /> : <FiChevronUp size={30} />}
+                </button>
+              </div>
+
+              {analysisHistory && analysisHistory.analyses.length > 0 ? (
+                <>
+                  {showHistory && (
+                    <div className="max-h-96 space-y-4 overflow-x-hidden overflow-y-auto lg:max-h-[500px]">
+                      {analysisHistory?.analyses.map((item) => (
+                        <div
+                          key={item.id}
+                          className="cursor-pointer rounded-xl border border-orange-100 bg-gradient-to-r from-white/60 to-white/40 p-4 shadow-sm transition-all duration-200 hover:shadow-md"
+                        >
+                          {/* Header with date and severity */}
+                          <div className="mb-3 flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-600">
+                              {formatDate(item.created_at)}
+                            </span>
+                            <span
+                              className={`rounded-full px-3 py-1 text-xs font-semibold ${item?.severity_level && getSeverityColor(item?.severity_level)}`}
+                            >
+                              {item.severity_level}
+                            </span>
+                          </div>
+
+                          {/* Image thumbnail */}
+                          <div className="mb-3 flex items-center gap-3">
+                            <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                              <img
+                                src={item.image_url}
+                                alt="Analysis"
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNCAzNkMyNCAzNiAyNCAzNiAyNCAzNlpNMjQgMTJDMjQgMTIgMjQgMTIgMjQgMTJaIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=";
+                                }}
+                              />
+                            </div>
+                            <div className="flex-grow">
+                              <p className="text-sm font-semibold text-gray-800">
+                                {item.skin_type}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                {item.total_detections} acne detections found
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="py-8 text-center lg:py-12">
+                  <History className="mx-auto mb-4 h-16 w-16 text-orange-200 lg:h-20 lg:w-20" />
+                  <p className="text-primary-dark/70"> No history found</p>
+                  <p className={`text-primary-dark/70 mb-6`}>
+                    {" "}
+                    Click the button below to refresh history.
+                  </p>
+                  <button
+                    onClick={() => refetchHistory}
+                    className="text-pink-light font-black drop-shadow-2xl transition-colors duration-200"
+                  >
+                    Refresh History
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Camera Modal */}
+      <CameraModal
+        isOpen={isCameraOpen}
+        onClose={handleCloseCamera}
+        onCapture={handleCameraCapture}
+      />
     </div>
   );
 };
 
-export default UploadSkinPhoto;
+export default AnalyzeSkinApp;
