@@ -52,7 +52,7 @@ export default function DotLoader() {
             >
               <div
                 className={`
-                  w-[15px] h-[15px] rounded-full bg-white/40 backdrop-blur-xs  drop-shadow-lg transition-all duration-300 ease-in-out
+                  w-[15px] h-[15px] rounded-full bg-pink-light/10 backdrop-blur-xs  drop-shadow-5xl transition-all duration-300 ease-in-out
                   ${isActive ? 'scale-100' : 'scale-0'}
                 `}
               />

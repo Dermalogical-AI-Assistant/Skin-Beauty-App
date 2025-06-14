@@ -3,12 +3,13 @@ export const REQUEST_lOGIN = "/auth/login";
 export const REQUEST_REFRESH = "/auth/refresh";
 export const REQUEST_GET_MY_PROFILE = "/auth/self/my-profile"
 export const REQUEST_REGISTER_ACCOUNT = "/auth/local/sign-up";
+export const REQUEST_LOGOUT = "/auth/logout";
 export const REQUEST_USERS_MODULE = "/auth/users"
 
 // SKIN ANALYSIS
 export const REQUEST_SKIN_ANALYSIS_PREDICT = "/skin-analysis/predict"
 export const REQUEST_FILES_MODULE = "/files"
-export const REQUEST_LOGOUT = "/auth/logout";
+export const REQUEST_MY_ANALYSIS_HISTORY = "/skin-analysis/history";
 
 // CHATBOT
 // SESSIONS

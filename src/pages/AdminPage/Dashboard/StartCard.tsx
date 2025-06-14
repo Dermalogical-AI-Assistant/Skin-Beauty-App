@@ -5,6 +5,7 @@ interface StartCardProps {
   icon?: ReactNode;
   title: string;
   value: string | number;
+  total?: string | number;
   change?: string;
   changeType?: 'positive' | 'negative';
   isLoading?: boolean;
@@ -33,15 +34,13 @@ const StartCard = (props:StartCardProps) => {
         <div className="p-2 bg-gray-50 rounded-lg">
           {props.icon}
         </div>
-        <div className={`flex items-center gap-2 ${
-          props.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-        }`}>
-          {
-            props.changeType === 'positive' ? <FaArrowUp size={10}/> : <FaArrowDown size={10}/>
-          }
-          <span className={`flex text-sm font-medium `}>
-            {props.change}
-          </span>
+        <div className={`flex flex-col items-end `}>
+          <div className="text-md  text-primary-dark">
+            <span>
+              Total: {props.total}
+            </span>
+          </div>
+
         </div>
 
       </div>

@@ -76,10 +76,14 @@ const UserFooter: React.FC = () => {
       <section className={`py-3`}>
         <div className="flex h-full w-full justify-center px-32">
           <div className="text-center text-sm text-primary-dark space-y-1">
-            <h2 className="text-lg font-bold">TDCosmetics</h2>
+            <img
+              src="https://res.cloudinary.com/dk6ivhi6t/image/upload/v1749753109/uploads/TDCosmetic/dvfz4cwv69a4dnisiprc.png"
+              alt="TDCosmetics Logo"
+              className="h-15 mx-auto mb-2 object-cover drop-shadow-2xl"
+            />
             <p>Danang, Vietnam</p>
-            <p>Email: <a href="mailto:info@tdcosmetics.vn" className="text-pink-light hover:underline">info@cosmetics.vn</a></p>
-            <p>ĐT (Zalo): <a href="tel:087900123" className="text-pink-light hover:underline">087900123</a></p>
+            <p>Email: <a href="mailto:lvd.levadat@outlook.com" className="text-pink-light hover:underline">lvd.levandat@outlook.com</a></p>
+            <p>ĐT (Zalo): <a href="tel:08862700132" className="text-pink-light hover:underline">0862700132</a></p>
           </div>
           <div></div>
         </div>

@@ -25,6 +25,8 @@ export enum E_DisscountType {
   PERCENT = "PERCENT",
 }
 
+
+
 export type ReqCreateDiscount = {
   title: string;
   description: string;
@@ -54,7 +56,7 @@ export enum E_DisscountStatus {
 
 export type GetDiscountRequestParam = {
     search?: string;
-    status?: E_DisscountStatus[];
+    statuses?: E_DisscountStatus[];
     skincareConcerns?: E_SkincareConcern[];
     discountTypes?: E_DisscountType;
     page?: number;

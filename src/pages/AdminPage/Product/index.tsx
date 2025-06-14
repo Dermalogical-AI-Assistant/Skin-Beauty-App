@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MultiSelect } from "@mantine/core";
 import { BsThreeDots } from "react-icons/bs";
+import { FaSort } from "react-icons/fa";
 import "@mantine/core/styles.css";
 import Loading from "../../../components/Loading";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
@@ -19,16 +20,16 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 const ProductManagement: React.FC = () => {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(10);
+  const [orderPage, setOrderPage] = useState<string>("createdAt:desc");
   const [search, setSearch] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<E_ProductStatus[]>([]);
   const {getProducts} = useAdminProduct();
   const navigate = useNavigate();
 
   const params: GetProductsRequestParam = {
     search,
-    status: selectedStatus,
     page,
     perPage,
+    order: orderPage,
   };
 
   const {data, isLoading, refetch: refreshProducts} = getProducts(params);
@@ -61,19 +62,6 @@ const ProductManagement: React.FC = () => {
             className="rounded-md border border-transparent bg-gray-100 px-3 text-xs"
           />
 
-          <MultiSelect
-            data={[
-              { value: E_ProductStatus.ACTIVE, label: "Active" },
-              { value: E_ProductStatus.DRAFT, label: "Draft" },
-              { value: E_ProductStatus.ACHIVE, label: "Achive" },
-            ]}
-            value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value as E_ProductStatus[])}
-            placeholder="Select Status(s)"
-            className="min-w-[160px]"
-            size="xs"
-          />
-
           <Link
             className="inline-flex items-center rounded-md bg-pink-light px-4 py-2 text-xs font-semibold text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             to="/admin/products/new-product"
@@ -94,7 +82,7 @@ const ProductManagement: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="rounded-lg bg-white shadow overflow-hidden">
+      <div className="rounded-lg shadow overflow-hidden">
         {isLoading ? (
           <Loading entityName="Products"></Loading>
         ) : (
@@ -115,27 +103,45 @@ const ProductManagement: React.FC = () => {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     #
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Products
+                  <th className="cursor-pointer hover:bg-gray-200 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <span
+                      className={`flex gap-1`}
+                      onClick={()=>{setOrderPage(orderPage==="title:desc" ? "title:asc" : "title:desc")}}
+                    >
+                      Products
+                      <FaSort />
+                    </span>
                   </th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     In Stock
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Sold
+                  <th className="px-4 py-3 text-center cursor-pointer hover:bg-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <span
+                      className={`flex gap-1 justify-center`}
+                      onClick={()=>{setOrderPage(orderPage==="bestSeller:desc" ? "bestSeller:asc" : "bestSeller:desc")}}
+                    >
+                      Sold
+                      <FaSort />
+                    </span>
                   </th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Ratings
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Created At
+                  <th className="px-4 py-3 text-left text-xs cursor-pointer hover:bg-gray-200 font-medium text-gray-500 uppercase tracking-wider">
+                    <span
+                      className={`flex gap-1`}
+                      onClick={()=>{setOrderPage(orderPage==="createdAt:desc" ? "createdAt:asc" : "createdAt:desc")}}
+                    >
+                      Created At
+                      <FaSort />
+                    </span>
                   </th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white/10 divide-y divide-gray-200">
                 {products.map((product: Product, index) => (
                   <tr
                     key={product.id}
