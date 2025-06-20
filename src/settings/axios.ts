@@ -77,7 +77,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Gọi API refresh token
-        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/${REQUEST_REFRESH}`, {
+        const response = await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}${REQUEST_REFRESH}`, {
           deviceId: "hihi",
           refreshToken: refreshToken,
           type: "ACCESS_TOKEN"
