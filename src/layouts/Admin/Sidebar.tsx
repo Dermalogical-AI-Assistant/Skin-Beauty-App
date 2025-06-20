@@ -118,7 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
       className={` rounded-2xl min-w-64 max-w-72 h-full bg-white/60 shadow-md transition-transform duration-300 ease-in-out
                   ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
     >
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <div className="h-25 flex items-center justify-between px-6 py-4 border-b border-gray-200">
         <BrandLogo />
       </div>
 

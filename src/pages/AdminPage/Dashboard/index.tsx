@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TrendingUp, ShoppingCart, User, Filter, Database } from 'lucide-react';
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar } from 'recharts';
 import StartCard from "./StartCard.tsx";
 import { getCurrencySymbol } from "../../../utils/currency.ts";
 import useDashboard from "../../../hooks/useDashboard.ts";
@@ -16,33 +17,6 @@ const Dashboard = () => {
   const [crawlActiveTab, setCrawlActiveTab] = useState('Monthly');
 
   const  navigate  = useNavigate();
-
-  // Data crawl theo tháng và năm
-  const crawlDataMonthly = [
-    { period: 'Jan', value: 1200 },
-    { period: 'Feb', value: 1800 },
-    { period: 'Mar', value: 2400 },
-    { period: 'Apr', value: 1900 },
-    { period: 'May', value: 2800 },
-    { period: 'Jun', value: 3200 },
-    { period: 'Jul', value: 2600 },
-    { period: 'Aug', value: 3400 },
-    { period: 'Sep', value: 2900 },
-    { period: 'Oct', value: 3800 },
-    { period: 'Nov', value: 3100 },
-    { period: 'Dec', value: 4200 }
-  ];
-
-  const crawlDataYearly = [
-    { period: '2020', value: 18000 },
-    { period: '2021', value: 24000 },
-    { period: '2022', value: 32000 },
-    { period: '2023', value: 28000 },
-    { period: '2024', value: 36000 }
-  ];
-
-  const currentCrawlData = crawlActiveTab === 'Monthly' ? crawlDataMonthly : crawlDataYearly;
-  const maxCrawlValue = Math.max(...currentCrawlData.map(d => d.value));
 
   // Tạo đường cong mềm với Cubic Bezier
   const createSmoothPath = (points:{x:number, y:number}[]) => {
@@ -104,7 +78,7 @@ const Dashboard = () => {
     perPage: 10,
     order: "bestSeller:desc"
   };
-  const { data:bestSellerData, isLoading:isBestSellerLoading, refetch:bestSellerRefetch } = getProducts(bestSellerParams);
+  const { data:bestSellerData } = getProducts(bestSellerParams);
   const bestSellerProducts = bestSellerData?.data ?? [];
 
 
@@ -180,9 +154,9 @@ const Dashboard = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <StartCard title={`Monthly Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${monthlySales?.newSales||0}`} change={`${(monthlySales?.incrementalRate === 100? monthlySales?.incrementalRate: (monthlySales?.incrementalRate ||0).toFixed(2))}%`} changeType={`${monthlySales?.incrementalRate && monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
-            <StartCard title={`Monthly Order`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate===100?monthlyOrders?.incrementalRate:(monthlyOrders?.incrementalRate||0).toFixed(2)}%`} changeType={`${monthlyOrders?.incrementalRate && monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
-            <StartCard title={`New customer`} isLoading={isuseFetchNewCustomerLoading} value={`${(newCustomerCount?.newCustomersCount||0)} Users`} change={`${newCustomerCount?.incrementalRate===100?newCustomerCount?.incrementalRate:(newCustomerCount?.incrementalRate||0).toFixed(2)}%`} changeType={`${newCustomerCount?.incrementalRate && newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
+            <StartCard title={`Current Sales`} isLoading={isuseFetchMonthlySalesLoading} value={`${getCurrencySymbol("GBP")} ${(monthlySales?.newSales||0).toFixed(2)}`} change={`${(monthlySales?.incrementalRate === 100? monthlySales?.incrementalRate: (monthlySales?.incrementalRate ||0).toFixed(2))}%`} total={`£ ${(monthlySales?.totalSales||0).toFixed(2)}`} changeType={`${monthlySales?.incrementalRate && monthlySales?.incrementalRate>0?"positive":"negative"}`} icon={<TrendingUp />}/>
+            <StartCard title={`Current Orders`} isLoading={isuseFetchMonthlyOrdersLoading} value={`${monthlyOrders?.newOrdersCount||0} order`} change={`${monthlyOrders?.incrementalRate===100?monthlyOrders?.incrementalRate:(monthlyOrders?.incrementalRate||0).toFixed(2)}%`}  total={monthlyOrders?.totalOrdersCount} changeType={`${monthlyOrders?.incrementalRate && monthlyOrders?.incrementalRate>0?"positive":"negative"}`} icon={<ShoppingCart />}/>
+            <StartCard title={`New customers`} isLoading={isuseFetchNewCustomerLoading} value={`${(newCustomerCount?.newCustomersCount||0)} Users`} change={`${newCustomerCount?.incrementalRate===100?newCustomerCount?.incrementalRate:(newCustomerCount?.incrementalRate||0).toFixed(2)}%`} total={newCustomerCount?.totalUsersCount} changeType={`${newCustomerCount?.incrementalRate && newCustomerCount?.incrementalRate>0?"positive":"negative"}`} icon={<User />}/>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -246,7 +220,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className=" grid grid-cols-2 gap-x-20 gap-y-4">
                     {orderStatusCount.map((item) => {
                       // Màu sắc và nhãn cho từng trạng thái
                       const statusConfig = {
@@ -414,41 +388,85 @@ const Dashboard = () => {
                   ))}
                 </div>
               </div>
-              <div className="mb-4">
-                <div className="flex items-center gap-2">
-  <span className="text-2xl font-bold text-pink-light">
-    {monthlyCrawlCount?.data?.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
-  </span>
-                  <span className="text-sm text-gray-500">
-    total records {crawlActiveTab.toLowerCase()}
-  </span>
+
+              {isFetchCrawlDataCountLoading ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-gray-500">Loading crawl data...</div>
                 </div>
-              </div>
-
-              <div className="h-64 flex items-end justify-center gap-4 px-4">
-                {monthlyCrawlCount?.data?.map((item, index) => {
-                  const height = (Number(item?.count||0) / maxCrawlValue) * 200;
-                  return (
-                    <div key={index} className="flex flex-col items-center gap-2 flex-1 max-w-16">
-                      <div className="text-xs font-medium text-gray-700 mb-1">
-                        {item?.count?.toLocaleString()}
-                      </div>
-                      <div
-                        className="w-full bg-gradient-to-br from-pink-light/50 to-pink-light rounded-t-full transition-all duration-700 hover:from-orange-600 hover:to-orange-500 shadow-sm relative group"
-                        style={{ height: `${height}px`, minHeight: '20px' }}
-                      >
-                        {/* Hiệu ứng shine */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 rounded-t-full transition-opacity duration-300"></div>
-                      </div>
-                      <div className="text-xs text-gray-500 font-medium mt-1">
-                        {item.month}
-                      </div>
+              ) : monthlyCrawlCount?.data && monthlyCrawlCount.data.length > 0 ? (
+                <>
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2">
+          <span className="text-2xl font-bold text-pink-light">
+            {monthlyCrawlCount.data.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
+          </span>
+                      <span className="text-sm text-gray-500">
+            total records {crawlActiveTab.toLowerCase()}
+          </span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                  </div>
 
+                  {/* Recharts BarChart */}
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={monthlyCrawlCount.data.map(item => ({
+                          month: item.month,
+                          count: item.count
+                        }))}
+                        margin={{
+                          top: 5,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
+                        }}
+                      >
+                        <defs>
+                          <linearGradient id="colorCrawl" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#F97316" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#F97316" stopOpacity={0.3}/>
+                          </linearGradient>
+                        </defs>
+                        <XAxis
+                          dataKey="month"
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fontSize: 12, fill: '#6B7280' }}
+                        />
+                        <YAxis
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fontSize: 12, fill: '#6B7280' }}
+                          tickFormatter={(value) => `${(value / 1000).toFixed(1)}k`}
+                        />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+                        <Tooltip
+                          formatter={(value, name) => [`${value.toLocaleString()} records`, 'Crawled Data']}
+                          labelFormatter={(label) => `Month: ${label}`}
+                          contentStyle={{
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #E5E7EB',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          }}
+                        />
+                        <Bar
+                          dataKey="count"
+                          fill="url(#colorCrawl)"
+                          radius={[4, 4, 0, 0]}
+                          stroke="#F97316"
+                          strokeWidth={1}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-gray-500">No crawl data available</div>
+                </div>
+              )}
+            </div>
             {/* Popular Products */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6">

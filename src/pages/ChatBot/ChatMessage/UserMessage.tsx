@@ -2,13 +2,15 @@
 import React from 'react';
 import { Message } from '../../../types/ChatBot.ts';
 import { RxCopy } from "react-icons/rx";
+import useAuth from "../../../hooks/useAuth.ts";
+import useAuthStore from "../../../stores/AuthStore.ts";
 
 interface UserMessageProps {
   message: Message;
 }
 
 const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
-
+  const {user} = useAuthStore();
   const handleCopyFromDiv = () => {
     const element = document.getElementById('copy');
     if (element) {
@@ -55,7 +57,7 @@ const UserMessage: React.FC<UserMessageProps> = ({ message }) => {
       {/* User Avatar */}
       <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
         <img
-          src="https://miguelminambres.com/wp-content/uploads/2021/10/Social-04-810x1024.jpg"
+          src={ user?.avatar }
           alt="User"
           className="w-full h-full object-cover"
         />

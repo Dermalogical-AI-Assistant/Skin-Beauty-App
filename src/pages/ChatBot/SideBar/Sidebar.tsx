@@ -89,8 +89,8 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="w-96 h-full bg-secondary flex flex-col overflow-hidden">
-      <div className="flex items-center justify-center px-6 py-4 border-b border-gray-200">
-        <BrandLogo />
+      <div className={`h-20 my-5`}>
+        <BrandLogo position={`center`}/>
       </div>
       {/*DELETE ALL CHAT MODAL*/}
       <DeleteModal

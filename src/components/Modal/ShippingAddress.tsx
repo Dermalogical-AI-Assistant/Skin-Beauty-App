@@ -78,16 +78,22 @@ const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
       <div className={`sticky top-0 border-b-2 border-primary-dark/10 rounded-t-2xl bg-white`}>
         <div className={`px-10 py-5 flex justify-between`}>
           <div className={` flex items-center`}>
-            <MapPin className="text-pink-light mr-2 h-5 w-5" />
-            <h2 className={`text-primary-dark font-semibold`}>My Address</h2>
+            <div>
+              <MapPin className="text-pink-light mr-2 h-5 w-5" />
+              <h2 className={`text-primary-dark font-semibold`}>My Address</h2>
+            </div>
+
+
           </div>
-          <button
-            className={`flex items-center justify-center mt-4 rounded-lg bg-white/50 px-6 py-2 text-primary-dark hover:bg-white/70`}
-            onClick={()=>setShowAddressForm(true)}
-          >
-            <FaPlus/>
-            <span>Add New Address</span>
-          </button>
+          <div className={`flex items-center justify-center`}>
+            <button
+              className={`flex items-center justify-center mt-4 rounded-lg bg-white/50 px-6 py-2 text-primary-dark hover:bg-white/70`}
+              onClick={()=>setShowAddressForm(true)}
+            >
+              <FaPlus/>
+              <span>Add New Address</span>
+            </button>
+          </div>
         </div>
       </div>
       <div className={`flex flex-col items-center justify-center rounded-2xl text-center px-10`}>

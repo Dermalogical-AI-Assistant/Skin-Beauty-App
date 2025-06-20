@@ -4,6 +4,7 @@ import { Message } from '../../../types/ChatBot.ts';
 import { IoArrowUpCircleOutline } from "react-icons/io5";
 import { RxCopy } from "react-icons/rx";
 import { TbRefresh } from "react-icons/tb";
+import ReactMarkdown from 'react-markdown';
 
 interface BotMessageProps {
   message: Message;
@@ -37,9 +38,8 @@ const BotMessage: React.FC<BotMessageProps> = ({ message }) => {
 
         {/* Message Bubble */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl rounded-tl-md p-4 shadow-lg border border-white/30">
-          <div className="prose prose-sm text-primary-dark"
-               id="bot-message"
-               dangerouslySetInnerHTML={{ __html: message.message }}>
+          <div className="prose prose-sm text-primary-dark" id="bot-message">
+            <ReactMarkdown>{message.message}</ReactMarkdown>
           </div>
         </div>
 
