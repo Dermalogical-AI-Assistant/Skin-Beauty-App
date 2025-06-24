@@ -11,6 +11,7 @@ import ChatLayout from "../../layouts/BaseLayout/ChatLayout.tsx";
 import SkinAnalysisLayout from "../../layouts/SkinAnalysis/SkinAnalysisLayout.tsx";
 import UploadSkinPhoto from "../../pages/SkinAnalysisPage/UploadSkinPhoto";
 import SkinAnalysisResult from "../../pages/SkinAnalysisPage/SkinAnalysisResult";
+import MyProfilePage from "../../pages/MyProfilePage";
 
 /**
  * Routes that require authentication
@@ -34,6 +35,10 @@ export const routesForAuthenticated = [
           {
             path: "/logout",
             element: <>hello from logout</>,
+          },
+          {
+            path: "/profile",
+            element: <MyProfilePage />,
           },
           {
             path: `${ROUTE_CHECKOUT}/:orderId`,

@@ -178,7 +178,7 @@ const ProductDetails: React.FC = () => {
             <div className="md:w-1/2">
               {/* Product title */}
               <div className="flex items-baseline mb-4">
-                <h1 className="font-semibold text-2xl text-primary-dark/90 truncate">{product?.title}</h1>
+                <h1 className="font-semibold text-2xl text-primary-dark/90">{product?.title}</h1>
               </div>
               <div className={`pb-3 flex items-center gap-2 text-primary-dark/70`}>
                 <StarRating rating={product?.averageRating} /> (0)

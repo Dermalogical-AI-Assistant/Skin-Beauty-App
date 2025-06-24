@@ -1,4 +1,4 @@
-import { AcneDetection, SkinAnalysisResult } from "../../hooks/useSkinAnalysis";
+import { SkinAnalysisResult } from "../../hooks/useSkinAnalysis";
 import { useEffect } from "react";
 import { rgbToHex } from "../../utils/color.ts";
 
@@ -66,7 +66,7 @@ export const AnalysisSummary = (skinAnalysis: SkinAnalysisResult) => {
           </p>
         <div className={`border-l-4 border-primary-dark/80 pl-3 ml-1`}>
            <p className={`font-bold`}>
-             Level: <span className="font-medium">{skinAnalysis?.acneSeverity?.predicts[0]?.name}</span>
+             Level: <span className="font-medium">{skinAnalysis?.acneSeverity[0]?.predicts[0]?.name}</span>
            </p>
          </div>
         </div>

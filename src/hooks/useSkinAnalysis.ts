@@ -27,15 +27,17 @@ type AcneSeverity = {
   confidence: number;
 };
 
+type AcneSeverityResponse = {
+  meta: MetaData;
+  predicts: AcneSeverity[];
+}
+
 export type SkinAnalysisResult = {
   acneDetection?: {
     meta: MetaData;
     predicts: AcneDetection[];
   };
-  acneSeverity?: {
-    meta: MetaData;
-    predicts: AcneSeverity[];
-  };
+  acneSeverity:AcneSeverityResponse[];
   skinType?: {
     meta: MetaData;
     predicts: { name: string; class_index: number; confidence: number, error?:string};
