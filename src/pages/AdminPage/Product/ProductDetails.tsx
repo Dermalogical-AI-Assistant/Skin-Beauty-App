@@ -3,10 +3,9 @@ import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { Camera, X, Plus, AlertCircle, Edit, Save } from "lucide-react";
 import useUploadImage from "../../../hooks/useUploadImage.ts";
 import useProducts from "../../../hooks/useProducts.ts";
-import { ReqCreateProduct, Product } from "../../../types/Products.ts";
+import { ReqCreateProduct} from "../../../types/Products.ts";
 import { E_SkincareConcern, SkincareConcern } from "../../../types/SkincareConcern";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
 import { toast } from "react-toastify";
 
 interface UploadError {
@@ -17,7 +16,6 @@ interface UploadError {
 const ProductDetails: React.FC = () => {
   const { productId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   // Get edit mode from query params
   const isEditMode = searchParams.get('edit') === 'true';

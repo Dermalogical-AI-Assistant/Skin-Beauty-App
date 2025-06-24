@@ -11,6 +11,8 @@ import useDiscount from "../../../hooks/useDisscount.ts";
 import { Discount, E_DisscountStatus } from "../../../types/Discount.ts";
 import { ROUTE_ADMIN_DISCOUNTS } from "../../../constants/routes.ts";
 import { E_SkincareConcern } from "../../../types/SkincareConcern.ts";
+import ConfirmDeleteDialog from "../../../components/ConfirmDeleteDialog";
+import { toast } from "react-toastify";
 
 const DiscountPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +21,37 @@ const DiscountPage: React.FC = () => {
   const [perPage, setPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
   const [skincareConcerns, setSkincareConcerns] = useState<E_SkincareConcern[]>([]);
+  const [openConfirmDeleteDiscountDialog, setOpenConfirmDeleteDiscountDialog] = useState(false);
+  const [deleteDiscountId, setDeleteDiscountId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const { useFetchDiscounts } = useDiscount();
+  const handleCloseConfirmDeleteDialog = () => {
+    setOpenConfirmDeleteDiscountDialog(false);
+    setDeleteDiscountId(null);
+  };
+
+
+  const handleOpenConfirmDeleteDialog = () => {
+    if (deleteDiscountId) {
+      setIsDeleting(true);
+      onDeleteDiscount(deleteDiscountId, () => {
+        setOpenConfirmDeleteDiscountDialog(false);
+        setDeleteDiscountId(null);
+        refreshDiscounts();
+        setIsDeleting(false);
+        toast.success("Product deleted successfully.");
+      }, () => {
+        setOpenConfirmDeleteDiscountDialog(false);
+        setDeleteDiscountId(null);
+        toast.error("Failed to delete product. Please try again.");
+        setIsDeleting(false);
+      });
+    }
+  }
+
+
+
+  const { useFetchDiscounts, onDeleteDiscount } = useDiscount();
   const {
     data: discounts,
     isLoading: isDiscountsLoading,
@@ -204,19 +235,34 @@ const DiscountPage: React.FC = () => {
                         {convertDate(discount.createdAt)}
                       </td>
                       <td className="px-4 py-3 text-center text-sm whitespace-nowrap">
-                        <div className="flex justify-center">
+                        <div
+                          className="flex justify-center"
+                          onClick={(e) => e.stopPropagation()} // Prevent row click when clicking menu
+                        >
                           <ContextMenu icon={<BsThreeDots size={16} />}>
                             <ContextMenuItem
                               label={"Details"}
                               onClick={() => {
-                                console.log("View details", discount.id);
+                                navigate(`${ROUTE_ADMIN_DISCOUNTS}/${discount.id}`);
                               }}
                             />
+                            {
+                              (discount.status === E_DisscountStatus.ACTIVE || discount.status === E_DisscountStatus.UPCOMING)  && (
+                                <ContextMenuItem
+                                  label={"Edit"}
+                                  onClick={() => {
+                                    navigate(`${ROUTE_ADMIN_DISCOUNTS}/${discount.id}?edit=true`);
+                                  }}
+                                />
+                              )
+                            }
                             <ContextMenuItem
                               label={"Delete"}
                               onClick={() => {
-                                console.log("Delete discount", discount.id);
-                              }}
+                                  setDeleteDiscountId(discount.id);
+                                  setOpenConfirmDeleteDiscountDialog(true);
+                                }
+                              }
                             />
                           </ContextMenu>
                         </div>
@@ -225,6 +271,15 @@ const DiscountPage: React.FC = () => {
                   ))}
                 </tbody>
               </table>
+              <ConfirmDeleteDialog
+                open={openConfirmDeleteDiscountDialog}
+                onClose={handleCloseConfirmDeleteDialog}
+                onConfirm={handleOpenConfirmDeleteDialog}
+                entityName="Discount"
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDeleting={isDeleting}
+              />
             </div>
           </div>
         )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { X, Edit, Save } from "lucide-react";
 import { E_SkincareConcern, SkincareConcern } from "../../../types/SkincareConcern";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import useDiscount from "../../../hooks/useDisscount.ts";
 import { E_DisscountType, ReqCreateDiscount } from "../../../types/Discount.ts";
 import { toast } from "react-toastify";
@@ -10,7 +10,28 @@ import { E_Currency } from "../../../types/Currency.ts";
 
 const DiscountDetails: React.FC = () => {
   const { discountId } = useParams();
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const isEditMode = searchParams.get('edit') === 'true';
+
+  // Functions to manage edit mode via query params
+  const enableEditMode = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set('edit', 'true');
+      return newParams;
+    });
+  };
+
+  const disableEditMode = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('edit');
+      return newParams;
+    });
+  };
+
+
 
   const [discountData, setDiscountData] = useState<ReqCreateDiscount>({
     title: "",
@@ -92,7 +113,7 @@ const DiscountDetails: React.FC = () => {
       () => {
         console.log("Discount updated successfully");
         toast.success("Discount updated successfully!");
-        setIsEditMode(false);
+        disableEditMode()
         refreshDiscountDetails();
       },
       (error) => {
@@ -103,11 +124,11 @@ const DiscountDetails: React.FC = () => {
   };
 
   const handleEdit = () => {
-    setIsEditMode(true);
+    enableEditMode()
   };
 
   const handleCancel = () => {
-    setIsEditMode(false);
+    disableEditMode()
     // Reset to original data
     if (discountDetails) {
       setDiscountData({

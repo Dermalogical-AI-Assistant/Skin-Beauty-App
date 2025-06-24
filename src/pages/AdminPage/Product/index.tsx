@@ -5,7 +5,7 @@ import "@mantine/core/styles.css";
 import Loading from "../../../components/Loading";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
 import { GetProductsRequestParam, Product } from "../../../types/Products.ts";
-import useAdminProduct from "../../../hooks/useAdminProduct.tsx";
+import useAdminProduct from "../../../hooks/useAdminProduct.ts";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
 import ContextMenu from "../../../components/ContextMenu";
 import StarRating from "../../../components/StarRating";
@@ -62,10 +62,6 @@ const ProductManagement: React.FC = () => {
     setOpenConfirmDeleteProductDialog(false);
     setProductIdToDelete(null);
   }
-
-
-
-
 
   const {data, isLoading, refetch: refreshProducts} = getProducts(params);
 

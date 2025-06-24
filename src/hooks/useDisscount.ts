@@ -1,6 +1,6 @@
 import {
   REQUEST_ADMIN_CREATE_DISCOUNTS, REQUEST_ADMIN_DISCOUNT_DETAIL,
-  REQUEST_ADMIN_DISCOUNTS, REQUEST_CREATE_PRODUCT
+  REQUEST_ADMIN_DISCOUNTS, REQUEST_CREATE_PRODUCT, REQUEST_DELETE_DISCOUNT, REQUEST_DELETE_PRODUCT
 } from "../constants/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios";
@@ -109,12 +109,30 @@ function useDiscount() {
     });
   };
 
+  const handleDeleteDiscount = useMutation({
+    mutationKey: ["delete-discount"],
+    mutationFn: (discountId:string) => {
+      return axios.delete(`${REQUEST_DELETE_DISCOUNT}/${discountId}`);
+    },
+  });
+
+  const onDeleteDiscount = (discountId:string, onSuccess: () => void, onError:()=> void) => {
+    handleDeleteDiscount.mutate(discountId, {
+      onSuccess: onSuccess,
+      onError: (error) => {
+        console.log(error);
+        onError()
+      }
+    });
+  };
+
   return {
     isLoading,
     useFetchDiscounts,
     useFetchDiscountDetails,
     onRequestCreateDiscount,
-    onRequestUpdateDiscount
+    onRequestUpdateDiscount,
+    onDeleteDiscount
   };
 }
 

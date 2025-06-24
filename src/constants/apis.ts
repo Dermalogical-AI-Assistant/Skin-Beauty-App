@@ -51,6 +51,7 @@ export const REQUEST_DELETE_PRODUCT = "/eco/products";
 export const REQUEST_ADMIN_CREATE_DISCOUNTS = "/eco/discounts";
 export const REQUEST_ADMIN_DISCOUNTS = "/eco/discounts";
 export const REQUEST_ADMIN_DISCOUNT_DETAIL = "/eco/discounts";
+export const REQUEST_DELETE_DISCOUNT = "/eco/discounts";
 
 //Dashboard
 export const REQUEST_MONTHLY_SALES = "/eco/sales-monthly";
