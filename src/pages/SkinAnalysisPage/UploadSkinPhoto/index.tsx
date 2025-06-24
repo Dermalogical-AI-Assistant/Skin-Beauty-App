@@ -58,14 +58,8 @@ const AnalyzeSkinApp: React.FC = () => {
         (response) => {
           console.log("response", response);
           toast.success("Upload successful!");
-          const imageURL = URL.createObjectURL(imageFile);
-          navigate('/skin-analysis/result', {
-            state: {
-              data: response,
-              url: imageURL,
-              fileName: imageFile.name
-            },
-          })
+          // Navigate with analysis ID instead of state
+          navigate(`/skin-analysis/result?id=${response.id}`);
         },
         // error
         (error) => {
@@ -130,6 +124,11 @@ const AnalyzeSkinApp: React.FC = () => {
   const handleClearImage = () => {
     setSelectedImage(null);
     setImageFile(null);
+  };
+
+  // Handle clicking on history item to view result
+  const handleHistoryItemClick = (analysisId: string) => {
+    navigate(`/skin-analysis/result?id=${analysisId}`);
   };
 
   return (
@@ -272,6 +271,7 @@ const AnalyzeSkinApp: React.FC = () => {
                       {analysisHistory?.analyses.map((item) => (
                         <div
                           key={item.id}
+                          onClick={() => handleHistoryItemClick(item.id)}
                           className="cursor-pointer rounded-xl border border-orange-100 bg-gradient-to-r from-white/60 to-white/40 p-4 shadow-sm transition-all duration-200 hover:shadow-md"
                         >
                           {/* Header with date and severity */}
@@ -322,7 +322,7 @@ const AnalyzeSkinApp: React.FC = () => {
                     Click the button below to refresh history.
                   </p>
                   <button
-                    onClick={() => refetchHistory}
+                    onClick={() => refetchHistory()}
                     className="text-pink-light font-black drop-shadow-2xl transition-colors duration-200"
                   >
                     Refresh History

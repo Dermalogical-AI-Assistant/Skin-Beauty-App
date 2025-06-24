@@ -90,14 +90,6 @@ const AcountMenu: React.FC<AccountMenuProps> = (props) => {
                 <User size={16} className="mr-2" /> Profile
               </a>
             </li>
-            <li>
-              <a
-                href="/settings"
-                className="flex items-center px-4 py-2 text-sm transition hover:bg-gray-100"
-              >
-                <Settings size={16} className="mr-2" /> Settings
-              </a>
-            </li>
             {
               user?.role === RoleType.ADMIN &&
               (<li>

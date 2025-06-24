@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  REQUEST_MY_ANALYSIS_HISTORY,
+  REQUEST_GET_ANALYSIS_HISTORY_DETAIL,
+  REQUEST_MY_ANALYSIS_HISTORY, REQUEST_PRODUCTS,
   REQUEST_SKIN_ANALYSIS_PREDICT
 } from "../constants/apis";
 import axios from "../settings/axios";
 import { useState } from "react";
 import qs from "qs";
 import { GetAnalysisHistoryRequestParam, GetAnalysisHistoryResponse } from "../types/SkinAnalysis.ts";
+import { GetProductRequestParam, Product } from "../types/Products.ts";
 
 type MetaData = {
   classes: Record<string, string>;
@@ -42,7 +44,10 @@ export type SkinAnalysisResult = {
     meta: MetaData;
     predicts: { name: string; class_index: number; confidence: number, error?:string};
   };
-  imageURL?: string;
+  image_url?: string;
+  created_at?: string;
+  id?: string;
+  message?: string;
 };
 
 function useSkinAnalysis (){
@@ -94,11 +99,25 @@ function useSkinAnalysis (){
       refetchOnWindowFocus: false,
     });
   };
+
+  const getSkinAnalysisDetails = (id:string) => {
+    return useQuery<SkinAnalysisResult>({
+      queryKey: ["skin-analysis-history", id],
+      queryFn: async ({ queryKey }) => {
+        const [, id] = queryKey as [string, GetProductRequestParam];
+        const res = await axios.get<SkinAnalysisResult>(
+          `${ REQUEST_GET_ANALYSIS_HISTORY_DETAIL}/${ id }`);
+        return res.data as SkinAnalysisResult;
+      },
+      refetchOnWindowFocus: false,
+    });
+  };
   
   return {
     isLoading,
     onSubmitAnalyzeSkin,
-    useFetchAnalysisHistory
+    useFetchAnalysisHistory,
+    getSkinAnalysisDetails
   };
 };
 
