@@ -364,7 +364,7 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Biểu đồ cột Data Crawl */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-3">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-orange-50 rounded-lg">
@@ -395,17 +395,6 @@ const Dashboard = () => {
                 </div>
               ) : monthlyCrawlCount?.data && monthlyCrawlCount.data.length > 0 ? (
                 <>
-                  <div className="mb-4">
-                    <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-pink-light">
-            {monthlyCrawlCount.data.reduce((sum, item) => sum + (item?.count||0), 0).toLocaleString()}
-          </span>
-                      <span className="text-sm text-gray-500">
-            total records {crawlActiveTab.toLowerCase()}
-          </span>
-                    </div>
-                  </div>
-
                   {/* Recharts BarChart */}
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -468,13 +457,9 @@ const Dashboard = () => {
               )}
             </div>
             {/* Popular Products */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border mb-3 border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Popular Products</h3>
-                <button className="flex items-center gap-2 text-gray-500 hover:text-gray-700">
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm">Filter</span>
-                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">

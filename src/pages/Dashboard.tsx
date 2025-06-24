@@ -364,17 +364,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-blue-600">
-                {currentCrawlData.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
-              </span>
-              <span className="text-sm text-gray-500">
-                total records {crawlActiveTab.toLowerCase()}
-              </span>
-            </div>
-          </div>
-
           <div className="h-64 flex items-end justify-center gap-4 px-4">
             {currentCrawlData.map((item, index) => {
               const height = (item.value / maxCrawlValue) * 200;
