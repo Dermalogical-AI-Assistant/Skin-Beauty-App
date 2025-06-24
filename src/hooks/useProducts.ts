@@ -1,4 +1,4 @@
-import { REQUEST_CREATE_PRODUCT, REQUEST_PRODUCTS } from "../constants/apis";
+import { REQUEST_CREATE_PRODUCT, REQUEST_DELETE_PRODUCT, REQUEST_PRODUCTS } from "../constants/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../settings/axios";
 import {
@@ -105,6 +105,8 @@ function useProducts() {
       },
     });
   };
+
+
 
   return {
     isLoading,

@@ -5,7 +5,7 @@ import useUploadImage from "../../../hooks/useUploadImage.ts";
 import useProducts from "../../../hooks/useProducts.ts";
 import { ReqCreateProduct, Product } from "../../../types/Products.ts";
 import { E_SkincareConcern, SkincareConcern } from "../../../types/SkincareConcern";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
 import { toast } from "react-toastify";
 
@@ -16,7 +16,11 @@ interface UploadError {
 
 const ProductDetails: React.FC = () => {
   const { productId } = useParams();
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // Get edit mode from query params
+  const isEditMode = searchParams.get('edit') === 'true';
 
   const [productData, setProductData] = useState<ReqCreateProduct>({
     thumbnail: "",
@@ -57,6 +61,23 @@ const ProductDetails: React.FC = () => {
       });
     }
   }, [productDetails]);
+
+  // Functions to manage edit mode via query params
+  const enableEditMode = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set('edit', 'true');
+      return newParams;
+    });
+  };
+
+  const disableEditMode = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('edit');
+      return newParams;
+    });
+  };
 
   const handleThumbnailUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isEditMode) return;
@@ -219,8 +240,9 @@ const ProductDetails: React.FC = () => {
       (response) => {
         // Handle success, e.g., show a success message or redirect
         console.log("Product update successfully");
-        setIsEditMode(false);
+        disableEditMode(); // Exit edit mode after successful update
         refreshProductDetails();
+        toast.success("Product updated successfully!");
       },
       (error) => {
         console.error("Error updating product:", error);
@@ -230,11 +252,10 @@ const ProductDetails: React.FC = () => {
   };
 
   const handleEdit = () => {
-    setIsEditMode(true);
+    enableEditMode();
   };
 
   const handleCancel = () => {
-    setIsEditMode(false);
     // Reset to original data
     if (productDetails) {
       setProductData({
@@ -251,6 +272,7 @@ const ProductDetails: React.FC = () => {
         skincareConcerns: productDetails.skincareConcerns || []
       });
     }
+    disableEditMode(); // Exit edit mode
   };
 
   const isFormValid = productData.title.trim() && productData.thumbnail && productData.description.trim();

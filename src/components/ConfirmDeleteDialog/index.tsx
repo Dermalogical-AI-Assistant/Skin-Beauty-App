@@ -19,6 +19,7 @@ interface ConfirmDeleteDialogProps {
   entityName: string;
   confirmText?: string;
   cancelText?: string;
+  isDeleting?: boolean;
 }
 
 const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
@@ -28,6 +29,7 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
   entityName,
   confirmText = "Delete",
   cancelText = "Cancel",
+  isDeleting = false,
 }) => {
   const theme = useTheme();
 
@@ -60,34 +62,31 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button
-          onClick={onClose}
-          variant="outlined"
-          sx={{
-            px: 3,
-            py: 1,
-            borderRadius: 1,
-          }}
-        >
-          {cancelText}
-        </Button>
-        <Button
-          onClick={onConfirm}
-          color="error"
-          variant="contained"
-          sx={{
-            px: 3,
-            py: 1,
-            borderRadius: 1,
-            boxShadow: "none",
-            "&:hover": {
-              boxShadow: "none",
-            },
-          }}
-          autoFocus
-        >
-          {confirmText}
-        </Button>
+        <div className="flex justify-end gap-3 px-6 py-4">
+          <button
+            onClick={onClose}
+            disabled={isDeleting}
+            className="px-6 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+          >
+            {cancelText}
+          </button>
+
+          <button
+            onClick={onConfirm}
+            disabled={isDeleting}
+            className="px-6 py-2 rounded bg-red-600 text-white shadow-none hover:shadow-none hover:bg-red-700 disabled:opacity-50"
+            autoFocus
+          >
+            {isDeleting ? (
+              <span
+                className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"
+              />
+            ) : (
+              confirmText
+            )}
+          </button>
+        </div>
+
       </DialogActions>
     </Dialog>
   );

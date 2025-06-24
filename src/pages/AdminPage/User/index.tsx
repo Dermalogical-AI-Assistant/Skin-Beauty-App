@@ -48,6 +48,7 @@ const UserManagement: React.FC = () => {
     userId: string,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
+    e.stopPropagation();
     e.preventDefault();
     setOpenConfirmDeleteUserDialog(true);
     setSelectedUserId(userId);
@@ -261,18 +262,17 @@ const UserManagement: React.FC = () => {
                         >
                           <FaTrash className="text-lg" /> {/* Trash Icon */}
                         </button>
-
-                        <ConfirmDeleteDialog
-                          open={openConfirmDeleteUserDialog}
-                          onClose={() => setOpenConfirmDeleteUserDialog(false)}
-                          onConfirm={handleConfirmDelete}
-                          entityName="user"
-                        />
                       </td>
                     </tr>
                   ))}
                   </tbody>
                 </table>
+                <ConfirmDeleteDialog
+                  open={openConfirmDeleteUserDialog}
+                  onClose={() => setOpenConfirmDeleteUserDialog(false)}
+                  onConfirm={handleConfirmDelete}
+                  entityName="user"
+                />
               </div>
             </div>
           )}

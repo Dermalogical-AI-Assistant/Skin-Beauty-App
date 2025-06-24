@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { MultiSelect } from "@mantine/core";
 import { BsThreeDots } from "react-icons/bs";
 import { FaSort } from "react-icons/fa";
 import "@mantine/core/styles.css";
 import Loading from "../../../components/Loading";
 import { DEFAULT_AVATAR_URL } from "../../../constants/properties";
-import { GetProductsRequestParam, Product, E_ProductStatus } from "../../../types/Products.ts";
+import { GetProductsRequestParam, Product } from "../../../types/Products.ts";
 import useAdminProduct from "../../../hooks/useAdminProduct.tsx";
 import ContextMenuItem from "../../../components/ContextMenu/ContextMenuItem.tsx";
 import ContextMenu from "../../../components/ContextMenu";
@@ -14,16 +13,20 @@ import { Link, useNavigate } from "react-router-dom";
 import AdminContentLayout from "../../../layouts/Admin/ContentLayout.tsx";
 import { ROUTE_ADMIN_PRODUCTS } from "../../../constants/routes.ts";
 import { convertDate } from "../../../utils/date.ts";
-import { Upload } from "lucide-react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import ConfirmDeleteDialog from "../../../components/ConfirmDeleteDialog";
+import { toast } from "react-toastify";
 
 const ProductManagement: React.FC = () => {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [orderPage, setOrderPage] = useState<string>("createdAt:desc");
+  const [openConfirmDeleteProductDialog, setOpenConfirmDeleteProductDialog] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const {getProducts} = useAdminProduct();
+  const {getProducts, onDeleteProduct} = useAdminProduct();
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const params: GetProductsRequestParam = {
     search,
@@ -31,6 +34,38 @@ const ProductManagement: React.FC = () => {
     perPage,
     order: orderPage,
   };
+
+  const handleDeleteProduct = () => {
+    if (productIdToDelete) {
+      setIsDeleting(true);
+      onDeleteProduct(productIdToDelete, () => {
+        setOpenConfirmDeleteProductDialog(false);
+        setProductIdToDelete(null);
+        refreshProducts();
+        setIsDeleting(false);
+        toast.success("Product deleted successfully.");
+      }, () => {
+        setOpenConfirmDeleteProductDialog(false);
+        setProductIdToDelete(null);
+        toast.error("Failed to delete product. Please try again.");
+        setIsDeleting(false);
+      });
+    }
+  }
+
+  const handleOpenConfirmDeleteDialog = (productId: string) => {
+    setProductIdToDelete(productId);
+    setOpenConfirmDeleteProductDialog(true);
+  }
+
+  const handleCloseConfirmDeleteDialog = () => {
+    setOpenConfirmDeleteProductDialog(false);
+    setProductIdToDelete(null);
+  }
+
+
+
+
 
   const {data, isLoading, refetch: refreshProducts} = getProducts(params);
 
@@ -199,17 +234,12 @@ const ProductManagement: React.FC = () => {
                             label={"Edit"}
                             onClick={() => {
                               console.log("Edit product", product.id);
-                              navigate(`${ROUTE_ADMIN_PRODUCTS}/${product.id}/edit`);
+                              navigate(`${ROUTE_ADMIN_PRODUCTS}/${product.id}?edit=true`);
                             }}
                           />
                           <ContextMenuItem
                             label={"Delete"}
-                            onClick={() => {
-                              console.log("Delete product", product.id);
-                              if (confirm(`Are you sure you want to delete "${product.title}"?`)) {
-                                // Add delete logic here
-                              }
-                            }}
+                            onClick={() => handleOpenConfirmDeleteDialog(product.id)}
                           />
                         </ContextMenu>
                       </div>
@@ -228,6 +258,15 @@ const ProductManagement: React.FC = () => {
                 )}
                 </tbody>
               </table>
+              <ConfirmDeleteDialog
+                open={openConfirmDeleteProductDialog}
+                onClose={handleCloseConfirmDeleteDialog}
+                onConfirm={handleDeleteProduct}
+                entityName="Product"
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDeleting={isDeleting}
+              />
             </div>
           </div>
         )}
